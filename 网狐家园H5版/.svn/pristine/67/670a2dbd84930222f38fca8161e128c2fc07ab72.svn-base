@@ -1,0 +1,31 @@
+namespace df
+{
+
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+    //登录命令
+    export const MDM_MP_LOGON =				utils.MAIN_COMMAND(df.eCmdKind.CMD_LOGON, 200)		//广场登录
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+    //登录模式
+    export const SUB_MP_LOGON_ACCOUNTS		=100									//帐号登录
+    export const SUB_MP_LOGON_TOURISTS		=101									//游客登录
+    export const SUB_MP_LOGON_EXTERNAL		=102									//他发登录
+    export const SUB_MP_LOGON_SECRETKEY		=103									//密钥登录
+    export const SUB_MP_REGISTER_ACCOUNTS	=104									//注册帐号
+
+    //登录结果
+    export const SUB_MP_LOGON_SUCCESS		=200									//登录成功
+    export const SUB_MP_LOGON_FAILURE		=201									//登录失败
+    export const SUB_MP_LOGON_COMPLETE		=202									//登录完成
+
+    //升级提示
+    export const SUB_MP_UPDATE_NOTIFY		=300									//升级提示
+
+//////////////////////////////////////////////////////////////////////////////////
+
+
+
+}

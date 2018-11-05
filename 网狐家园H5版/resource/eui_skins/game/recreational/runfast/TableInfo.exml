@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="TableInfo" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" width="180" height="90">
+	<e:Group id="group_0" x="0" height="30" top="0">
+		<e:Image id="table_num" source="runfast_game_word_tableNum_png" x="0" verticalCenter="0"/>
+		<e:Component x="60" name="table_num" verticalCenter="0"/>
+	</e:Group>
+	<e:Group id="group_1" x="0" verticalCenter="0" height="30">
+		<e:Image id="cell_number" source="runfast_game_word_cellscore_png" x="0" verticalCenter="0"/>
+		<e:Component x="60" name="cell_number" verticalCenter="0"/>
+	</e:Group>
+	<e:Group id="group_2" x="0" bottom="0" height="30">
+		<e:Image id="round" source="runfast_game_word_numbers_png" x="0" verticalCenter="0"/>
+		<e:Component x="60" name="round_num" verticalCenter="0"/>
+	</e:Group>
+</e:Skin>

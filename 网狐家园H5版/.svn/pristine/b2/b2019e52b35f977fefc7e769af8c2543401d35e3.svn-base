@@ -1,0 +1,25 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var utils;
+(function (utils) {
+    /**
+     * 消息包组装
+     */
+    var Message = (function () {
+        /**构造
+         * constructor
+         */
+        function Message(wMain, wSub, wLen, cbBuffer) {
+            this.wMainCmd = wMain;
+            this.wSubCmd = wSub;
+            this.wLength = wLen;
+            this.cbBuffer = new utils.__ByteArray();
+            utils.Memory.CopyMemory(this.cbBuffer, cbBuffer, wLen, 0, df.Len_Tcp_Head);
+        }
+        return Message;
+    }());
+    utils.Message = Message;
+    __reflect(Message.prototype, "utils.Message");
+})(utils || (utils = {}));
+//# sourceMappingURL=Message.js.map

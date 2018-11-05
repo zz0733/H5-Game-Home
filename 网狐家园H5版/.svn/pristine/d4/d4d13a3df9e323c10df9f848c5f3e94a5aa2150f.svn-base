@@ -1,0 +1,265 @@
+/**
+ * 服务器管理
+ */
+namespace models {
+
+    /**
+     * 代理
+     */
+    export class Agent {
+        public wAgentLevel: number = 0;
+        public dwServiceAddr: number = 0;
+        public szServiceDomain: string = "";
+
+        constructor(wAgentLevel, dwServiceAddr, szServiceDomain) {
+            this.wAgentLevel = wAgentLevel;
+            this.dwServiceAddr = dwServiceAddr;
+            this.szServiceDomain = szServiceDomain;
+        }
+    }
+    export class AgentServer {
+        public wAgentID: number = 0;
+        public wServicePort: number = 0;
+        constructor(wAgentID, wServicePort) {
+            this.wAgentID = wAgentID;
+            this.wServicePort = wServicePort;
+        }
+    }
+
+    /** 约战相关
+     * 附加配置
+     */
+    class ItemsSpcial {
+        public type: number = 0;
+        public describe: string = "";
+        public price: number = 0;
+        public min: number = 0;
+        public max: number = 0;
+        public card: number = 0;
+        public value: number = 0;
+
+        constructor(data: any) {
+            if (null != data.type) {
+                this.type = data.type;
+            }
+
+            if (null != data.describe) {
+                this.describe = data.describe;
+            }
+
+            if (null != data.price) {
+                this.price = data.price;
+            }
+
+            if (null != data.min) {
+                this.min = data.min;
+            }
+            if (null != data.max) {
+                this.max = data.max;
+            }
+            if (null != data.roomCard) {
+                this.card = data.roomCard;
+            }
+
+            if (null != data.value) {
+                this.value = data.value;
+            }
+        };
+    }
+
+    /**
+     * 约战配置
+     */
+    export class Option {
+        public wPlayerCount: number = 0;
+        public wOptionMask: number = 0;
+
+        //AA约战
+        public wSuportPayType: number = 0;
+        public cbOptionCount: number = 0;
+        //视频费用 (新增)
+        public lVideoIngot_User: number = 0;
+        public lVideoRoomCard_User: number = 0;
+        public lVideoIngot_Owner: number = 0;
+        public lVideoRoomCard_Owner: number = 0;
+        public lMinBaseScore: number = 0;
+        public lMaxBaseScore: number = 0;
+        public wPlayCount: number[] = [];
+        public dwPlayTime: number[] = [];
+        public lConsumeIngot: number[] = [];
+        public lRoomCard: number[] = [];
+        public lConsumeIngot_Owner: number[] = [];
+        public lRoomCard_Owner: number[] = [];
+
+        constructor() {
+
+        }
+    }
+    /**
+     * 附加配置
+     */
+    export class OptionSpecial {
+        public wCount: number = 0;
+        public name: string = "";
+        public count: number = 0;
+        public type: number = 0;
+        public min: number = 0;
+        public max: number = 0;
+        public items: ItemsSpcial[] = [];
+
+        public setItem(data: any): void {
+            let item = new ItemsSpcial(data);
+            this.items.push(item);
+        }
+    }
+
+    export class ServerInfo {
+        /**
+        * 登录列表
+        */
+        private m_LogonList = [];
+
+        /**
+         * 代理列表
+         */
+        private m_AgentList: { [key: number]: Agent } = {}
+
+        /**
+         * 代理列表
+         */
+        private m_ServerAgentList: { [key: number]: AgentServer[] } = {};
+
+        /**
+         * 游戏列表
+         */
+        private m_RoomList: { [key: number]: models.GameServerItem[] } = {};
+
+        /**
+         * 网关列表 
+         */
+        private m_AccessList = [];
+
+        /**
+         * 比赛列表
+         */
+        private m_MatchList: models.GameServerItem[] = [];
+
+        /**约战
+         * 约战配置
+         */
+        private m_Optionlist: { [key: number]: Option[] } = {};
+
+        /**约战
+         * 游戏选项
+         * 附加配置
+         */
+        private m_OptionSpecialList: { [key: number]: OptionSpecial[] } = {};
+
+        /**
+         * 更新时间
+         */
+        public _lUpdateTime: number = 0;
+
+        /**
+         * 构造
+         */
+        constructor() {
+
+        }
+
+        /**
+         * 更新列表
+         */
+        public UpdataRoomInfo(info: any) {
+            this.m_RoomList = info;
+        }
+
+        /**
+         * 更新比赛列表
+         */
+        public UpdataMatchInfo(info: any) {
+            this.m_MatchList = info;
+        }
+
+        /**
+         * 更新代理列表
+         */
+        public upDateAgentInfo(wAgentID: number, agentInfo: Agent) {
+            this.m_AgentList[wAgentID] = agentInfo;
+        }
+        public upDateRoomAgentInfo(wServerID: number, agentInfo: AgentServer[]) {
+            this.m_ServerAgentList[wServerID] = agentInfo;
+        }
+
+        /**
+         * 获取代理
+         */
+        public getAgent(wAgentID): Agent {
+            return this.m_AgentList[wAgentID];
+        }
+        public getServerAgent(wServerID) {
+            let agentList: any[] = [];
+            if (this.m_ServerAgentList[wServerID].length > 0) {
+
+                for (var i = 0; i < this.m_ServerAgentList[wServerID].length; i++) {
+                    let item = this.getAgent(this.m_ServerAgentList[wServerID][i].wAgentID);
+                    if (item) {
+                        let agentInfo = {
+                            dwServiceAddr: item.dwServiceAddr,
+                            szServiceDomain: item.szServiceDomain,
+                            wServicePort: this.m_ServerAgentList[wServerID][i].wServicePort
+                        };
+                        agentList.push(agentInfo);
+                    }
+                }
+            }
+            return agentList;
+        }
+
+        /**
+         * 设置网关服务
+         */
+        public setAccessServerInfo(info: any) {
+            this.m_AccessList = info;
+        }
+        public getAccessServer() {
+            return this.m_AccessList;
+        }
+
+        /**
+         * 约战配置
+         */
+        public setOptionList(wKind: number, option: any) {
+            if (null == this.m_Optionlist[wKind])
+                this.m_Optionlist[wKind] = [];
+
+            this.m_Optionlist[wKind].push(option);
+        }
+        public getOptionList() {
+            return this.m_Optionlist;
+        }
+
+        /**
+         * 附加配置
+         */
+        public setOptionSpecialList(wKind: number, option: any) {
+            if (null == this.m_OptionSpecialList[wKind])
+                this.m_OptionSpecialList[wKind] = [];
+
+            this.m_OptionSpecialList[wKind].push(option);
+        }
+        public getOptionSpecialList() {
+            return this.m_OptionSpecialList;
+        }
+
+        /**
+         * 重置
+         */
+        public resetServer() {
+            this.m_LogonList = [];
+            this.m_AgentList = {};
+            this.m_RoomList = {};
+            this.m_AccessList = [];
+        }
+    }
+}

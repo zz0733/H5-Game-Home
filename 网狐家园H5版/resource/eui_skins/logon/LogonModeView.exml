@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.LogonModeView" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Button id="Logon" label="" x="667" y="204" anchorOffsetX="226" anchorOffsetY="79" name="bt_account_logon">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_account_png" source.down="general_bt_account_png" source.disabled="general_bt_account_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Wechat" label="" x="667" y="364" anchorOffsetX="226" anchorOffsetY="79" name="bt_wechat_logon">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_wechat_png" source.down="bt_wechat_png" source.disabled="bt_wechat_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Regist" label="" x="667" y="524" anchorOffsetX="226" anchorOffsetY="79" name="bt_regist_account">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_regist_png" source.down="bt_regist_png" source.disabled="bt_regist_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="Logo" width="608" height="305" x="955" y="445" source="general_general_logo_png" fillMode="clip" scaleX="0.7" scaleY="0.7" name="logo"/>
+	<e:Image id="CopyRight" width="576" height="28" x="667" y="630.5" source="CopyRight_1_png" fillMode="clip" anchorOffsetX="288" anchorOffsetY="14"/>
+	<e:Image id="CopyRight1" width="781" height="21" x="667" y="658.5" source="CopyRight_2_png" fillMode="clip" anchorOffsetX="390.5" anchorOffsetY="10.5"/>
+	<e:Image id="CopyRight2" width="1000" height="21" x="667" y="686.5" source="CopyRight_3_png" fillMode="clip" anchorOffsetX="500" anchorOffsetY="10.5"/>
+</e:Skin>

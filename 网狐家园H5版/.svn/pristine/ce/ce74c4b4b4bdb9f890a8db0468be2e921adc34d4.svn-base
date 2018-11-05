@@ -1,0 +1,42 @@
+/**
+ * 用于数据缓存
+ * 本地缓存 
+ * http请求缓存
+ */
+namespace cache {
+    export class localization {
+        constructor() {
+
+        }
+
+        /**
+         * 本地存储 base64加密
+         */
+        public saveConfig(key:string,value: any) {
+            
+        }
+
+        public getConfigByKey(key: string) {
+
+        }
+
+        public removeConfigByKey(key: string) {
+
+        }
+
+        /**
+         * http请求缓存 JSON 不加密
+         */
+        public saveCache(key:string,value: any) {
+
+        }
+
+        public updateCache(key: string,value: any) {
+
+        }
+
+        public removeCacheByKey(key: string) {
+
+        }
+    }
+}

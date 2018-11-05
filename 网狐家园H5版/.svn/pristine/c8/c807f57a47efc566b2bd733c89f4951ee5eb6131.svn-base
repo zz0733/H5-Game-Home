@@ -1,0 +1,119 @@
+/**
+ * 网络服务
+**/
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var managers;
+(function (managers) {
+    /** @param MAX_MSG
+     * 每次处理消息包
+     * 每一帧压力不宜过大
+     */
+    var MAXMSG = 100;
+    var ServiceManager = (function () {
+        function ServiceManager() {
+            /**
+             * 消息队列
+             */
+            this.MsgQueue = [];
+            /**
+             * 服务类型
+             */
+            this.m_eServiceMode = 1 /* LogonService */;
+        }
+        /**
+        *获取当前实例
+        */
+        ServiceManager.getInstance = function () {
+            if (this.m_sInstance == null) {
+                this.m_sInstance = new ServiceManager();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+        };
+        ServiceManager.prototype.init = function () {
+            //TCP服务
+            this.m_pTcpService = null;
+            //服务类型
+            this.m_eServiceMode = 1 /* LogonService */;
+        };
+        /**
+         * 设置服务类型
+         */
+        ServiceManager.prototype.setServiceMode = function (mode) {
+            this.m_eServiceMode = mode;
+        };
+        /**
+         * 消息代理
+         */
+        ServiceManager.prototype.setViewFrame = function (view) {
+            this._viewFrame = null;
+            if (null == view)
+                return;
+            this._viewFrame = view;
+        };
+        ServiceManager.prototype.getViewFrame = function () {
+            return this._viewFrame ? this._viewFrame : null;
+        };
+        /**
+         * 获取TCP服务
+         */
+        ServiceManager.prototype.getTcpService = function () {
+            return this.m_pTcpService ? this.m_pTcpService : null;
+        };
+        //创建服务
+        ServiceManager.prototype.createSocketService = function (host, port, serviceMode) {
+            if (serviceMode === void 0) { serviceMode = 1 /* LogonService */; }
+            var tcpService = new service.TcpSocketService();
+            tcpService.createConnect(host, port);
+            this.m_pTcpService = tcpService;
+            this.m_eServiceMode = serviceMode;
+        };
+        /**
+         * 刷新服务
+         */
+        ServiceManager.prototype.onUpdate = function () {
+            //服务刷新
+            if (this.m_pTcpService && this.m_pTcpService.onUpdate) {
+                this.m_pTcpService.onUpdate();
+            }
+            if (this.MsgQueue.length == 0)
+                return;
+            //处理队列
+            if (this._viewFrame && this._viewFrame.onMessage) {
+                //消息处理
+                var queue = [];
+                if (this.MsgQueue.length > MAXMSG) {
+                    for (var i = 0; i < MAXMSG; i++) {
+                        var msg = this.MsgQueue[0];
+                        queue.push(msg);
+                        this.MsgQueue.shift();
+                    }
+                }
+                else {
+                    this.MsgQueue.forEach(function (msg) {
+                        queue.push(msg);
+                    });
+                    this.MsgQueue = [];
+                }
+                //消息处理
+                do {
+                    //消息分发
+                    var msg = queue[0];
+                    if (null != this._viewFrame) {
+                        this._viewFrame.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH, false, false, msg));
+                    }
+                    queue.shift();
+                } while (queue.length);
+            }
+            else {
+                console.log("_viewFrame 为空");
+            }
+        };
+        return ServiceManager;
+    }());
+    managers.ServiceManager = ServiceManager;
+    __reflect(ServiceManager.prototype, "managers.ServiceManager");
+})(managers || (managers = {}));
+//# sourceMappingURL=ServiceManager.js.map

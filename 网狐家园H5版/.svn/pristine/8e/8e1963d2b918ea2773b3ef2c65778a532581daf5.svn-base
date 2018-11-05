@@ -1,0 +1,87 @@
+namespace controller
+{
+    export class GameController extends egret.DisplayObjectContainer implements df.IController
+    {
+        //构造
+        public constructor()
+        {
+            super();
+
+            //视图名称
+            this.name = "GameController"
+
+            this.createGameClient()
+        }
+
+         /* controller生命周期
+         *  viewWillAppear
+         *  viewDidAppear 
+         *  viewWillDisappear 
+         *  viewDidDisappear
+         *  dealloc 回收资源
+         */
+         viewWillAppear(animated:boolean):void
+         {
+
+
+         }
+
+         viewDidAppear(animated:boolean):void
+         {
+
+         }
+
+         viewWillDisappear(animated:boolean):void
+         {
+
+
+         }
+
+         viewDidDisappear(animated:boolean):void
+         {
+
+
+         }
+
+         dealloc():void
+         {
+
+         }
+
+         private createGameClient():void
+         {
+
+             this.addChild(new game.landlord.GameClient());
+
+         }
+
+         /**
+         * 切换页面
+         * @param target  目标view
+         * @param handler 切换回调
+         */
+        onChangeView(target :any,action:any,handler? :any):void
+        {
+            
+        }
+
+        /**进入前台
+         * applicationDidBecomeActive
+         */
+         applicationDidBecomeActive(event :any):void
+         {
+
+
+         }
+
+         /**进入后台
+         * applicationDidBecomeActive
+         */
+         applicationWillEnterForeground(event :any):void
+         {
+
+
+         }
+    }
+
+}

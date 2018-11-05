@@ -1,0 +1,93 @@
+namespace controller
+{
+    export class ClientController extends models.Controller implements df.IController
+    {
+        /**
+         * 构造
+         */
+        public constructor()
+        {
+            super();
+
+            //视图名称
+            this.name = "ClientController"
+
+            this.createClientScene();
+        }
+
+        private createClientScene():void
+        {
+        
+        }
+
+        /* controller生命周期
+         *  viewWillAppear
+         *  viewDidAppear 
+         *  viewWillDisappear 
+         *  viewDidDisappear
+         *  dealloc 资源回收
+         */
+         viewWillAppear(animated:boolean):void
+         {
+             //根view
+            var root = new eui.UILayer();
+            this.addChild(root);
+
+            //背景
+            let sky = utils.createBitmapByName("background_png");
+            root.addChild(sky);
+
+            let controller: models.Controller = <models.Controller>managers.FrameManager.getInstance().getRunningController();
+            controller.setRoot(root);
+
+            //大厅入口
+            let clientLayer = new client.ClientLayer();
+            clientLayer.x = -this.width;
+            clientLayer.y = 0;
+            controller.showView(clientLayer,df.eControllerKind.PLAZA);
+         }
+
+         viewDidAppear(animated:boolean):void
+         {
+
+
+         }
+
+
+         viewWillDisappear(animated:boolean):void
+         {
+
+
+         }
+
+         viewDidDisappear(animated:boolean):void
+         {
+          
+         }
+
+         dealloc():void
+         {
+
+
+         }
+
+        /**进入前台
+         * applicationDidBecomeActive
+         */
+         applicationDidBecomeActive(event :any):void
+         {
+
+
+         }
+
+         /**进入后台
+         * applicationDidBecomeActive
+         */
+         applicationWillEnterForeground(event :any):void
+         {
+
+
+         }
+
+    }
+}

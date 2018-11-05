@@ -1,0 +1,179 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var utils;
+(function (utils) {
+    //数学库
+    var MathUtils = (function () {
+        function MathUtils() {
+        }
+        MathUtils.getUnsignedByte = function (byte) {
+            //防止溢出 0-0xFF
+            if (byte > 0xFF) {
+                byte = byte % 0x100;
+            }
+            if (byte < 0) {
+                //负数转换成无符号BYTE 0-0xFF
+                byte = byte % 0x100 + 0x100;
+            }
+            return byte;
+        };
+        return MathUtils;
+    }());
+    utils.MathUtils = MathUtils;
+    __reflect(MathUtils.prototype, "utils.MathUtils");
+    //字符库
+    var StringUtils = (function () {
+        function StringUtils() {
+        }
+        //format 1,000,000
+        StringUtils.numberToFormat = function (value) {
+            var formatStr = null;
+            var vec = 0;
+            formatStr = value.toString();
+            var len = formatStr.length;
+            for (var i = len; i >= 0; i--) {
+                vec++;
+                if ((vec % 3) == 0) {
+                    formatStr.concat;
+                }
+            }
+            return formatStr;
+        };
+        return StringUtils;
+    }());
+    utils.StringUtils = StringUtils;
+    __reflect(StringUtils.prototype, "utils.StringUtils");
+    /*********************************************************************************** *
+                                    export function
+    *********************************************************************************** */
+    /**
+    * 生成主命令码
+    * */
+    function MAIN_COMMAND(wCmdKindID, wCmdMainID) {
+        return (wCmdKindID & 0xFF00) | (wCmdMainID & 0x00FF);
+    }
+    utils.MAIN_COMMAND = MAIN_COMMAND;
+    /**基于矩形的碰撞检测*/
+    function hitTest(obj1, obj2) {
+        var rect1 = obj1.getBounds();
+        var rect2 = obj2.getBounds();
+        rect1.x = obj1.x;
+        rect1.y = obj1.y;
+        rect2.x = obj2.x;
+        rect2.y = obj2.y;
+        return rect1.intersects(rect2);
+    }
+    utils.hitTest = hitTest;
+    /**
+     * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
+     * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
+     */
+    function createBitmapByName(name, rect) {
+        var result = new egret.Bitmap();
+        var texture = RES.getRes(name);
+        if (rect) {
+            texture.$bitmapX = rect.x;
+            texture.$bitmapY = rect.y;
+            texture.$bitmapWidth = rect.width;
+            texture.$bitmapHeight = rect.height;
+        }
+        result.texture = texture;
+        return result;
+    }
+    utils.createBitmapByName = createBitmapByName;
+    function createTextureByName(name, rect) {
+        var texture = RES.getRes(name);
+        if (rect) {
+            texture.$bitmapX = rect.x;
+            texture.$bitmapY = rect.y;
+            texture.$bitmapWidth = rect.width;
+            texture.$bitmapHeight = rect.height;
+        }
+        return texture;
+    }
+    utils.createTextureByName = createTextureByName;
+    /*
+    *设置锚点
+    */
+    function setAnchorPoint(object, x, y) {
+        if ((object != null) && (x >= 0) && (y >= 0)) {
+            object.anchorOffsetX = x;
+            object.anchorOffsetY = y;
+            return object;
+        }
+        return object;
+    }
+    utils.setAnchorPoint = setAnchorPoint;
+    /*
+    *设置锚点为中心
+    */
+    function setAnchorCenter(object) {
+        if (object != null) {
+            return this.setAnchorPoint(object, object.width / 2, object.height / 2);
+        }
+        return null;
+    }
+    utils.setAnchorCenter = setAnchorCenter;
+    /*
+    *设置锚点为左上角
+    */
+    function setAnchorLeftTop(object) {
+        if (object != null) {
+            return this.setAnchorPoint(object, 0, 0);
+        }
+        return null;
+    }
+    utils.setAnchorLeftTop = setAnchorLeftTop;
+    /*
+    *设置锚点为上中心
+    */
+    function setAnchorMidTop(object) {
+        if (object != null) {
+            return this.setAnchorPoint(object, object.width / 2, 0);
+        }
+        return null;
+    }
+    utils.setAnchorMidTop = setAnchorMidTop;
+    /*
+    *设置锚点为下中心
+    */
+    function setAnchorMidBottom(object) {
+        if (object != null) {
+            return this.setAnchorPoint(object, object.width / 2, object.height);
+        }
+        return null;
+    }
+    utils.setAnchorMidBottom = setAnchorMidBottom;
+    /*
+   *设置锚点为左下角
+   */
+    function setAnchorLeftBottom(object) {
+        if (object != null) {
+            return this.setAnchorPoint(object, 0, object.height);
+        }
+        return null;
+    }
+    utils.setAnchorLeftBottom = setAnchorLeftBottom;
+    /*
+    *设置锚点为右上角
+    */
+    function setAnchorRightTop(object) {
+        if (object != null) {
+            return this.setAnchorPoint(object, object.width, 0);
+        }
+        return null;
+    }
+    utils.setAnchorRightTop = setAnchorRightTop;
+    /*
+    *设置锚点为右下角
+    */
+    function setAnchorRightBottom(object) {
+        if (object != null) {
+            return this.setAnchorPoint(object, object.width, object.height);
+        }
+        return null;
+    }
+    utils.setAnchorRightBottom = setAnchorRightBottom;
+})(utils || (utils = {}));
+//# sourceMappingURL=Utils.js.map

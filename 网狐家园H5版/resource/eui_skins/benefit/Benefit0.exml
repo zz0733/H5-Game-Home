@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="Benefit0" width="658" height="118" xmlns:e="http://ns.egret.com/eui">
+	<e:Button label="" x="329.5" y="58" anchorOffsetX="329.5" anchorOffsetY="59">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="benefit_frame_4_png" source.down="benefit_frame_4_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="118" height="104" x="39" y="6" source="benefit_icon_4_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="209" height="69" x="157" y="24.5" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="benefit_text_4_png"/>
+	<e:Button label="" x="600" y="58" anchorOffsetX="40" anchorOffsetY="40">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="benefit_bt_4_0_png" source.down="benefit_bt_4_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

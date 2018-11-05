@@ -1,0 +1,64 @@
+namespace models
+{
+    export class Dialog extends eui.UILayer implements df.IDialog
+    {
+        public m_eMode:number = df.eDialogMode.OK;
+        public m_OkFunc:any = null;
+        public m_CancellFunc:any = null; 
+        public m_Content:string = "";
+
+        protected createChildren(): void {
+             super.createChildren();
+             this.name = "Dialog";
+             this.once(egret.Event.ADDED_TO_STAGE,this.onInitLayer,this);
+             this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+         }
+
+         public onInitLayer():void
+         {
+             //背景
+             let backGround = utils.createBitmapByName("query_bg_def_png");
+             utils.setAnchorCenter(backGround);
+             this.addChild(backGround);
+             backGround.x = 667;
+             backGround.y = 375;
+         }
+
+         public initDialog(style:number,content:string,okFunc?:any,canCellFunc?:any)
+         {
+            this.m_eMode = df.eDialogMode.OK;
+            this.m_OkFunc = okFunc ? okFunc : null;
+            this.m_CancellFunc = canCellFunc ? canCellFunc : null ; 
+            this.m_Content = content;
+         }
+
+        /**
+        *IDialog
+        */
+         onSure():void
+         {
+
+
+         }
+
+        /**
+        *IDialog
+        */
+         onCancell():void
+         {
+
+
+         }
+
+         private onButtonClick(e: egret.TouchEvent) 
+         {
+
+         } 
+
+         private onExit(e:egret.Event):void
+         {
+            
+         }
+
+    }
+}

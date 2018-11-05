@@ -1,0 +1,115 @@
+/**
+ * 游戏交互
+ */
+namespace game {
+    export namespace runfast {
+        //用户头像位置
+        const HeadPoint: any[] = [{ x: 667, y: 618 }, { x: 1074, y: 172 }, { x: 144, y: 172 }];
+        export class GameViewLayer extends eui.UILayer {
+            private _gameEngine: GameClientEngine;
+          
+            /**
+             * 构造
+             */
+            constructor(engine: any) {
+                super();
+                this._gameEngine = engine;
+
+            }
+            protected createChildren(): void {
+                super.createChildren();
+
+                this.name = "GameViewLayer";
+
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+
+                //注册触摸
+                this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            }
+
+            /**初始化 */
+            public _companet: eui.Component;
+            private _userList: models.UserItem[] = [];
+            private onInitLayer(): void {
+                let componet = new eui.Component();
+                this.addChild(componet);
+                this._companet = componet;
+
+
+
+            }
+
+            /**清理桌面 */
+            public onRestGameView() {
+               
+            }
+
+            /**帧率刷新 */
+            private _lCurTime = egret.getTimer();
+            private _nDotIndex: number = 0;
+            public update() {
+               
+            }
+
+            /**停止动画 */
+            public stopAllAction() {
+               
+            }
+
+            private onButtonClick(e: egret.Event) {
+                let target = e.target as eui.Button;
+                switch (target.name) {
+                   
+                }
+            }
+
+            /**刷新倒计时 */
+            public updateClockView() {
+               
+            }
+
+
+            /**显示场景 */
+            public showSceneFree(data: any) {
+               
+            }
+
+          
+            /** 触摸事件
+            * onTouchBegan
+            * onTouchMove
+            * onTouchEnd
+            */
+            private onTouchBegan(event: egret.TouchEvent) {
+                //console.log("GameViewLayer onTouch Began");
+                this._bMoved = false;
+            }
+
+            private _bMoved = false;
+            private onTouchMove(event: egret.TouchEvent) {
+                // console.log("GameViewLayer onTouch move");
+                this._bMoved = true;
+            }
+
+            private onTouchEnd(event: egret.TouchEvent) {
+                // console.log("GameViewLayer onTouch end");
+
+            }
+
+            /**
+             * 移除舞台 
+             */
+            private onExit() {
+                //移除触摸
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+
+            }
+        }
+    }
+}

@@ -1,0 +1,151 @@
+/**
+ * 用户手牌
+ */
+namespace game {
+    export namespace sparrowsclm {
+
+        //手牌起始位置
+        export class HandCard {
+            private _cbCardsData: any[] = [];
+            private _handCardsObject: any[] = [];
+            private _handCardsCompanet: eui.Component[] = [];
+            private _gameLogic: GameLogic;
+            private _scene: any;
+            constructor(scene: any, viewId?: number, cardsData?: number[]) {
+                this._scene = scene;
+                this.onInitCardsData();
+            }
+
+            //数据初始化
+            private onInitCardsData() {
+
+                for (let i = 0; i < cmd.sparrowsclm.PLAYER_COUNT; i++) {
+                    if (null == this._cbCardsData[i]) {
+                        this._cbCardsData[i] = [];
+                    }
+
+                    if (null == this._handCardsObject[i]) {
+                        this._handCardsObject[i] = [];
+                    }
+
+                    this._handCardsCompanet[i] = this._scene._companet.getchildByName("handcardArea" + i);
+                    this._handCardsCompanet[i].removeChildren();
+                }
+            }
+
+            //创建手牌
+            public createHandCard(viewId: number, cardsData: number[], isLast: boolean = false, cardParam?: any) {
+                //手牌数据
+                for (let i = 0; i < cardsData.length; i++) {
+                    if (this._gameLogic.IsValidCard(cardsData[i])) {
+                        this._cbCardsData[viewId].push(cardsData[i]);
+                    }
+                }
+
+                egret.assert(this._cbCardsData[viewId].length < cmd.sparrowsclm.MAX_COUNT);
+
+                let texture: string = "";
+                if (viewId == cmd.sparrowsclm.MY_VIEW) {
+                    texture = cardParam ? cardParam.texture : "game_handcard_png";
+                } else if (viewId == 1) {
+                    texture = "";
+                } else if (viewId == 2) {
+                    texture = "";
+                }
+
+                //创建视图
+                for (let i = 0; i < cardsData.length; i++) {
+                    let cbData = cardsData[i];
+                    let card = new CardSprite(texture, cbData, cardParam);
+                    this._handCardsCompanet[viewId].addChild(card);
+                    this._handCardsObject[viewId].push(card);
+
+                    this.sortCardsPos(viewId, i, cardsData.length)
+                }
+            }
+
+            //调整位置
+            private sortCardsPos(viewId: number, count: number, total: number) {
+                //获取组合个数
+                const weaveItemCount = this._scene._weaveCard.getWeaveItemCount();
+
+                //获取组件
+                let companet = this._handCardsCompanet[viewId];
+                switch (viewId) {
+                    case cmd.sparrowsclm.MY_VIEW:
+                        {
+                            for (let i = 0; i < count; i++) {
+                                let card: CardSprite = this._handCardsObject[i];
+                                card.x = i * card.width;
+                                card.y = 0;
+                            }
+                        }
+                        break;
+                    case 1:
+                        {
+                            for (let i = 0; i < count; i++) {
+                                let card: CardSprite = this._handCardsObject[i];
+                                card.x = 0;
+                                card.y = i * card.height;
+                            }
+                        }
+                        break;
+                    case 2:
+                        {
+                            for (let i = 0; i < count; i++) {
+                                let card: CardSprite = this._handCardsObject[i];
+                                card.x = 0;
+                                card.y = i * card.height;;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            //移除手牌
+            public removeHandCard(viewId: number, deleteCount: number, deleteData?: number[]) {
+
+                //其他玩家 
+                if (viewId != cmd.sparrowsclm.MY_VIEW) {
+                    return;
+                }
+
+                if (this._gameLogic.RemoveCard(this._cbCardsData[viewId], deleteData)) {
+                    this.updateCardsData(viewId, this._cbCardsData[viewId])
+                }
+            }
+
+            //更新手牌
+            public updateCardsData(viewId: number, cardsData: number[]) {
+
+                //数据清空
+                if (null != this._cbCardsData[viewId]) {
+                    this._cbCardsData[viewId] = [];
+                }
+                this._handCardsCompanet[viewId].removeChildren();
+                this._handCardsObject[viewId] = [];
+
+                this.createHandCard(viewId, cardsData);
+            }
+
+            //获取手牌数据
+            public getHandCardData() {
+                return this._cbCardsData[cmd.sparrowsclm.MY_VIEW];
+            }
+
+            //排序
+            public sortHandCards() {
+                //数据排序
+                this._gameLogic.SortCardList(this._cbCardsData[cmd.sparrowsclm.MY_VIEW], this._cbCardsData[cmd.sparrowsclm.MY_VIEW].length);
+
+                //视图位置调整
+                this.updateCardsData(cmd.sparrowsclm.MY_VIEW, this._cbCardsData[cmd.sparrowsclm.MY_VIEW]);
+            }
+
+            //显示倒着手牌 一般游戏结束的时候明牌
+            public showSleepCards(viewId: number, cbCardsData: number[]) {
+
+            }
+        }
+    }
+}

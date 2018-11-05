@@ -1,0 +1,139 @@
+/**
+ * 权位操作
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export const MASK_CHI_HU_RIGHT = 0x0fffffff
+        export class CChiHuRight {
+            private m_dwRightMask = utils.allocArray<Number>(32, Number);
+            private m_dwRight = utils.allocArray<Number>(32, Number);
+
+            //加番变量
+            public m_cbGengCount: number = 0;
+            public m_cbQiaCount: number = 0;
+            //构造
+            constructor() {
+                for (let i = 0; i < 32; i++) {
+                    if (0 == i)
+                        this.m_dwRightMask[i] = 0;
+                    else
+                        this.m_dwRightMask[i] = (utils.MathUtils.getUnsignedDWORD(Math.pow(2, i - 1))) << 28;
+                    this.m_dwRightMask[i] = utils.MathUtils.getUnsignedDWORD(this.m_dwRightMask[i]);
+                }
+            }
+            //检查权位是否正确
+            public IsValidRight(dwRight: number) {
+                let dwRightHead: number = utils.MathUtils.getUnsignedDWORD(utils.MathUtils.getUnsignedDWORD(dwRight) & 0xF0000000);
+                for (let i = 0; i < 32; i++) {
+                    if (this.m_dwRightMask[i] == dwRightHead) return true;
+                }
+
+                return false;
+            }
+
+
+            //设置权位数值
+            public SetRightData(dwRight: number[], cbRightCount: number) {
+                egret.assert(cbRightCount <= 32);
+                if (cbRightCount > 32) return false;
+
+                this.m_dwRight = null;
+                this.m_dwRight = utils.allocArray<Number>(32, Number);
+                for (let i = 0; i < cbRightCount; i++) {
+                    this.m_dwRight[i] = dwRight[i];
+                }
+
+                return true;
+            }
+
+            //是否权位为空
+            public IsEmpty() {
+                for (let i = 0; i < 32; i++)
+                    if (this.m_dwRight[i]) return false;
+                return true;
+            }
+
+            //设置权位为空
+            public SetEmpty() {
+                this.m_dwRight = null;
+                this.m_dwRight = utils.allocArray<Number>(32, Number);
+                this.m_cbGengCount = 0;
+                this.m_cbQiaCount = 0;
+                return;
+            }
+
+            //赋值
+            public Assignment(dwRight: number) {
+                let dwOtherRight: number = 0;
+                //验证权位
+                if (!this.IsValidRight(dwRight)) {
+                    //验证取反权位
+                    egret.assert(this.IsValidRight(~dwRight));
+                    if (!this.IsValidRight(~dwRight)) return this;
+                    dwRight = ~dwRight;
+                    dwOtherRight = MASK_CHI_HU_RIGHT;
+                }
+
+                for (let i = 0; i < 32; i++) {
+                    if ((dwRight & Number(this.m_dwRightMask[i])) || (i == 0 && dwRight < 0x10000000))
+                        this.m_dwRight[i] = dwRight & MASK_CHI_HU_RIGHT;
+                    else this.m_dwRight[i] = dwOtherRight;
+                }
+
+                return this;
+            }
+
+            //与等于
+            public AndAssignment(dwRight: number) {
+                let bNavigate: boolean = false;
+                //验证权位
+                if (!this.IsValidRight(dwRight)) {
+                    //验证取反权位
+                    egret.assert(this.IsValidRight(~dwRight));
+                    if (!this.IsValidRight(~dwRight)) return this;
+                    //调整权位
+                    let dwHeadRight: number = utils.MathUtils.getUnsignedDWORD((~dwRight) & 0xF0000000);
+                    let dwTailRight: number = utils.MathUtils.getUnsignedDWORD(dwRight & MASK_CHI_HU_RIGHT);
+                    dwRight = dwHeadRight | dwTailRight;
+                    bNavigate = true;
+                }
+
+                for (let i = 0; i < 32; i++) {
+                    if ((dwRight & Number(this.m_dwRightMask[i])) || (i == 0 && dwRight < 0x10000000)) {
+                        let temp: number = Number(this.m_dwRight[i]);
+                        temp &= (dwRight & MASK_CHI_HU_RIGHT);
+                        this.m_dwRight[i] = temp;
+
+                    }
+                    else if (!bNavigate)
+                        this.m_dwRight[i] = 0;
+                }
+
+                return this;
+            }
+
+            //或等于
+            public OrAssignment(dwRight: number) {
+                //验证权位
+                if (!this.IsValidRight(dwRight)) return this;
+
+                for (let i = 0; i < 32; i++) {
+                    if ((dwRight & Number(this.m_dwRightMask[i])) || (i == 0 && dwRight < 0x10000000)) {
+                        let temp: number = Number(this.m_dwRight[i]);
+                        temp |= (dwRight & MASK_CHI_HU_RIGHT);
+                        this.m_dwRight[i] = temp;
+                    }
+
+                }
+
+                return this;
+            }
+
+            //与
+            public LogicAnd(dwRight: number) {
+                let chr: CChiHuRight= this;
+                return (chr.AndAssignment(dwRight));
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="LogonView" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:client="client.*" xmlns:w="http://ns.egret.com/wing">
+	<e:TextInput width="657" height="126" x="667" y="220" skinName="skins.TextInputLogon" enabled="true" anchorOffsetX="328.5" anchorOffsetY="63" name="input_account"/>
+	<e:TextInput width="657" height="126" x="667" y="357" skinName="skins.TextInputLogon" displayAsPassword="true" anchorOffsetX="328.5" anchorOffsetY="63" name="input_password"/>
+	<e:Image width="87" height="87" x="354" y="171.5" source="icon_account_png" fillMode="clip" touchEnabled="false"/>
+	<e:Image width="87" height="87" x="354" y="310.5" fillMode="clip" source="icon_password_png" touchEnabled="false"/>
+	<e:Button label="" x="832" y="520" name="bt_logon" anchorOffsetX="163.5" anchorOffsetY="76">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_logon_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button label="" x="502" y="520" enabled="true" name="bt_regist" anchorOffsetX="163.5" anchorOffsetY="76">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_regist_2_png" source.down="bt_regist_2_png" source.disabled="bt_regist_2_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button label="" x="50.5" y="50.5" name="bt_return" anchorOffsetX="50.5" anchorOffsetY="50.5">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png" source.disabled="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="87" height="87" x="482" y="596" source="general_choose_bg_png" fillMode="clip"/>
+	<e:CheckBox label="" x="482" y="596" name="auot_checkbox">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_choose_bg_png" source.down="general_choose_pass_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:Label text="下次自动登录" x="575.5" y="629.5" fontFamily="Arial" textColor="0x000000"/>
+</e:Skin>

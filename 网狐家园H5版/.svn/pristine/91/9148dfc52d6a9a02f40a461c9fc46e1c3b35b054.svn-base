@@ -1,0 +1,96 @@
+namespace controller
+{
+    export class ClientController extends egret.DisplayObjectContainer implements df.IController
+    {
+        /**
+         * 构造
+         */
+        public constructor()
+        {
+            super();
+
+            //视图名称
+            this.name = "ClientController"
+
+            this.createClientScene();
+        }
+
+        private createClientScene():void
+        {
+              //背景
+            let sky = utils.createBitmapByName("background_png");
+            this.addChild(sky);
+
+            this.addChild(new client.ClientLayer());
+
+        }
+
+        /* controller生命周期
+         *  viewWillAppear
+         *  viewDidAppear 
+         *  viewWillDisappear 
+         *  viewDidDisappear
+         *  dealloc 资源回收
+         */
+         viewWillAppear(animated:boolean):void
+         {
+
+
+         }
+
+         viewDidAppear(animated:boolean):void
+         {
+
+
+         }
+
+
+         viewWillDisappear(animated:boolean):void
+         {
+
+
+         }
+
+         viewDidDisappear(animated:boolean):void
+         {
+
+
+         }
+
+         dealloc():void
+         {
+
+
+         }
+
+         /**
+         * 切换页面
+         * @target 目标view
+         * @mode   切换模式
+         */
+         onChangeView(target :any,mode? :number):void
+         {
+
+            
+         }
+
+        /**进入前台
+         * applicationDidBecomeActive
+         */
+         applicationDidBecomeActive(event :any):void
+         {
+
+
+         }
+
+         /**进入后台
+         * applicationDidBecomeActive
+         */
+         applicationWillEnterForeground(event :any):void
+         {
+
+
+         }
+
+    }
+}

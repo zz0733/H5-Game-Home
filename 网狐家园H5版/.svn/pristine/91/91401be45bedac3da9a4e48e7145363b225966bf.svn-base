@@ -1,0 +1,503 @@
+/**
+ * 约战配置 
+ */
+namespace client {
+
+    /**
+     * 布局顺序
+     */
+    const layOutID = {
+        TYPE_USERCOUNT: 0, TYPE_PAY: 1, TYPE_CURRENCY: 2, TYPE_OTHER: 3,
+        TYPE_COUNT: 4, TYPE_TIME: 5, TYPE_CELL: 6
+    }
+
+    /**
+     * 组件模块
+     */
+    const module = {
+        0x01: client.RadioGroup,    //df.OPTION_TYPE_SINGLE
+        0x02: client.CheckBoxGroup, //df.OPTION_TYPE_MULTIPLE
+        0x04: client.NumInput       //df.OPTION_TYPE_INPUT
+    }
+
+    export class CreateConfigView extends egret.Sprite {
+        /**
+         * 构造
+         */
+        private _scene: any;
+        private _configNormal: any[] = [];
+        private _configSpecial: any[] = [];
+        private _recordConfig: any;
+        private _kindID: number = 0;
+        private _CurConfig: any;
+
+        //配置标识
+        private m_nCurIndex: number = 1
+        //数据保存
+        private m_OtherOption: any[] = [];
+        //控件保存
+        private m_ControlList: { [key: number]: any } = {};
+        //当前底注
+        private m_lBaseScore: number = 0
+        //当前货币
+        private m_cbCurrencyKind: number = 0
+        //结算局数/时间
+        private m_cbSettleKind: number = 0
+        //局数
+        private m_wBalanceCount: number = 0
+        //时间
+        private m_dwBalanceTime: number = 0
+        //人数
+        private m_wPlayerCount: number = 0
+        //付款人类型
+        private m_wPayType: number = 0
+        //子项数目
+        private m_wShowCount: number = 0
+        //是否茶馆
+        private m_isTeaHouse: boolean = false;
+
+        constructor(scene, config, recordConfig) {
+            super();
+            this._scene = scene;
+            this._configNormal = config.optionInfo;
+            this._configSpecial = config.specialInfo ? config.specialInfo[0] : [];
+            this._CurConfig = (this._configNormal.length == 1) ? this._configNormal : this._configNormal[0];
+            this._kindID = Number(config.gameID);
+            this.width = 910;
+            this.height = 530;
+
+            this.onInitConfig();
+
+        }
+
+        /**
+         * 配置项
+         */
+        private onInitConfig() {
+
+            //人数 付款人 货币类型 配置 局数 时间 底注
+            this.createUserCountConfig();
+            this.createPayerConfig();
+            this.createCurrencyConfig();
+            this.createCustomConfig();
+            this.createRoundConfig();
+            this.createTimeConfig();
+            this.createCellConfig();
+
+            this.onRestLayout();
+        }
+
+        private _scrollConfig: eui.Scroller;
+        private onRestLayout() {
+            const showCount = this.m_wShowCount;
+            let height = 0;
+            if (null != this.m_ControlList[layOutID.TYPE_USERCOUNT]) {
+                let showData = this.m_ControlList[layOutID.TYPE_USERCOUNT];
+                let companet = new module[showData.type](this, showData, this._configNormal);
+                this.addChild(companet);
+                companet.x = 0;
+                companet.y = 0;
+
+                height += companet.height;
+
+            }
+
+            if (null != this.m_ControlList[layOutID.TYPE_PAY]) {
+                let showData = this.m_ControlList[layOutID.TYPE_PAY];
+                let companet = new module[showData.type](this, showData, this._configNormal);
+                this.addChild(companet);
+                companet.x = 0;
+                companet.y = height;
+
+                height += companet.height;
+            }
+
+            if (null != this.m_ControlList[layOutID.TYPE_CURRENCY]) {
+
+                let showData = this.m_ControlList[layOutID.TYPE_CURRENCY];
+                let companet = new module[showData.type](this, showData, this._configNormal);
+                this.addChild(companet);
+                companet.x = 0;
+                companet.y = height;
+
+                height += companet.height;
+            }
+
+            if (null != this.m_ControlList[layOutID.TYPE_OTHER] && this.m_ControlList[layOutID.TYPE_OTHER].length >= 1) {
+                for (let i = 0; i < this.m_ControlList[layOutID.TYPE_OTHER].length; i++) {
+                    let showData = this.m_ControlList[layOutID.TYPE_OTHER][i];
+                    let companet = new module[showData.type](this, showData, this._configSpecial);
+                    this.addChild(companet);
+                    companet.x = 0;
+                    companet.y = height;
+
+                    height += companet.height;
+                }
+            }
+
+            if (null != this.m_ControlList[layOutID.TYPE_COUNT]) {
+                let showData = this.m_ControlList[layOutID.TYPE_COUNT];
+                let companet = new module[showData.type](this, showData, this._configNormal);
+                this.addChild(companet);
+                companet.x = 0;
+                companet.y = height;
+
+                height += companet.height;
+            }
+
+            if (null != this.m_ControlList[layOutID.TYPE_TIME]) {
+                let showData = this.m_ControlList[layOutID.TYPE_TIME];
+                let companet = new module[showData.type](this, showData, this._configNormal);
+                this.addChild(companet);
+                companet.x = 0;
+                companet.y = height;
+
+                height += companet.height;
+            }
+
+            if (null != this.m_ControlList[layOutID.TYPE_CELL]) {
+                let showData = this.m_ControlList[layOutID.TYPE_CELL];
+                let companet = new module[showData.type](this, showData, this._configNormal);
+                this.addChild(companet);
+                companet.x = 0;
+                companet.y = height;
+
+                height += companet.height;
+            }
+        }
+
+        //人数
+        private createUserCountConfig() {
+            //是否多个配置
+            let tmpIndex = -1;
+            if (this._configNormal.length > 1) {
+                //记录配置标识 根据玩家习惯记录
+                const recordPlayerCount = this._recordConfig ? this._recordConfig.wPlayerCount : 0;
+                //数据
+                let showData = { type: df.OPTION_TYPE_SINGLE, title: "人数 :", itemCount: this._configNormal.length, seletedIdx: 0, option: [] };
+                for (let i = 0; i < this._configNormal.length; i++) {
+                    showData.option.push(`${this._configNormal[i].wPlayerCount}人`);
+                    if (recordPlayerCount == this._configNormal[i].wPlayerCount) {
+                        showData.seletedIdx = i;
+                        tmpIndex = i;
+                        this.m_wPlayerCount = this._configNormal[i].wPlayerCount;
+                    }
+                }
+
+                if (-1 == tmpIndex) {
+
+                    //当前标识
+                    this.m_nCurIndex = 0;
+                    //当前配置
+                    this._CurConfig = this._configNormal[0]
+                    //当前人数
+                    this.m_wPlayerCount = this._configNormal[0].wPlayerCount;
+                }
+                //保存控件
+                this.m_ControlList[layOutID.TYPE_USERCOUNT] = showData;
+            } else {
+                //当前标识
+                this.m_nCurIndex = 0;
+                //当前配置
+                this._CurConfig = this._configNormal[0];
+                //当前人数
+                this.m_wPlayerCount = this._configNormal[0].wPlayerCount;
+            }
+        }
+
+        //付款人
+        private createPayerConfig() {
+            //房主支付支持
+            const bPayOwner = this._CurConfig.wSuportPayType && (this._CurConfig.wSuportPayType & df.PAY_TYPE_OWNER) != 0;
+            //AA支付支持
+            const bPayAA = this._CurConfig.wSuportPayType && (this._CurConfig.wSuportPayType & df.PAY_TYPE_USER) != 0;
+            //历史数据
+            let recordPayType = this._recordConfig ? this._recordConfig.wPayType : df.PAY_TYPE_OWNER;
+
+            //数据纠正
+            if (recordPayType == df.PAY_TYPE_OWNER) {
+                recordPayType = bPayOwner && recordPayType
+            } else if (recordPayType == df.PAY_TYPE_USER) {
+                recordPayType = bPayAA && recordPayType
+            } else {
+                recordPayType = null;
+            }
+
+            //当前类型
+            this.m_wPayType = (recordPayType == null) ? (bPayOwner ? df.PAY_TYPE_OWNER : df.PAY_TYPE_USER) : recordPayType;
+
+            if (this.m_isTeaHouse) {
+
+                return;
+            }
+
+            if (bPayOwner && bPayAA) {
+                //数据
+                let showData = {
+                    type: df.OPTION_TYPE_SINGLE, title: "支付房费 :", itemCount: 2,
+                    seletedIdx: this.m_wPayType == df.PAY_TYPE_OWNER ? 0 : 1, option: ["房主支付", "AA支付"]
+                };
+                //保存控件
+                this.m_ControlList[layOutID.TYPE_PAY] = showData;
+                this.m_wShowCount++;
+            }
+        }
+
+        //货币类型
+        private createCurrencyConfig() {
+            //房卡支持
+            const bRoomCardMask = this._CurConfig.wOptionMask && (this._CurConfig.wOptionMask & df.OPTION_MASK_ROOMCARD) != 0;
+            //钻石支持
+            const bIngotMask = this._CurConfig.wOptionMask && (this._CurConfig.wOptionMask & df.OPTION_MASK_INGOT) != 0;
+            //历史数据
+            let recordCurrency = this._recordConfig ? this._recordConfig.cbCurrencyKind : df.OPTION_MASK_INGOT;
+
+            //数据纠正
+            if (recordCurrency == df.OPTION_MASK_ROOMCARD) {
+                recordCurrency = bRoomCardMask && recordCurrency;
+            } else if (recordCurrency == df.OPTION_MASK_INGOT) {
+                recordCurrency = bIngotMask && recordCurrency
+            } else {
+                recordCurrency = null;
+            }
+
+            //当前类型
+            this.m_cbCurrencyKind = (recordCurrency == null) ? (bIngotMask ? df.CURRENCY_KIND_INGOT : df.CURRENCY_KIND_ROOMCARD) : recordCurrency;
+
+            if (this.m_isTeaHouse) {
+
+                return;
+            }
+
+            let stationID = df.STATION_ID;
+            if (bRoomCardMask && bIngotMask && (stationID == 2004 || this._kindID != 76)) {
+                //数据
+                let showData = {
+                    type: df.OPTION_TYPE_SINGLE, title: "支付类型 :", itemCount: 2,
+                    seletedIdx: this.m_cbCurrencyKind == df.CURRENCY_KIND_ROOMCARD ? 0 : 1, option: ["房卡", "钻石"]
+                };
+
+                //保存控件
+                this.m_ControlList[layOutID.TYPE_CURRENCY] = showData;
+                this.m_wShowCount++;
+            }
+        }
+
+        //玩法配置
+        private createCustomConfig() {
+
+            if (0 == this._configSpecial.length)
+                return;
+
+            //配置个数
+            const wSpecailCount = this._configSpecial.length;
+            //配置列表
+            const configList = this._configSpecial;
+            //控件保存
+            let uiIndex = 0;
+            this.m_ControlList[layOutID.TYPE_OTHER] = [];
+            //数据保存
+            this.m_OtherOption = []
+            //历史数据
+            let recordOption = this._recordConfig ? this._recordConfig.options : null;
+
+            for (let i = 0; i < wSpecailCount; i++) {
+                this.m_OtherOption.push(0);
+                //控件类型支持判断
+                if (null != configList[i].type) {
+                    let dataComplex: any;
+                    let nTmpDataCount = Number(configList[i].count ? configList[i].count : 0);
+                    let recordData = recordOption ? recordOption[i] : 0;
+                    //输入框判断
+                    if (configList[i].type == df.OPTION_TYPE_INPUT) {
+                        if (configList[i].max && configList[i].min) {
+                            recordData = Math.max(recordData, configList[i].min);
+                            recordData = Math.min(recordData, configList[i].max);
+                            this.m_OtherOption[i] = recordData;
+
+                            dataComplex = {
+                                type: df.OPTION_TYPE_INPUT, title: configList[i].name, recordData: recordData,
+                                lMaxBaseScore: configList[i].max, lMinBaseScore: configList[i].min
+                            };
+
+                            //保存控件
+                            this.m_ControlList[layOutID.TYPE_OTHER].push(dataComplex);
+                            this.m_wShowCount++;
+                            uiIndex++;
+
+                            return
+
+                        }
+                    } else if (nTmpDataCount) {
+                        dataComplex = [];
+                        let optionName = [];
+                        for (let j = 0; j < nTmpDataCount; j++) {
+                            let data = { name: "", value: 0, price: 0, card: 0, ownerprice: 0, ownercard: 0, lMaxBaseScore: 0, lMinBaseScore: 0 };
+                            data.name = configList[i].items[j].describe
+                            data.value = configList[i].items[j].value ? configList[i].items[j].value : j;
+                            data.price = configList[i].items[j].price ? configList[i].items[j].price : 0;
+                            data.card = configList[i].items[j].card ? configList[i].items[j].card : 0;
+                            data.ownerprice = configList[i].items[j].ownerprice ? configList[i].items[j].ownerprice : 0;
+                            data.ownercard = configList[i].items[j].ownercard ? configList[i].items[j].ownercard : 0;
+                            data.lMaxBaseScore = configList[i].items[j].max;
+                            data.lMinBaseScore = configList[i].items[j].min;
+                            dataComplex.push(data);
+                            optionName.push(data.name);
+                        }
+
+                        if (null == dataComplex || dataComplex.length == 0) return;
+
+                        // 初始数据 单选 记录的选择index
+                        if (configList[i].type == df.OPTION_TYPE_SINGLE) {
+                            this.m_OtherOption[i] = Math.min(configList[i].count, recordData); //范围过滤
+                            let showData = {
+                                type: df.OPTION_TYPE_SINGLE, title: configList[i].name + " :", itemCount: nTmpDataCount,
+                                seletedIdx: this.m_OtherOption[i], option: optionName
+                            };
+
+                            //保存控件
+                            this.m_ControlList[layOutID.TYPE_OTHER].push(showData);
+                            this.m_wShowCount++;
+                            uiIndex++;
+
+                        } else if (configList[i].type == df.OPTION_TYPE_MULTIPLE) {
+                            //多选 记录的所有选择选对应的value 或 | 操作后的值 
+                            this.m_OtherOption[i] = recordData;
+                            let selectedValue = [];
+                            for (let k = 0; k < nTmpDataCount; k++) {
+                                if ((this.m_OtherOption[i], dataComplex[k].value) != 0) {
+                                    //判断是否包含
+                                    selectedValue.push(1);
+
+                                } else {
+                                    selectedValue.push(0);
+                                }
+                            }
+                            let showData = {
+                                type: df.OPTION_TYPE_MULTIPLE, title: configList[i].name + " :", itemCount: nTmpDataCount,
+                                seletedValue: selectedValue, option: optionName
+                            };
+
+                            //保存控件
+                            this.m_ControlList[layOutID.TYPE_OTHER].push(showData);
+                            this.m_wShowCount++;
+                            uiIndex++;
+                        }
+                    }
+                }
+            }
+        }
+
+        //局数
+        private createRoundConfig() {
+            //支持判断
+            const bCountMask = (this._CurConfig.wOptionMask & df.OPTION_MASK_COUNT);
+            if (bCountMask && bCountMask != 0) {
+                //记录
+                const recordCount = this._recordConfig ? this._recordConfig.wCount : 0;
+                //当前选择
+                let cbTmpIndex = -1;
+
+                //数据
+                let showData = {
+                    type: df.OPTION_TYPE_SINGLE, title: "局数结算 :", itemCount: 0,
+                    seletedIdx: 0, option: []
+                };
+
+                for (let i = 0; i < 3; i++) {
+                    if (this._CurConfig.wPlayCount[i] != 0) {
+                        if (recordCount == this._CurConfig.wPlayCount[i]) {
+                            cbTmpIndex = i;
+                            this.m_wBalanceCount = recordCount;
+                            this.m_cbSettleKind = df.SETTLE_KIND_COUNT;
+
+                            showData.seletedIdx = i;
+
+                        }
+                        showData.itemCount++;
+                        showData.option.push(`${this._CurConfig.wPlayCount[i]}局`);
+                    }
+                }
+
+                this.m_ControlList[layOutID.TYPE_COUNT] = showData;
+                this.m_wShowCount++;
+            }
+        }
+
+        //时间
+        private createTimeConfig() {
+            //支持判断
+            const bTimeMask = (this._CurConfig.wOptionMask & df.OPTION_MASK_TIME);
+            if (bTimeMask && bTimeMask != 0) {
+                //时间记录
+                const recordTime = this._recordConfig ? this._recordConfig.dwTime : 0;
+                //当前选择
+                let cbTmpIndex = -1;
+
+                //数据
+                let showData = {
+                    type: df.OPTION_TYPE_SINGLE, title: "时间结算 :", itemCount: 0,
+                    seletedIdx: 0, option: []
+                };
+                for (let i = 0; i < 3; i++) {
+                    if (this._CurConfig.dwPlayTime[i] != 0) {
+                        if (recordTime == this._CurConfig.dwPlayTime[i]) {
+                            cbTmpIndex = i
+                            this.m_dwBalanceTime = recordTime;
+                            this.m_cbSettleKind = df.SETTLE_KIND_TIME;
+                        }
+                        showData.itemCount++;
+                        showData.option.push(`${this._CurConfig.dwPlayTime[i] / 60}分钟`);
+                    }
+                }
+
+                this.m_ControlList[layOutID.TYPE_TIME] = showData;
+                this.m_wShowCount++;
+            }
+
+        }
+
+        //底分
+        private createCellConfig() {
+            //获取记录
+            const recordCell = this._recordConfig ? this._recordConfig.cellScore : 0;
+
+            this.m_lBaseScore = (recordCell >= this._CurConfig.lMinBaseScore && recordCell <= this._CurConfig.lMaxBaseScore) ? recordCell : this._CurConfig.lMinBaseScore;
+
+            //可调整判断
+            if (this._CurConfig.lMaxBaseScore != this._CurConfig.lMinBaseScore) {
+                let showData = {
+                    type: df.OPTION_TYPE_INPUT, title: "游戏底分 :", recordData: this.m_lBaseScore,
+                    lMaxBaseScore: this._CurConfig.lMaxBaseScore, lMinBaseScore: this._CurConfig.lMinBaseScore
+                };
+                this.m_ControlList[layOutID.TYPE_CELL] = showData;
+                this.m_wShowCount++;
+            }
+        }
+
+        //人数改变事件
+        private onUserCoutChange(index: number, data: any) {
+
+        }
+
+        //时间结算改变事件
+        private onTimeChange(index: number, data: any) {
+
+        }
+
+        //局数结算改变事件
+        private onRoundChange(index: number, data: any) {
+
+        }
+
+        //玩法改变事件
+        private onCustomChange(index: number, data: any) {
+
+        }
+
+        //变更事件
+        private onConfigChangeEvent(tag, index1, index2) {
+
+        }
+    }
+}

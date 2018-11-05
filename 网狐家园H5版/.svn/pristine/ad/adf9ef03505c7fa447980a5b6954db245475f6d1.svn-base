@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+        <title></title>
+
+        <style>
+            .ui-articles { width: 95%; margin: 0 auto; }
+            .ui-articles h1 { text-align: center; border-bottom: 1px solid #ccc; font-weight: bold; font-size: 1em; padding: 10px 0; }
+            .ui-articles-content { padding: .8em .3em; font-size: 1em; }
+            .ui-articles-content p, .ui-articles-content img { margin: .5em 0 }
+            .ui-articles-content img { width: 100%; display: block; }
+            body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+                margin: 0; padding: 0;
+            }
+            body { font-size: 24px; }
+			p{ color: #fff;font-family:"宋体","幼圆","黑体",sans-serif;}
+            @media only screen and (max-width: 360px) and (min-width: 320px) {
+                body { font-size: 14px !important; }
+            }
+            @media only screen and (max-width: 360px) and (min-width: 350px) {
+                body { font-size: 14px !important; }
+            }
+            @media only screen and (max-width: 480px) and (min-width: 360px) {
+                body { font-size: 16px !important; }
+            }
+            @media only screen and (max-width: 480px) and (min-width: 470px) {
+                body { font-size: 16px !important; }
+            }
+            @media only screen and (max-width: 560px) and (min-width: 480px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 570px) and (min-width: 560px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 640px) and (min-width: 570px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 640px) and (min-width: 630px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 710px) and (min-width: 640px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 800px) and (min-width: 710px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 1080px) and (min-width: 800px) {
+                body { font-size: 20px !important; }
+            }
+            @media only screen and (max-width: 1280px) and (min-width: 1080px) {
+                body { font-size: 22px !important; }
+            }
+            @media only screen and (max-width: 1500px) and (min-width: 1280px) {
+                body { font-size: 24px !important; }
+            }
+            .l1:link, .l1:visited { text-decoration: none; color: #005ce5; }
+            .l1:hover { color: #005ce5; text-decoration: none; }
+            .Pd50 {padding-right:40px;}
+        </style>
+    </head>
+    <body>
+        <div class="ui-articles">
+            <div class="ui-articles-content">             
+                <p><strong style="font-weight:bold;color: #ffff00"><联系客服></strong></p>
+
+                <p> <a href="tel:15882201185" class="l1 Pd50">联系电话 158-8220-1185</a></p>  
+                <p> <a id="BizQQWPAInfo" href="javascript:;" title="企业QQ" class="l1 Pd50">官方QQ 1337275678</a>                
+                    <script charset="utf-8" type="text/javascript" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+                    <script type="text/javascript">
+                        BizQQWPA.addCustom({ aty: '0', a: '0', nameAccount: 1337275678, selector: 'BizQQWPAInfo' });
+                    </script>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

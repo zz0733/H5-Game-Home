@@ -1,0 +1,77 @@
+namespace utils
+{
+    /**
+     * 数字图片标签
+     */
+    export class LabelAtlas extends egret.Sprite
+    {
+        /**
+         * 纹理名称
+         */
+        private _textrueName: string = "";
+        /**
+         * 构造
+         */
+        constructor()
+        {
+            super();
+        }
+
+        /**createLabel
+         *@param str            目标子串
+         *@param charMapFile    目标纹理
+         *@param itemWidth      纹理宽度   
+         *@param itemHeight     纹理高度
+         *@param startCharMap   开始字符       
+         */
+
+        public static createLabel(str: string, charMapFile: string,charMapString: string ,itemWidth: number, itemHeight: number)
+        {
+            var instance = new LabelAtlas();
+            if(instance && instance.initWithString(str, charMapFile, charMapString,itemWidth, itemHeight))
+            {
+                return instance;
+            }
+
+            return null;
+        }
+
+        public initWithString(str: string, charMapFile: string,charMapString: string ,itemWidth: number, itemHeight: number):boolean
+        {
+            var length = str.length;
+            this.width = length * itemWidth;
+            this.height = itemHeight;
+
+            this._textrueName = charMapFile;
+
+            if (str.length == 0)
+                return false;
+
+            for (var i = 0 ; i<length ; i++)
+            {
+                var sub = str[i];
+                var pos = 0;
+                for (var j = 0 ; j < charMapString.length; j++)
+                {
+                    if (sub == charMapString[j])
+                    {
+                        //记录位置
+                        pos = j;
+
+                        //创建纹理
+                        var rect:egret.Rectangle = new egret.Rectangle(pos*itemWidth,0,itemWidth,itemHeight) ;
+                        var txture = utils.createBitmapByName(charMapFile,rect);
+                        this.addChild(txture);
+                        utils.setAnchorLeftTop(txture);
+                        txture.x = i*itemWidth;
+                        txture.y = 0;
+
+                        break;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }    
+}

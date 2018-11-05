@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ShopLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="Bg" width="1238" height="644" x="667" y="431" source="shop_background_png" anchorOffsetX="619" anchorOffsetY="322" locked="true"/>
+	<e:Image id="Top" width="1334" height="161" x="0" y="0" source="shop_top_png" fillMode="clip" locked="true"/>
+	<e:Button id="Return" label="" x="0" y="0" name="bt_close">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Panel id="Info" width="946" height="94" x="384" y="0" anchorOffsetX="0" anchorOffsetY="0" name="panel_info">
+		<e:Button id="Refresh" label="" x="190" y="47" name="info_refresh" anchorOffsetX="40" anchorOffsetY="40">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="bt_flushscore_0_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+		<e:Image id="Ingot" width="340" height="78" x="234" y="8" fillMode="clip" source="ingot_frame_png" anchorOffsetX="0" anchorOffsetY="0"/>
+		<e:Image id="Gold" width="340" height="78" x="588" y="10" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="gold_frame_png"/>
+		<e:Label id="Label_Ingot" text="1000000000" x="326" y="30" size="30" textColor="0x74eaff" name="label_ingot"/>
+		<e:Label id="Label_Gold" text="1000000000" x="684" y="32" size="30" textColor="0xf2c203" name="label_gold"/>
+	</e:Panel>
+	<e:Panel id="Medal" width="946" height="94" x="385" y="0" anchorOffsetX="0" anchorOffsetY="0" name="panel_medal" visible="false">
+		<e:Button id="Refresh0" label="" x="523" y="53" name="medal_refresh" anchorOffsetX="40" anchorOffsetY="40">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_flushscore_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+		</e:Button>
+		<e:Image id="Gold0" width="340" height="78" x="559" y="10" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="metal_frame_png"/>
+		<e:Label text="88888" x="637.85" y="34.61" textColor="0xf2c203" name="label_madal"/>
+	</e:Panel>
+	<e:CheckBox id="IngotCheck" label="" x="80" y="190" selected="true" name="check_0" locked="true">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="cbt_recharge_0_png" source.down="cbt_recharge_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:CheckBox id="GoldCheck" label="" x="80" y="295" name="check_1" locked="true">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="cbt_excharge_0_png" source.down="cbt_excharge_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:CheckBox id="BankCheck" label="" x="80" y="400" name="check_2">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="cbt_bank_0_png" source.down="cbt_bank_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:CheckBox id="ExchangeCheck" label="" x="80" y="505" name="check_3">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="cbt_item_0_png" source.down="cbt_item_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:CheckBox id="RoomCardCheck" label="" x="80" y="610" name="check_4">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="cbt_recharge_card_0_png" source.down="cbt_recharge_card_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:Label id="Tips" text="温馨提示：" x="820" y="160" textColor="0xc14d00" size="24" name="tips"/>
+	<e:Label id="TipsContent" text="钻石用于约战开房记录战绩" x="942" y="160" size="24" textColor="0x9e0b05" name="content"/>
+	<e:Panel id="PurchaseIngot" width="878" height="494" x="362" y="204" anchorOffsetX="0" anchorOffsetY="0" name="PurchaseIngot" visible="false">
+		<e:Label text="商品为空,敬请期待!" x="276" y="196" size="34" visible="false"/>
+		<e:Scroller width="858" height="474" x="8" y="8" anchorOffsetX="0" anchorOffsetY="0" name="scroller" bounces="true" scrollPolicyH="off" scrollPolicyV="on">
+			<e:Group anchorOffsetX="0" width="854" anchorOffsetY="0" height="470" name="Group">
+			</e:Group>
+		</e:Scroller>
+	</e:Panel>
+	<e:Panel id="PurchaseGold" width="878" height="494" x="362" y="202" anchorOffsetX="0" anchorOffsetY="0" name="PurchaseGold" visible="false">
+		<e:Scroller width="870" height="482" x="4" y="8" anchorOffsetX="0" anchorOffsetY="0" name="scroller" bounces="true" scrollPolicyH="off" scrollPolicyV="on">
+			<e:Group anchorOffsetX="0" width="870" anchorOffsetY="0" height="484" name="Group"/>
+		</e:Scroller>
+	</e:Panel>
+	<e:Panel id="Bank" width="878" height="494" x="362" y="202" anchorOffsetX="0" anchorOffsetY="0" name="Bank" visible="false" locked="true">
+		<e:Image width="136" height="54" x="153" y="33" source="shop_text_gold_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+		<e:Image width="136" height="54" x="153" y="114" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="shop_text_insure_png"/>
+		<e:TextInput width="660" height="121" x="128" y="173" skinName="skins.BankInput" prompt="请输入操作金额" name="textInput"/>
+		<e:Button id="Save" label="" x="293.5" y="379" anchorOffsetX="163" anchorOffsetY="74" name="save">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="bt_save_0_png" source.down="bt_save_0_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+		<e:Button id="Take" label="" x="629" y="379" anchorOffsetX="163" anchorOffsetY="74" name="take">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="bt_take_0_png" source.down="bt_take_0_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+	</e:Panel>
+	<e:Panel id="Exchange" width="878" height="494" x="362" y="202" anchorOffsetX="0" anchorOffsetY="0" name="Exchange" locked="true" visible="false">
+		<e:Label text="道具为空,敬请期待!" x="294" y="206" size="34"/>
+	</e:Panel>
+	<e:Panel id="RoomCard" width="878" height="494" x="362" y="202" anchorOffsetX="0" anchorOffsetY="0" name="RoomCard" visible="false">
+		<e:Label id="init" text="道具为空,敬请期待！" x="276" y="204" size="34"/>
+	</e:Panel>
+	<e:Panel id="PurChaseType" width="468" height="78" x="349" y="122" anchorOffsetX="0" anchorOffsetY="0" name="panel_purchaseType" locked="true">
+		<e:Image width="228" height="78" x="240" y="0" source="choose_wechat_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+		<e:Image width="228" height="78" x="6" y="0" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="choose_alipay_png"/>
+		<e:CheckBox id="Wechat" label="" x="240" y="0" selected="true" name="Wechat">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="choose_wechat_png" source.down="choose_buy_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:CheckBox>
+		<e:CheckBox id="ZFB" label="" x="6" y="0" name="ZFB">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="choose_alipay_png" source.down="choose_buy_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:CheckBox>
+	</e:Panel>
+</e:Skin>

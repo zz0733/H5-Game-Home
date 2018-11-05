@@ -1,0 +1,58 @@
+/**
+ * 客服
+ */
+namespace client{
+
+    export class ServiceLayer extends eui.UILayer{
+
+        /**
+         * constructor
+         */
+        createChildren()
+        {
+            super.createChildren();
+            this.once(egret.Event.ADDED_TO_STAGE,this.onInitLayer,this);
+            this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+        }
+
+        public onInitLayer()
+        {
+            //加载皮肤 
+            let componet = new eui.Component();
+            this.addChild(componet);
+            componet.skinName ="resource/eui_skins/ServiceLayer.exml";
+
+            //返回按钮
+            var btn = componet.getChildByName("bt_return");
+            btn.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClickEvent,this);
+        }
+
+        public onExit()
+        {
+
+        }
+
+        private onButtonClickEvent(e: egret.TouchEvent) 
+        {
+            var target = e.target;
+            if (target instanceof eui.Button)
+            {
+                let tw = egret.Tween.get(target)
+                .to({scaleX:1.1,scaleY:1.1},50)
+                .to({scaleX:1.0,scaleY:1.0},50);
+            }
+            
+
+            var controller: controller.Controller = managers.FrameManager.getInstance().getRunningController();
+            var rootLayer = controller.getRootLayer();
+            egret.assert(null != rootLayer);
+            if ((null == rootLayer) || (!rootLayer.onChangeView)) return;
+
+
+            if (target.name == "bt_return")
+            {
+                 rootLayer.onChangeView();
+            }
+        }
+    }
+}

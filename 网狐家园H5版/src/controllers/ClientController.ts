@@ -1,0 +1,96 @@
+/**
+ * 大厅视图控制器
+ */
+namespace controller {
+    export class ClientController extends models.Controller implements df.IController {
+        /**
+         * 构造
+         */
+        public constructor() {
+            super();
+
+            //视图名称
+            this.name = "ClientController"
+
+            this.createClientScene();
+
+            this.addEventListener(customEvent.CustomEvent.EVENT_ENTER_BACKGROUND, this.applicationWillEnterForeground, this);
+            this.addEventListener(customEvent.CustomEvent.EVENT_BECOME_ACTIVE, this.applicationDidBecomeActive, this);
+        }
+
+        private createClientScene(): void {
+
+        }
+
+        /* controller生命周期
+         *  viewWillAppear
+         *  viewDidAppear 
+         *  viewWillDisappear 
+         *  viewDidDisappear
+         *  dealloc 资源回收
+         */
+        viewWillAppear(animated: boolean): void {
+            //根view
+            var root = new eui.UILayer();
+            this.addChild(root);
+
+            //背景
+            let sky = utils.createBitmapByName("background_png");
+            root.addChild(sky);
+
+            let controller: models.Controller = managers.FrameManager.getInstance().getRunningController() as models.Controller;
+            controller.setRoot(root);
+
+            //大厅入口
+            let clientLayer = new client.ClientLayer();
+            clientLayer.x = -this.width;
+            clientLayer.y = 0;
+            controller.showView(clientLayer, df.eControllerKind.PLAZA,true);
+        }
+
+        viewDidAppear(animated: boolean): void {
+
+
+        }
+
+
+        viewWillDisappear(animated: boolean): void {
+
+
+        }
+
+        viewDidDisappear(animated: boolean): void {
+
+        }
+
+        dealloc(): void {
+            this.removeEventListener(customEvent.CustomEvent.EVENT_ENTER_BACKGROUND, this.applicationWillEnterForeground, this);
+            this.removeEventListener(customEvent.CustomEvent.EVENT_BECOME_ACTIVE, this.applicationDidBecomeActive, this);
+        }
+
+        /**进入前台
+         * applicationDidBecomeActive
+         */
+        applicationDidBecomeActive(event: any): void {
+
+
+        }
+
+        /**进入后台
+        * applicationDidBecomeActive
+        */
+        applicationWillEnterForeground(event: any): void {
+
+
+        }
+
+        /**
+         * 网络消息
+         */
+        public onMessage(e: egret.Event): void {
+            let msg = <network.Message>e.data;
+            var wMainCmd = msg.wMainCmd;
+        }
+
+    }
+}

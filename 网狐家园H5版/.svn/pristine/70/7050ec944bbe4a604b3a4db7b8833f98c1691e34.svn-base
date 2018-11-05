@@ -1,0 +1,242 @@
+
+/**
+ * 视图基类
+ */
+namespace controller{
+    
+    /**
+     * 视图遍历 先入后出
+     */
+    class ViewWalker
+    {
+        private _rootNode: any; //根节点
+        private _curNode: any;  //当前节点 
+       
+        //视图堆栈
+        private _viewStack: any[];
+
+        /**
+         * 构造
+         */
+        constructor()
+        {
+            this._viewStack = [];
+        }
+        
+        //压栈
+        public push(node:any,mode:df.eControllerKind = df.eControllerKind.LOGON,animate?: boolean,endPosX?: number,endPosY?: number)
+        {
+            //校验重复
+            egret.assert(node != this._rootNode);
+            egret.assert(node != this._curNode)
+
+            if ((node == this._rootNode) ||(node == this._curNode))
+            {
+                return;
+            }
+
+            //隐藏当前层
+            if (this._curNode) 
+            {
+                var tmp = this._curNode;
+                this._curNode = null;
+                var nodeMap = this._viewStack[(this._viewStack.length-1)];
+                var beginPos = nodeMap.begPos;
+                tmp.x = beginPos.x;
+                tmp.y = beginPos.y;
+                if (mode == df.eControllerKind.LOGON)
+                {
+                     tmp.visible = false;
+                }else
+                {
+                    egret.Tween.get(tmp)
+                    .to({x:-tmp.width,y:0},200);
+                }
+               
+                if (tmp.preHidden)
+                {
+                    tmp.preHidden();
+                }
+            }
+
+            //保存状态
+            var newNodeMap = {node:node,begPos:{x:node.x,y:node.y},endPos:{x:endPosX?endPosX:0,y:endPosY?endPosY:0}};
+
+            //切入目标层
+            this._rootNode.addChild(node);
+            this._curNode = node;
+           
+            if (animate)
+            {
+                egret.Tween.get(node)
+                .call(()=>{
+                    if (node.transAnibegin)
+                    {
+                        node.transAnibegin();
+                    }
+                })
+                .to({x:endPosX?endPosX:0,y:endPosY?endPosY:0},200)
+                .call(()=>{
+                    if (node.transFinish)
+                    {
+                        node.transFinish();
+                    }
+                })
+            }else
+            {
+                this._curNode.x = 0;
+                this._curNode.y = 0
+            }
+
+            //加入栈
+            this._viewStack.push(newNodeMap);
+        }
+
+        //出栈 
+        public pop(mode:df.eControllerKind = df.eControllerKind.LOGON)
+        {
+            if (this._viewStack.length < 2)
+            {
+                 return;
+            }
+               
+            //移除最上层
+            var map = this._viewStack.pop();
+            var node = map.node;
+            if (mode == df.eControllerKind.LOGON)
+            {
+                this._rootNode.removeChild(node);
+            }else
+            {
+                egret.Tween.get(node)
+                .to({x:-node.width,y:0},200)
+                .call(()=>{
+                    this._rootNode.removeChild(node);
+                });
+            }
+            
+            //弹出层
+            map = this._viewStack[this._viewStack.length-1];
+            var pos = map.endPos;
+            var node = map.node;
+            node.visible = true;
+            this._curNode = node;
+
+            egret.Tween.get(node)
+            .call(()=>{
+                if (node.transAnibegin)
+                {
+                    node.transAnibegin();
+                }
+            })
+            .to({x:pos.x,y:pos.y},200)
+            .call(()=>{
+                if (node.transAniFinish)
+                {
+                    node.transFinish();
+                }
+            })
+        }
+
+        //栈重置
+        public reSet()
+        {
+            this._viewStack = [];
+        }
+
+        //设置根节点
+        public setRoot(node: any)
+        {
+            this._rootNode = node;
+            
+            //保存状态
+            var nodeMap = {node:node,begPos:{x:-node.width,y:0},endPos:{x:0,y:0}};
+            this._viewStack.push(nodeMap);
+        }
+
+        //设置当前节点
+        public setCurNode(node: any)
+        {
+            this._curNode = node;
+        }
+    } 
+
+    export class Controller extends egret.DisplayObjectContainer{
+        /**
+         * 视图序列
+         */
+        public  _viewWalker: ViewWalker;
+
+        /**
+         * 根节点
+         */
+        private _rootLayer: any;
+
+            /**
+         * 构造
+         */
+            constructor()
+            {
+                super();
+
+                this.createTreeWalker();
+                
+            }
+
+            /**
+             * 视图遍历
+            */
+            public createTreeWalker(): ViewWalker
+            {
+                return this._viewWalker = new ViewWalker();
+            }
+
+            /**
+             * 设置根节点
+            */
+            public setRoot(root: any)
+            {
+                this._viewWalker.setRoot(root);
+                this._rootLayer = root;
+            }
+
+            public setCurNode(node: any)
+            {
+                this._viewWalker.setCurNode(node);
+            }
+            public getRootLayer()
+            {
+                return this._rootLayer;
+            }
+
+            /**
+             * 压栈
+             */
+            public showView(node: any,mode: df.eControllerKind = df.eControllerKind.LOGON,animate?:boolean,endPosX?: number,endPosY?: number)
+            {
+                this._viewWalker.push(node,mode,animate,endPosX,endPosY);
+            }
+
+            /**
+             * 出栈
+             */
+            public popView(mode: df.eControllerKind = df.eControllerKind.LOGON)
+            {
+                this._viewWalker.pop(mode);
+            }
+
+            /**
+             * 弹窗
+             */
+            public addAlert(view: any)
+            {
+                egret.assert(null != this._rootLayer);
+                if (null == this._rootLayer)
+                {
+                    return;
+                }
+
+                this._rootLayer.addChild(view);
+            }
+     }
+}

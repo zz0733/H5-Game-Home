@@ -1,0 +1,109 @@
+/**
+ * 登录控制器
+ * 视图切换
+ */
+namespace controller {
+    export class LoginController extends models.Controller implements df.IController {
+        /**
+         * 构造
+         */
+        constructor() {
+            super();
+
+            //视图名称
+            this.name = "LoginController"
+
+            this.createLoginScene();
+
+            //注册触摸
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+            this.addEventListener(customEvent.CustomEvent.EVENT_ENTER_BACKGROUND, this.applicationWillEnterForeground, this);
+            this.addEventListener(customEvent.CustomEvent.EVENT_BECOME_ACTIVE, this.applicationDidBecomeActive, this);
+        }
+
+        /* controller生命周期
+        *  viewWillAppear
+        *  viewDidAppear 
+        *  viewWillDisappear 
+        *  viewDidDisappear
+        *  dealloc 回收资源
+        */
+        viewWillAppear(animated: boolean): void {
+            console.log("LoginController viewWillAppear");
+
+        }
+
+        viewDidAppear(animated: boolean): void {
+            console.log("LoginController viewDidAppear");
+
+        }
+
+        viewWillDisappear(animated: boolean): void {
+            console.log("LoginController viewWillDisappear");
+        }
+
+        viewDidDisappear(animated: boolean): void {
+            console.log("LoginController viewDidDisappear");
+        }
+
+        dealloc(): void {
+
+            //移除监听
+            this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+            this.removeEventListener(customEvent.CustomEvent.EVENT_ENTER_BACKGROUND, this.applicationWillEnterForeground, this);
+            this.removeEventListener(customEvent.CustomEvent.EVENT_BECOME_ACTIVE, this.applicationDidBecomeActive, this);
+
+            console.log("LoginController dealloc");
+        }
+
+
+        /**进入前台
+        * applicationDidBecomeActive
+        */
+        applicationDidBecomeActive(event: any): void {
+            console.log("登录场景-进入前台");
+        }
+
+        /**进入后台
+        * applicationDidBecomeActive
+        */
+        applicationWillEnterForeground(event: any): void {
+            console.log("登录场景-进入后台");
+        }
+
+
+        createLoginScene(): void {
+            //背景
+            let sky = utils.createBitmapByName("background_png");
+            this.addChild(sky);
+
+            //加载登录层
+            var logonLayer = new client.LogonLayer();
+            this.addChild(logonLayer);
+        }
+
+    
+        /** 触摸事件
+         * onTouchBegan
+         * onTouchMove
+         * onTouchEnd
+        */
+        private onTouchBegan(event: egret.TouchEvent) {
+            console.log("onTouch Began");
+        }
+
+        private onTouchMove(event: egret.TouchEvent) {
+            console.log("onTouch move");
+        }
+
+        private onTouchEnd(event: egret.TouchEvent) {
+            console.log("onTouch end");
+        }
+    }
+}

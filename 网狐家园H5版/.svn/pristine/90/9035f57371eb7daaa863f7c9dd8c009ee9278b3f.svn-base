@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.HeadModify" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="BG" width="792.73" height="553.34" x="288" y="94.09" source="general_back_frame_1_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image id="HeadBG" width="732.12" height="350.31" x="320.24" y="185.91" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="userinfo_back_frame_3_png"/>
+	<e:Button id="Close" label="" x="1049.61" y="142.54" anchorOffsetX="37" width="74" anchorOffsetY="37" name="bt_close">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_close_png" source.down="general_bt_close_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Modify" label="" x="667" y="578.9" anchorOffsetX="103" anchorOffsetY="42" name="bt_modify">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_modify_0_png" source.down="userinfo_bt_modify_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="Title" width="142.73" height="38.19" x="616.84" y="113.97" fillMode="clip" source="userinfo_text_modifyhead_png" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Panel id="Head" width="718.48" height="324.54" x="323.82" y="193.64" anchorOffsetX="0" anchorOffsetY="0" name="panel_head">
+		<e:RadioButton label="" x="10" y="15" width="100" height="100" name="radio_0">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="10" y="145" width="100" height="100" name="radio_6">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="130" y="145" width="100" height="100" name="radio_7">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="250" y="145" width="100" height="100" name="radio_8">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="370" y="144.39" width="100" height="100" name="radio_9">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="130" y="15" width="100" height="100" name="radio_1">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="250" y="15" width="100" height="100" name="radio_2">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="370" y="15" width="100" height="100" name="radio_3">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="490" y="15" width="100" height="100" name="radio_4">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+		<e:RadioButton label="" x="610" y="15" width="100" height="100" name="radio_5">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_head_modify_0_png" source.down="userinfo_head_modify_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:RadioButton>
+	</e:Panel>
+</e:Skin>

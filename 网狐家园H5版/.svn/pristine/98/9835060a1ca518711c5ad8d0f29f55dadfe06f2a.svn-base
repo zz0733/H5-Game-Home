@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.RealItem" width="280" height="227" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="BG" width="280" height="200" x="0" y="0" source="bt_frame_item_png" fillMode="clip"/>
+	<e:Image id="Icon" width="152" height="152" x="140" y="100" source="item_default_png" fillMode="clip" anchorOffsetX="76" anchorOffsetY="76" name="icon"/>
+	<e:Label id="Name" text="IPHONE7S" x="140" y="28" anchorOffsetY="11" size="22" width="200" anchorOffsetX="100" textAlign="center" textColor="0x000000" name="name"/>
+	<e:Button id="Exchange" label="" x="140" y="193" anchorOffsetX="105" anchorOffsetY="29" name="exchange">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_buy_item_0_png" source.down="bt_buy_item_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="Medal" width="49" height="44" x="191" y="168" source="icon_medal_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false"/>
+</e:Skin>

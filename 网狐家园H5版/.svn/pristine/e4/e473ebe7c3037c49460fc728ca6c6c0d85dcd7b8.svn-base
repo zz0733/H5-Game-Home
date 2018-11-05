@@ -1,0 +1,109 @@
+/**
+ * 游戏定义 
+ */
+namespace cmd {
+    export namespace sparrowsclm {
+        export const GAME_PLAYER 				= 4  				//玩家人数
+        export const PLAYER_COUNT				= 3  				//游戏人数
+        export const MY_VIEW                    = 0                 //自己视图
+
+        export const MAX_WEAVE					= 3	 				//最大组合
+        export const MAX_INDEX					= 27				//最大索引
+        export const MAX_COUNT					= 11				//最大数目
+        export const MAX_REPERTORY				= 72				//最大库存
+
+        export const GAME_SCENE_FREE			= 0 				//空闲状态
+        export const GS_PLAYING					= 102				//游戏状态
+
+        export const GAME_ACTION_NULL			= 0x00				//无定义
+        export const GAME_ACTION_WIND			= 0x01				//刮风
+        export const GAME_ACTION_RAIN			= 0x02				//下雨
+        export const GAME_ACTION_CHI_HU			= 0x04  			//胡牌
+
+        export const OUT_CARD_JIA_GANG			= 1					//加杠标识
+        export const OUT_CARD_QING_HU			= 2					//请胡标识
+
+
+        export const SUB_S_GAME_START			= 100				//游戏开始
+        export const SUB_S_OUT_CARD				= 101				//用户出牌
+        export const SUB_S_SEND_CARD			= 102				//发送扑克
+        export const SUB_S_NOGANG_INFO			= 103				//禁杠扑克
+        export const SUB_S_OPERATE_NOTIFY		= 104				//操作提示
+        export const SUB_S_OPERATE_RESULT		= 105				//操作结果
+        export const SUB_S_CHIHU_RESULT			= 107				//吃胡命令 
+        export const SUB_S_GAME_END				= 108				//游戏结束
+        export const SUB_S_TRUSTEE				= 109				//用户托管
+        export const SUB_S_VOICEPHRASE			= 110				//语言短语
+        export const SUB_S_GAME_ACTION_NOTIFY	= 112				//动作提醒
+        export const SUB_S_GAME_RULE_SETTING	= 113				//规则设置
+        export const SUB_S_GAME_RULE_NOTIFY		= 114				//规则提醒
+        export const SUB_S_BAO_HU_NOTIFY		= 115				//报胡提醒
+        export const SUB_S_TRANSFER_NOTIFY		= 116				//呼叫转移 
+
+        export const SUB_C_OUT_CARD				= 1					//出牌命令
+        export const SUB_C_OPERATE_CARD			= 2					//操作扑克
+        export const SUB_C_TRUSTEE				= 3					//用户托管
+        export const SUB_C_SEND_CARD			= 4					//发送扑克  
+        export const SUB_C_VOICEPHRASE			= 5					//语音短语
+        export const SUB_C_GAME_RULE_SETTING	= 7					//规则设置
+        export const SUB_C_USER_BAO_HU			= 8					//报胡命令
+
+       
+        export const WIK_NULL					= 0x00				//没有类型
+        export const WIK_LEFT					= 0x01				//左吃类型
+        export const WIK_PENG					= 0x02				//碰牌类型
+        export const WIK_GANG					= 0x04				//杠牌类型100
+        export const WIK_JIA_GANG				= 0x08				//杠牌类型
+        export const WIK_BAO_HU					= 0x10				//报胡类型
+        export const WIK_QING_HU				= 0x20				//请胡类型100000
+        export const WIK_CHI_HU					= 0x40				//吃胡类型1000000
+        export const WIK_DIAN_PAO				= 0x80				//点炮
+
+        //扩展动作
+        export const WIK_EX_TIAN_HU				= 0x0100			//天胡类型  
+        export const WIK_EX_DI_HU				= 0x0200			//地胡类型
+        export const WIK_EX_FANG_PAO			= 0x0400			//放炮动作
+        export const WIK_EX_CHI_HU				= 0x0800			//吃胡动作                
+        export const WIK_EX_ZIMO				= 0x1000			//自摸动作
+        export const WIK_EX_GANG_PAO			= 0x2000			//杠上炮
+        export const WIK_EX_GANG_KAI			= 0x4000			//杠上花
+        export const WIK_EX_QING_HU				= 0x8000			//请胡类型
+        export const WIK_EX_LIU_JU				= 0x0110			//流局
+        export const WIK_EX_CHI_BAO_HU          = 0x0001            //抓胡类型  
+        export const WIK_EX_CHI_QING_HU         = 0x0002            //抓胡类型  
+
+        //胡牌牌型
+        export const CHR_PING_HU				= 0x00000001		//平胡1	
+        export const CHR_DUI_DUI_HU				= 0x00000002		//对对胡2
+        export const CHR_QING_DUI				= 0x00000004		//清对对3
+        export const CHR_JIANG_DUI				= 0x00000008		//将对对4
+        export const CHR_QING_YI_SE				= 0x00000010		//清一色5
+        export const CHR_WU_DUI					= 0x00000020		//五小对6
+        export const CHR_QING_WU_DUI			= 0x00000040		//清五对7
+        export const CHR_JIANG_WU_DUI			= 0x00000080		//将五对8
+        export const CHR_LONG_WU_DUI			= 0x00000100		//龙五对9
+        export const CHR_QLONG_WU_DUI			= 0x00000200		//清龙五对10
+        export const CHR_JLONG_WU_DUI			= 0x00000400		//将龙五对11
+        export const CHR_QJLONG_WU_DUI			= 0x00000800		//清将龙五对12
+        export const CHR_TAKE_YI_JIU			= 0x00001000		//带幺九13
+        export const CHR_QING_TAKE_YI_JIU		= 0x00008000		//清幺九 16
+        export const CHR_DUI_TAKE_YI_JIU		= 0x00002000		//对对胡带幺九 14
+        export const CHR_LDUI_TAKE_YI_JIU		= 0x00004000		//龙五对带幺九 15
+        export const CHR_TIAN_HU				= 0x00010000		//天胡17
+        export const CHR_DI_HU					= 0x00020000		//地胡 18
+
+        //加倍项
+        export const CHR_BREAK_YI_JIU			= 0x00100000		//断幺九 21
+        export const CHR_GANG_KAI				= 0x00200000		//杠上花 22
+        export const CHR_GANG_PAO				= 0x00400000		//杠上炮 23
+        export const CHR_QIANG_GANG				= 0x00800000		//抢杠 24
+        export const CHR_HAI_DI_LAO				= 0x01000000		//海底捞25
+        export const CHR_HAI_DI_PAO				= 0x02000000		//海底炮26
+        export const CHR_BAO_JIAO				= 0x04000000		//报叫27
+        export const MASK_CHI_HU_RIGHT			= 0x0fffffff
+
+
+        export const MASK_COLOR					= 0XF0 				//花色掩码
+        export const MASK_VALUE					= 0X0F 				//牌值掩码
+    }
+}

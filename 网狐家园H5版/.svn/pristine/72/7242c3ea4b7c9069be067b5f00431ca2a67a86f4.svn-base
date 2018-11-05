@@ -1,0 +1,264 @@
+/** 
+ * 网络服务
+**/
+
+namespace managers {
+    export class TcpServiceCtrl implements df.IConnectSocket, df.ISocketService {
+        /**
+        *单例实例 
+        */
+        private static m_sInstance: TcpServiceCtrl;
+
+        /**
+         * 消息队列
+         */
+        _MsgQueue: network.Message[] = [];
+
+        /**
+         * 当前Tcp服务
+         */
+        private m_pTcpService: service.TcpSocketService;
+
+        /**
+         * 业务代理
+         */
+        private _delegate: any;
+
+        /**
+         * 当前服务列表
+         */
+        private _curServerList: any;
+
+        /**
+         * 当前服务索引
+         */
+        private _curServerIdx: number = 0;
+
+        /**
+         * 重连次数
+         */
+        m_ReConnectCount: number;
+
+        /**
+         * 最大连接次数
+         */
+        m_ReConnectMax: number = 5
+
+        /**
+         * 连接超时
+         */
+        m_ReConnectTimeOut: number = 10;
+
+        /**
+         * 默认服务信息
+         */
+        public m_DefaultServerInfo =
+        {
+            domain: "s88.foxuc.com",
+            port: 8100,
+            webAddr: "testwww.foxuc.com"
+        }
+
+        /**实卡地址*/
+        public URL_RECHARGE_CARD: string = "";
+        /**支付宝回调 */
+		public ZFB_CALLBACK_URL: string = "";
+
+        /**
+         * 服务器信息
+         */
+        private m_ServerInfo: models.ServerInfo;
+
+        /**
+         * 列表信息
+         */
+        private m_GamelistInfo: client.GameListInfo;
+
+
+        /**
+        *获取当前实例
+        */
+        public static getInstance(): TcpServiceCtrl {
+            if (this.m_sInstance == null) {
+                this.m_sInstance = new TcpServiceCtrl();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+        }
+
+
+        public init(): void {
+
+            //服务器信息
+            this.m_ServerInfo = new models.ServerInfo();
+
+            //列表信息
+            this.m_GamelistInfo = new client.GameListInfo();
+        }
+
+        /**
+         * 服务索引
+         */
+        public setServerIdx(idx: number) {
+            this._curServerIdx = idx;
+        }
+
+        /**
+         * 当前服务列表
+         */
+        public setCurServerList(list: any) {
+            this._curServerList = list;
+        }
+
+        /**
+         * 服务器信息
+         */
+        public getServerInfo() {
+            return this.m_ServerInfo ? this.m_ServerInfo : null;
+        }
+
+        /**
+         * 列表信息
+         */
+        public getGameListInfo() {
+            return this.m_GamelistInfo ? this.m_GamelistInfo : null;
+        }
+
+        //连接大厅
+        public onConnectPlaza() {
+            var host = this.m_DefaultServerInfo.domain;
+            var port = this.m_DefaultServerInfo.port;
+            this.createSocketService(host, port);
+        }
+
+
+        //加载上次成功地址
+        public loadAgentPlazaRecord() {
+
+        }
+
+        //保存地址
+        public saveAgentPlazaRecord() {
+
+        }
+
+        //连接成功
+        public socketConnectSuccess(): void {
+            //重置变量
+            this.m_ReConnectCount = 0;
+
+            //保存服务
+            this.saveAgentPlazaRecord();
+        }
+
+        /**
+        * 重连机制
+        */
+        onReconnect() {
+
+            //this.createConnect(connect.domain,Number(connect.port));
+
+            managers.FrameManager.getInstance().showPopWait("网络重连中");
+
+        }
+
+        /**
+         * 重连超时
+         */
+        onReconnectTimeOut() {
+
+        }
+
+        /**
+         * 重连失败
+         */
+        public onReconnectFailure() {
+            if (null == this._delegate)
+                return;
+
+            this._delegate.getDispatcher().dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_CONNECT_FAIlURE));
+        }
+
+        /**
+         * 消息代理
+         */
+        public setDelegate(delegate: any) {
+            this._delegate = null;
+
+            if (null == delegate)
+                return;
+
+            this._delegate = delegate;
+        }
+
+        public getDelegate() {
+            return this._delegate ? this._delegate : null;
+        }
+
+        /**
+         * 获取TCP服务
+         */
+        public getTcpService() {
+            return this.m_pTcpService;
+        }
+
+        //创建服务
+        public createSocketService(host: string, port: number, serviceKind: df.eServerKind = df.eServerKind.PLAZA) {
+            var tcpService = new service.TcpSocketService(this,serviceKind);
+            tcpService.createConnect(host, port);
+
+            this.m_pTcpService = tcpService;
+        }
+
+        /**
+         * 关闭服务
+         */
+        closeService(): void {
+            if (this.m_pTcpService) {
+                //关闭SOCKET
+                this.m_pTcpService.closeService();
+                this.m_pTcpService = null;
+
+                //重置变量
+                this._curServerIdx = 0;
+                this.m_ReConnectCount = 0;
+                this._curServerList = null;
+            }
+        }
+        /**
+         * 刷新服务
+         */
+        onUpdate(): void {
+            //服务刷新
+            if (this.m_pTcpService && this.m_pTcpService.onUpdate) {
+                this.m_pTcpService.onUpdate();
+            }
+
+            if (this._MsgQueue.length == 0) return;
+
+            if (null == this._delegate) {
+                console.log("delegate is null");
+                return;
+            }
+
+            //处理队列
+            if (null != this._delegate.onMessage) {
+                //变量定义
+                var dispatch: network.Message[] = [];
+                var length = this._MsgQueue.length;
+                length = (length < df.MAX_UNIT) ? length : df.MAX_UNIT;
+
+                //分帧处理
+                dispatch = this._MsgQueue.slice(0, length);
+                this._MsgQueue.splice(0, length);
+
+                //消息分发
+                while (dispatch.length) {
+                    var msg = dispatch[0];
+                    this._delegate.getDispatcher().dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH, false, false, msg));
+                    dispatch.shift();
+                }
+            }
+        }
+    }
+}    

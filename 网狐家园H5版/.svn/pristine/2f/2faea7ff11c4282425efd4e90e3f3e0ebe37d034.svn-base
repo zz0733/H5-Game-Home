@@ -1,0 +1,292 @@
+namespace utils{
+    //数学库
+    export class MathUtils
+    {
+        public static getUnsignedByte(byte): number
+        {
+            //防止溢出 0-0xFF
+            if (byte > 0xFF)
+            {
+                byte = byte % 0x0100
+            }
+            if (byte < 0)
+            {   
+                //负数转换成无符号BYTE 0-0xFF
+                byte = byte % 0x0100 + 0x0100;
+            }
+            return byte
+        }
+
+        public static getUnsignedWORD(word): number
+        {
+            //防止溢出 0-0xFFFF
+            if (word > 0xFFFF)
+            {
+                word = word % 0x00010000
+            }
+            if (word < 0)
+            {   
+               // 0-0xFFFF
+                word = word % 0x00010000 + 0x00010000;
+            }
+            return word;
+        }
+
+        public static getUnsignedDWORD(dword): number
+        {
+            //防止溢出 0-0xFFFFFFFF
+            if (dword > 0xFFFFFFFF)
+            {
+                dword = dword % 0x100000000
+            }
+            if (dword < 0)
+            {   
+               // 0-0xFFFFFFFF
+                dword = dword % 0x100000000 + 0x100000000;
+            }
+            return dword;
+        }
+    }
+
+    
+    
+    //字符库
+    export class StringUtils
+    {
+        
+        public static reverse(str: string): string
+        {    
+            let ret: string = "";
+            for (var i = str.length-1;i>=0 ;i--)
+            {
+               ret += str[i];
+            }
+            return ret;
+        }
+
+        /**
+         * 格式化字串 such as:1,000
+         */
+        public static formatNumberThousands(num :number): string
+        {   
+            let numStr: string = `${num}`;
+            let result: string = "";
+            let times: number = 0;
+            for (var i = numStr.length-1;i>=0;i--)
+            {
+                if (times>0 && times % 3 == 0)
+                {
+                   result += ",";
+                }
+                result += numStr[i];
+                times++;
+            }
+            result = StringUtils.reverse(result)
+            return result ;
+        }
+
+        /*
+        * 生成机器码
+        */
+        public static getGUID() 
+        {
+            return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            });
+        }
+
+    }
+
+
+
+    /*********************************************************************************** *
+                                   全局函数
+    *********************************************************************************** */
+
+     /**
+     * 版本值
+     */
+    export function PROCESS_VERSION(PRODUCT_VER,cbMainVer,cbSubVer,cbBuildVer)
+    {
+        egret.assert(PRODUCT_VER>0);
+        var version = 0;
+
+        cbMainVer = MathUtils.getUnsignedByte(cbMainVer);
+        cbSubVer = MathUtils.getUnsignedByte(cbSubVer);
+        cbBuildVer = MathUtils.getUnsignedByte(cbBuildVer);
+
+        version =  PRODUCT_VER << 24;
+        version += cbMainVer << 16;
+        version += cbSubVer << 8;
+        version += cbBuildVer;
+
+        version = MathUtils.getUnsignedDWORD(version);
+        return version;
+
+    }
+        
+
+    /**基于矩形的碰撞检测*/
+    export function hitTest(obj1:egret.DisplayObject,obj2:egret.DisplayObject):boolean
+    {
+        let rect1:egret.Rectangle = obj1.getBounds();
+        let rect2:egret.Rectangle = obj2.getBounds();
+        rect1.x = obj1.x;
+        rect1.y = obj1.y;
+        rect2.x = obj2.x;
+        rect2.y = obj2.y;
+        return rect1.intersects(rect2);
+    }
+
+    /**
+     * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
+     * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
+     */
+    export function createBitmapByName(name: string,rect?:egret.Rectangle): egret.Bitmap {
+        let result = new egret.Bitmap();
+        let texture: egret.Texture = RES.getRes(name);
+        if (rect)
+        {
+            texture.$bitmapX = rect.x;
+            texture.$bitmapY = rect.y;
+            texture.$bitmapWidth = rect.width;
+            texture.$bitmapHeight = rect.height;
+        }
+        result.texture = texture;
+        return result;
+    } 
+
+    export function createTextureByName(name: string,rect?:egret.Rectangle):egret.Texture{
+        let texture: egret.Texture = RES.getRes(name);
+
+        if (rect)
+        {
+            texture.$bitmapX = rect.x;
+            texture.$bitmapY = rect.y;
+            texture.$bitmapWidth = rect.width;
+            texture.$bitmapHeight = rect.height;
+        }
+
+        return texture;
+    }
+
+
+    /*
+    *设置锚点
+    */
+    export function setAnchorPoint(object:egret.DisplayObject,x:number,y:number):egret.DisplayObject  {
+        if((object != null) && (x >= 0) && (y >= 0))
+        {
+            object.anchorOffsetX = x;
+            object.anchorOffsetY = y;
+            return object;
+        }
+        return object;
+    }
+
+    /*
+    *设置锚点为中心
+    */
+    export function setAnchorCenter(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+            return this.setAnchorPoint(object,object.width/2,object.height/2);
+        }
+
+        return null;
+    }
+    /*
+    *设置锚点为左上角
+    */
+     export function setAnchorLeftTop(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+            return this.setAnchorPoint(object,0,0);
+        }
+
+        return null;
+     }
+    /*
+    *设置锚点为上中心
+    */
+    export function setAnchorMidTop(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+           return this.setAnchorPoint(object,object.width/2,0);
+           
+        }
+
+        return null;
+     }
+
+     /**
+      * 设置锚点为左中心
+      */
+      export function setAnchorLeftMid(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+           return this.setAnchorPoint(object,0,object.height/2);
+           
+        }
+
+        return null;
+     }
+
+     /**
+      * 设置锚点为右中心
+      */
+      export function setAnchorRightMid(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+           return this.setAnchorPoint(object,object.width,object.height/2);
+           
+        }
+
+        return null;
+     }
+
+    /*
+    *设置锚点为下中心
+    */
+    export function setAnchorMidBottom(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+            return this.setAnchorPoint(object,object.width/2,object.height);
+        }
+        return null;
+     }
+
+     /*
+    *设置锚点为左下角
+    */
+     export function setAnchorLeftBottom(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+            return this.setAnchorPoint(object,0,object.height);
+        }
+        return null;
+    }
+
+    /*
+    *设置锚点为右上角
+    */
+    export function setAnchorRightTop(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+            return this.setAnchorPoint(object,object.width,0);
+        }
+        return null;
+    }
+
+    /*
+    *设置锚点为右下角
+    */
+    export function setAnchorRightBottom(object:egret.DisplayObject):egret.DisplayObject  {
+        if(object != null)
+        {
+            return this.setAnchorPoint(object,object.width,object.height);
+        }
+        return null;
+    }
+}

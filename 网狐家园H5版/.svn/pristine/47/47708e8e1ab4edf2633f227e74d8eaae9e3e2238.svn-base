@@ -1,0 +1,141 @@
+/**
+ * 游戏公用父类 
+ */
+namespace models {
+    /**自己视图,定义为0 ;其他玩家按逆时针类推 eg:下家1 下下家 2 */
+    export const MY_VIEW: number = 0;
+    export class GameModel extends eui.UILayer {
+        public _gameFrame: frame.GameFrame;
+        public _gameviewLayer: any;
+        public _bChangeDesk: boolean = false;
+        public _bMatchDesk: boolean = false;
+        constructor() {
+            super();
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+            this.onInitEngine();
+
+            //倒计时定时器
+            managers.TimerCtrl.getInstance().createTimer(this,1000,0,this.onClockEvent,"clock");
+
+            //查询用户
+            this._gameFrame.queryUserInfo(this._gameFrame.getTableID(),df.INVALID_CHAIR);
+        }
+
+        /**
+         * 初始化
+         * 各游戏子类覆盖此方法
+         */
+        onInitEngine() {
+            this._gameFrame = managers.TcpServiceCtrl.getInstance().getDelegate();
+            this._bChangeDesk = false;
+            this._bMatchDesk = false;
+        }
+
+        /**
+         * 重置游戏
+         * 各游戏子类覆盖此方法
+         */
+        onResetEngine() {
+            this._bChangeDesk = false;
+            this._bMatchDesk = false;
+        }
+
+        /**倒计时 
+         * 各游戏子类覆盖此方法
+         */
+        public onClockEvent() {
+
+        }
+
+        /**游戏人数 
+         * 各游戏子类覆盖此方法
+         */
+        public gamePlayerCount() {
+            return 0;
+        }
+
+    
+        /**获取玩家自己 */
+        public getMeUserItem() {
+            if (null != this._gameFrame) {
+                return this._gameFrame.getMeUserItem();
+            }
+
+            return null;
+        }
+        /**转换玩家视图
+         * 返回索引
+         * 定义自己索引0
+         *  */
+        public switchViewChairID(chairID: number) {
+            if (chairID < 0 || chairID >= this.gamePlayerCount())
+                return;
+
+            const myChair = this._gameFrame.getChairID();
+            let userIndex: number = -1;
+            const playerCount = this.gamePlayerCount();
+            userIndex = ((playerCount - this._gameFrame.getChairID()) + chairID) % playerCount;
+            return userIndex;
+        }
+
+        /**进入桌子 */
+        public onEnterTable() {
+            if (this._bChangeDesk) {
+                //变量重置
+                this._bChangeDesk = false;
+                this._bMatchDesk = false;
+
+                //允许消息派发
+                managers.TcpServiceCtrl.getInstance()._isAllowDisPatch = true;
+
+                //清空界面
+                if (null != this._gameviewLayer && this._gameviewLayer.onRestGameView) {
+                    this._gameviewLayer.stopAllAction();
+                    this._gameviewLayer.onRestGameView();
+                }
+            }
+        }
+
+        /**退出当前桌子 */
+        public onExitTable() {
+            if (null != this._gameFrame && this._gameFrame.isMatchMode()) {
+                return true;
+            }
+
+            if (this._bChangeDesk) {
+                //清理数据
+                this.onResetEngine();
+                if (null != this._gameviewLayer && this._gameviewLayer.onRestGameView) {
+                    this._gameviewLayer.stopAllAction();
+                    this._gameviewLayer.onRestGameView();
+                    return true  
+                }
+            }
+
+            return false;
+        }
+   
+        /**离开游戏*/
+        public onExitGame(bForce?: boolean) {
+            //判断用户状态
+            const myself = this._gameFrame.getMeUserItem();
+            if (myself.cbUserStatus >= df.US_SIT) {
+                this._gameFrame.onStandUp(bForce);
+            }
+           // this._gameFrame.onExitRoom()
+        }
+
+        public onExit() {
+            //业务代理置空
+            if (null != this._gameFrame) {
+                this._gameFrame.setDelegate(null);
+                this._gameFrame = null;
+            }
+            //关闭倒计时定时器
+            managers.TimerCtrl.getInstance().killTimer(this,"clock");
+
+            //关闭游戏socket服务
+            managers.TcpServiceCtrl.getInstance().closeService();
+        }
+    }
+}

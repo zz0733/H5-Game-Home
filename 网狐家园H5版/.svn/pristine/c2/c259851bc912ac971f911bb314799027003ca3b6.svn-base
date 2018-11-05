@@ -1,0 +1,81 @@
+/**
+ * 服务器管理
+ */
+namespace models {
+    export class ServerInfo {
+        /**
+        * 登录列表
+        */
+        private m_LogonList = [];
+
+        /**
+         * 登录代理
+         */
+        private m_AgentList = [];
+
+        /**
+         * 游戏列表
+         */
+        private m_RoomList: {[key: number]: models.GameServerItem[]} = {};
+
+        /**
+         * 网关列表 
+         */
+        private m_GateList = [];
+
+        /**
+         * 比赛列表
+         */
+        private m_MatchList: models.GameServerItem[] = []
+
+        /**
+         * 更新时间
+         */
+        public _lUpdateTime: number = 0;
+
+        /**
+         * 构造
+         */
+        constructor() {
+
+        }
+
+        /**
+         * 更新列表
+         */
+        public UpdataRoomInfo(info: any) {
+            this.m_RoomList = info;
+        }
+
+        /**
+         * 更新比赛列表
+         */
+        public UpdataMatchInfo(info: any) {
+            this.m_MatchList = info;
+        }
+
+        /**
+         * 更新代理列表
+         */
+        public upDateRoomAgentInfo(info: any) {
+
+        }
+
+        /**
+         * 设置网关服务
+         */
+        public setAccessServerInfo(info: any) {
+
+        }
+
+        /**
+         * 重置
+         */
+        public resetServer() {
+            this.m_LogonList = [];
+            this.m_AgentList = [];
+            this.m_RoomList = [];
+            this.m_GateList = [];
+        }
+    }
+}

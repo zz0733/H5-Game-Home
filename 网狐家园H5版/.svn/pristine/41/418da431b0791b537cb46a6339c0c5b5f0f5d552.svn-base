@@ -1,0 +1,111 @@
+namespace models
+{
+
+    export class PopWait extends eui.UILayer implements df.IPopWait
+    {
+          protected createChildren(): void {
+             super.createChildren();
+             this.name = "PopWait";
+
+             this.once(egret.Event.ADDED_TO_STAGE,this.onInitLayer,this);
+             this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+         }
+
+         //初始化
+         private onInitLayer():void
+         {
+            let mask = utils.createBitmapByName("common_mask_png");
+            this.addChild(mask);
+            mask.width = this.width;
+            mask.height = this.height;
+            utils.setAnchorCenter(mask);
+            mask.x = this.width/2;
+            mask.y = this.height/2;
+
+            let fox = utils.createBitmapByName("wait_ani_frame_png");
+            utils.setAnchorCenter(fox);
+            this.addChild(fox);
+            fox.x = this.width/2;
+            fox.y = this.height/2
+
+            let circle = utils.createBitmapByName("wait_ani_round_png");
+            utils.setAnchorCenter(circle);
+            circle.name = "circle"
+            this.addChild(circle);
+            circle.x = this.width/2;
+            circle.y = this.height/2
+
+            let timer = new egret.Timer(1000/60, 0);
+            timer.addEventListener(egret.TimerEvent.TIMER, this.popWaitAnimation, this);
+            timer.start();
+
+            let tw = egret.Tween.get(this)
+                     .wait(2000)
+                     .call(()=>{this.onTimeOut();});
+
+         }
+
+         //移除舞台
+         private onExit():void
+         {
+            this.removeEventListener(egret.TimerEvent.TIMER,this.popWaitAnimation,this);
+         }
+
+         //超时处理
+         onTimeOut():void
+         {
+             managers.GameManager.getInstance().dismissPopWait()
+
+             if (null != this.m_TimeOutCallFunc)
+             {
+                 this.m_TimeOutCallFunc();
+             }
+         }
+
+         //提示内容
+         setContent(content:string):void
+         {
+            if (null == content || content.length == 0)
+                return;
+
+            let label:eui.Label = new eui.Label();
+            label.text = content;
+
+            //设置颜色等文本属性
+            label.textColor = 0XFFFFFF;
+            label.size = 24;
+            label.lineSpacing = 24;
+            label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            this.addChild(label);
+            utils.setAnchorCenter(label);
+            label.x = 667;
+            label.y = 500;
+         }
+
+         private popWaitAnimation(e:egret.Event):void
+         {
+
+            console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            
+            let circle = this.getChildByName("circle");
+            circle.rotation += 6;
+            if(circle.rotation > 360){
+                circle.rotation -= 360;
+            }
+         }
+
+         //设置超时回调
+         private m_TimeOutCallFunc:any = null;
+         public setTimeOutCallfunc(fun:any):void
+         {
+             if (null != this.m_TimeOutCallFunc)
+             {
+                 this.m_TimeOutCallFunc = null;
+             }
+
+             this.m_TimeOutCallFunc = fun
+         }
+
+ 
+    }
+}

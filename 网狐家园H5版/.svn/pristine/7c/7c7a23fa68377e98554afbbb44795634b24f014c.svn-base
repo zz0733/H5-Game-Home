@@ -1,0 +1,113 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var game;
+(function (game) {
+    var landlord;
+    (function (landlord) {
+        var GameClient = (function (_super) {
+            __extends(GameClient, _super);
+            function GameClient() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            GameClient.prototype.createChildren = function () {
+                _super.prototype.createChildren.call(this);
+                this.name = "GameClient";
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                //this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+            };
+            GameClient.prototype.onInitLayer = function () {
+                //测试代码
+                var _this = this;
+                egret.BitmapData;
+                var componet = new eui.Component();
+                this.addChild(componet);
+                componet.skinName = "resource/eui_skins/landlord.exml";
+                var backbtn = componet.getChildByName("bt_back");
+                backbtn.addEventListener(egret.TouchEvent.TOUCH_END, function (e) {
+                    managers.GameManager.getInstance().replaceScene(new controller.ClientController(), true);
+                }, this);
+                /* let backGround = utils.createBitmapByName("game_back_1_png");
+                 this.addChild(backGround);*/
+                var logo = utils.createBitmapByName("game_logo_share_png");
+                utils.setAnchorCenter(logo);
+                this.addChild(logo);
+                logo.x = 667;
+                logo.y = 275;
+                //动画测试
+                var count = 0;
+                var bFinish = false;
+                var cardsArray = [];
+                var func = function () {
+                    var cardSprite = new egret.Sprite();
+                    _this.addChild(cardSprite);
+                    cardSprite.width = 151;
+                    cardSprite.height = 201;
+                    cardSprite.anchorOffsetX = 151 / 2;
+                    cardSprite.anchorOffsetY = 201 / 2;
+                    cardSprite.x = 667;
+                    cardSprite.y = 100;
+                    cardsArray.push(cardSprite);
+                    var cardBack = utils.createBitmapByName("game_card_handcard_png", new egret.Rectangle(2 * 151, 4 * 201, 151, 201));
+                    cardSprite.addChild(cardBack);
+                    cardBack.name = "back";
+                    cardBack.anchorOffsetX = 151 / 2;
+                    cardBack.anchorOffsetY = 201 / 2;
+                    cardBack.x = 151 / 2;
+                    cardBack.y = 201 / 2;
+                    var tw = egret.Tween.get(cardSprite)
+                        .to({ x: 667, y: 650 }, 50)
+                        .call(function () {
+                        count++;
+                        if (count <= 50) {
+                            func();
+                        }
+                        else {
+                            cardsArray.forEach(function (cardSprite, index) {
+                                var tw = egret.Tween.get(cardSprite)
+                                    .to({ x: 80 + index * 53.1 }, 500)
+                                    .call(function () {
+                                    var cardBack = cardSprite.getChildByName("back");
+                                    cardSprite.removeChild(cardBack);
+                                    var card = utils.createBitmapByName("game_card_handcard_png", new egret.Rectangle(0 * 151, 0 * 201, 151, 201));
+                                    cardSprite.addChild(card);
+                                    card.name = "card";
+                                    card.anchorOffsetX = 151 / 2;
+                                    card.anchorOffsetY = 201 / 2;
+                                    card.x = 151 / 2;
+                                    card.y = 201 / 2;
+                                });
+                            });
+                        }
+                    });
+                };
+                func();
+            };
+            GameClient.prototype.onUserEnter = function (object) {
+            };
+            GameClient.prototype.onUserStatus = function (object) {
+            };
+            GameClient.prototype.onUserChat = function (object) {
+            };
+            GameClient.prototype.onUserScore = function (object) {
+            };
+            GameClient.prototype.onGameScene = function (object) {
+            };
+            GameClient.prototype.onGameMessage = function (object) {
+            };
+            GameClient.prototype.onGameSystemMessage = function (object) {
+            };
+            return GameClient;
+        }(eui.UILayer));
+        landlord.GameClient = GameClient;
+        __reflect(GameClient.prototype, "game.landlord.GameClient", ["df.IGameMessage", "df.IUserService"]);
+    })(landlord = game.landlord || (game.landlord = {}));
+})(game || (game = {}));
+//# sourceMappingURL=GameClient.js.map

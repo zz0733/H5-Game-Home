@@ -1,0 +1,21 @@
+namespace battle {
+    export class BattleUserItem {
+        public wFaceID                    = 0;                    //头像标识
+        public wChairID                   = 0;                    //椅子标识
+        public dwUserID                   = 0;                    //用户标识 
+        public dwCustomID 				  = 0;     
+        public szNickName                 = "";                   //用户昵称
+
+        constructor(buffer: utils.ByteArray) {
+            this.onInit(buffer);
+        }
+        private onInit(buffer: utils.ByteArray){
+            this.wFaceID = buffer.Pop_WORD();
+            this.wChairID = buffer.Pop_WORD();
+            this.dwUserID = buffer.Pop_DWORD();
+            this.dwCustomID = buffer.Pop_DWORD();
+            this.szNickName = buffer.Pop_UTF16(df.LEN_ACCOUNTS);
+
+        }
+    }
+}

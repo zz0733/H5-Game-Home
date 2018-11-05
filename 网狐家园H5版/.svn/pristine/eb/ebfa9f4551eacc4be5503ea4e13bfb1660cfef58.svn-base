@@ -1,0 +1,157 @@
+/**
+ * 游戏交互
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class GameViewLayer extends eui.UILayer {
+            private _gameEngine: GameClientEngine;
+            /**
+             * 构造
+             */
+            constructor(engine: any) {
+                super();
+                this._gameEngine = engine;
+
+            }
+            protected createChildren(): void {
+                super.createChildren();
+
+                this.name = "GameViewLayer";
+
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+
+                //注册触摸
+                this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            }
+
+            /**初始化 */
+            private _companet: eui.Component;
+            private onInitLayer(): void {
+                let componet = new eui.Component();
+                this.addChild(componet);
+                this._companet = componet;
+
+                //设置皮肤
+                componet.skinName = skins.sparrowsclm.GameLayer;
+
+                //显示自己信息
+                this.showMyselfInfo();
+
+                //初始化桌面
+                this.initDesk();
+
+                //按钮事件
+                this.onInitButton()
+            }
+
+            /**清理桌面 */
+            public onRestGameView() {
+
+            }
+
+            /**停止动画 */
+            public stopAllAction() {
+
+            }
+
+            /**桌面基本信息 */
+            public initDesk() {
+                //桌号
+                let num = this._gameEngine._gameFrame.getTableID() + 1;
+                let deskNum = utils.LabelAtlas.createLabel(`${num}`,"yz_num_count_png",":/0123456789",28,35);
+                utils.setAnchorLeftMid(deskNum);
+                deskNum.x = 565;
+                deskNum.y = 115;
+                this.addChild(deskNum);
+
+                //底分
+                let formatStr = utils.StringUtils.formatNumberThousands(1);
+                let deskCell = utils.LabelAtlas.createLabel(formatStr,"yz_num_cell_png",",0123456789",28,35);
+                deskCell.name = "deskCell";
+                utils.setAnchorLeftMid(deskCell);
+                deskCell.x = 815;
+                deskCell.y = 115;
+                this.addChild(deskCell);
+            }
+
+            /**显示自己信息 */
+            private showMyselfInfo() {
+                const myself = this._gameEngine.getMeUserItem();
+
+                //头像
+                let head = models.HeadSprite.createHead(myself, 120, 120, 35, 35);
+                utils.setAnchorCenter(head);
+                this.addChild(head);
+                head.x = 667;
+                head.y = 600;
+
+                //id
+                let userid = this._companet.getChildByName("userID") as eui.Label;
+                userid.text = "ID:" + myself.dwUserID;
+
+                //昵称
+                let nick = this._companet.getChildByName("userNick") as eui.Label;
+                nick.text = utils.StringUtils.clipByConfig(myself.szNickName, 150, utils.StringUtils.getSystemConfig(24));
+
+                //分数
+                let score = this._companet.getChildByName("userScore") as eui.Label;
+                score.text = utils.StringUtils.clipByConfig(utils.StringUtils.formatNumberThousands(myself.lScore), 150, utils.StringUtils.getSystemConfig(24));
+            }
+
+            /**
+             * 初始按钮
+             */
+            private onInitButton() {
+                //返回
+                let bt = this._companet.getChildByName("back");
+                bt.addEventListener(egret.TouchEvent.TOUCH_END,this.onButtonClick,this);
+            }
+            /**按钮事件 */
+            private onButtonClick(e: egret.Event) {
+                let target = e.target as eui.Button;
+                switch(target.name) {
+                    case "back": 
+                        {
+                            this._gameEngine.onQueryExitGame();
+                        }
+                        break;
+                }
+            }
+
+        
+            /** 触摸事件
+           * onTouchBegan
+           * onTouchMove
+           * onTouchEnd
+           */
+            private onTouchBegan(event: egret.TouchEvent) {
+                //console.log("onTouch Began");
+                this._bMoved = false;
+            }
+
+            private _bMoved = false;
+            private onTouchMove(event: egret.TouchEvent) {
+                //console.log("onTouch move");
+                this._bMoved = true;
+            }
+
+            private onTouchEnd(event: egret.TouchEvent) {
+                //console.log("onTouch end");
+
+            }
+
+            /**
+             * 移除舞台 
+             */
+            private onExit() {
+                //移除触摸
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            }
+        }
+    }
+}

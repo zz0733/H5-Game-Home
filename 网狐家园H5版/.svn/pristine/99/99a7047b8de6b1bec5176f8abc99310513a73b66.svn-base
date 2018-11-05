@@ -1,0 +1,81 @@
+/**
+ * 弹窗公告
+ */
+namespace client{
+    //公告
+    const NOTIFY_URL    = "http://service.foxuc.com/GameNotice.aspx?StationID="+`${df.STATION_ID}`+"&TypeID=1&KindID=0"
+    //常见问题
+    const QUESTION_URL	= "http://service.foxuc.com/GameNotice.aspx?StationID="+`${df.STATION_ID}`+"&TypeID=2&KindID=1"
+    //比赛规则
+    const MATCHRULE_URL	= "http://service.foxuc.com/GameMatch.aspx?PlazaStation="+`${df.STATION_ID}`+"&TypeID=1&MatchID="
+
+    export class NoticeLayer extends eui.UILayer{
+
+        /**
+         * 构造
+         */
+        private _scene: any;
+        private _mode: number;
+        constructor(scene: any,noticetype: number,kindID?: number)
+        {
+            super();
+            this._scene = scene;
+            this._mode = noticetype;
+        }
+        createChildren()
+        {
+            super.createChildren();
+            this.once(egret.Event.ADDED_TO_STAGE,this.onInitLayer,this);
+            this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+        }
+
+        /**
+         * 初始化
+         */
+        public onInitLayer()
+        {
+            //加载皮肤 
+            let componet = new eui.Component();
+            this.addChild(componet);
+            componet.skinName ="resource/eui_skins/NoticeLayer.exml";
+
+            //返回按钮
+            var panel = <eui.Panel>componet.getChildByName("panel_normal");
+            var btn = panel.getChildByName("bt_close");
+            btn.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClickEvent,this);
+
+            var titlePanel = <eui.Panel>panel.getChildByName("panel_title");
+            titlePanel.$children.forEach((child)=>{
+                child.visible = false;
+            });
+            if (this._mode == df.MODE_NOTICE) //游戏公告
+            {
+                var title = titlePanel.getChildByName("title_notice");
+                title.visible = true;
+            }else if (this._mode == df.MODE_AGREE) //用户服务协议
+            {
+                var title = titlePanel.getChildByName("title_agree");
+                title.visible = true;
+            }
+        }
+
+        /**
+         * 按钮事件
+         */
+        public onButtonClickEvent(e :egret.Event)
+        {
+            var target = <eui.Button>e.target;
+            if (target.name = "bt_close")
+            {
+                this._scene.removeChild(this);
+            }
+        }
+
+        /**
+         * 移除舞台
+         */
+        public onExit()
+        {
+        }
+    }
+}

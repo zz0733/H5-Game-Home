@@ -1,0 +1,162 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var client;
+(function (client) {
+    var Regist = (function (_super) {
+        __extends(Regist, _super);
+        function Regist() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.m_bAgree = true;
+            return _this;
+        }
+        Regist.prototype.createChildren = function () {
+            _super.prototype.createChildren.call(this);
+            this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+            //注册触摸
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+        };
+        Regist.prototype.onInitLayer = function () {
+            //账号
+            var account = utils.createBitmapByName("text_regist_account_png");
+            utils.setAnchorRightTop(account);
+            this.addChild(account);
+            account.x = 420;
+            account.y = 190;
+            //密码
+            var password = utils.createBitmapByName("text_regist_password_png");
+            utils.setAnchorRightTop(password);
+            this.addChild(password);
+            password.x = 420;
+            password.y = 340;
+            //输入文本
+            var nameInput = new eui.TextInput();
+            nameInput.prompt = "请输入账号";
+            nameInput.skinName = "resource/eui_skins/TextInputSkin1.exml";
+            utils.setAnchorCenter(nameInput);
+            this._nameInput = nameInput;
+            this.addChild(this._nameInput);
+            this._nameInput.x = 560;
+            this._nameInput.y = 210;
+            var passInput = new eui.TextInput();
+            passInput.prompt = "请输入密码";
+            ///设置显示为密码文本
+            passInput.displayAsPassword = true;
+            passInput.skinName = "resource/eui_skins/TextInputSkin1.exml";
+            this._passInput = passInput;
+            utils.setAnchorCenter(this._passInput);
+            this.addChild(this._passInput);
+            this._passInput.x = 560;
+            this._passInput.y = 360;
+            var dot = new eui.Button();
+            dot.skinName = "resource/eui_skins/ButtonDot.exml";
+            this.addChild(dot);
+            dot.name = "dot";
+            utils.setAnchorCenter(dot);
+            dot.x = 400;
+            dot.y = 490;
+            dot.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+            var sign = utils.createBitmapByName("choose_pass_png");
+            sign.name = "sign";
+            this.addChild(sign);
+            utils.setAnchorCenter(sign);
+            sign.x = 395;
+            sign.y = 490;
+            var label = new eui.Label();
+            label.text = "我已经同意,并接受";
+            //设置颜色等文本属性
+            label.textColor = 0x080808;
+            label.size = 22;
+            label.lineSpacing = 24;
+            label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            this.addChild(label);
+            utils.setAnchorMidTop(label);
+            label.x = 545;
+            label.y = 480;
+            var agree = new eui.Button();
+            agree.skinName = "resource/eui_skins/ButtonAgree.exml";
+            this.addChild(agree);
+            utils.setAnchorLeftTop(agree);
+            agree.x = 650;
+            agree.y = 456;
+            agree.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+            var confirm = new eui.Button();
+            confirm.skinName = "resource/eui_skins/ButtonConfirm.exml";
+            this.addChild(confirm);
+            confirm.name = "confirm";
+            utils.setAnchorCenter(confirm);
+            confirm.x = 667;
+            confirm.y = 600;
+            confirm.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+            //返回登录
+            var backLogon = new eui.Button();
+            backLogon.skinName = "resource/eui_skins/ButtonReturn.exml";
+            this.addChild(backLogon);
+            backLogon.name = "backLogon";
+            utils.setAnchorLeftTop(backLogon);
+            backLogon.x = 10;
+            backLogon.y = 10;
+            backLogon.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+        };
+        Regist.prototype.onButtonClick = function (e) {
+            var target = e.$target;
+            if (target.$name == "backLogon") {
+                var curController = managers.GameManager.getInstance().getRunningController();
+                var layer = curController.getChildByName("LoginLayer");
+                egret.assert(layer);
+                layer.removeChild(this);
+                //动画切入
+                layer.ruleAction(0);
+            }
+            else if (target.$name == "dot") {
+                this.m_bAgree = !this.m_bAgree;
+                var sign = this.getChildByName("sign");
+                sign.alpha = (this.m_bAgree == true) ? 1.0 : 0.0;
+            }
+            else if (target.$name == "confirm") {
+                if (this._nameInput.text.length == 0) {
+                    managers.GameManager.getInstance().showToast("请输入账号");
+                    return;
+                }
+                if (this._passInput.text.length == 0) {
+                    managers.GameManager.getInstance().showToast("请输入密码");
+                    return;
+                }
+            }
+        };
+        //登录层退出
+        Regist.prototype.onExit = function () {
+            this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+        };
+        /** 触摸事件
+        * onTouchBegan
+        * onTouchMove
+        * onTouchEnd
+       */
+        Regist.prototype.onTouchBegan = function (event) {
+            console.log("onTouch Began");
+        };
+        Regist.prototype.onTouchMove = function (event) {
+            console.log("onTouch move");
+        };
+        Regist.prototype.onTouchEnd = function (event) {
+            console.log("onTouch end");
+        };
+        return Regist;
+    }(eui.UILayer));
+    client.Regist = Regist;
+    __reflect(Regist.prototype, "client.Regist");
+})(client || (client = {}));
+//# sourceMappingURL=RegistView.js.map

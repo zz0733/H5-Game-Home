@@ -1,0 +1,236 @@
+/*
+*欢迎界面
+*预加载大厅资源
+*加载服务信息
+*进入登录场景
+*/
+
+
+namespace controller
+{
+    export class WelComeController extends egret.DisplayObjectContainer implements df.IController
+    {
+       
+        //构造
+        public constructor()
+         {
+            super();
+
+            //视图名称
+            this.name = "WelComeController"
+
+            this.createWelComeView();
+
+            //注册触摸
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTouchBegan,this);
+            this.addEventListener(egret.TouchEvent.TOUCH_MOVE,this.onTouchMove,this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END,this.onTouchEnd,this);
+
+            //获取登录信息
+            this.httpGetLogonInfo();
+         }
+
+         /* controller生命周期
+         *  viewWillAppear
+         *  viewDidAppear 
+         *  viewWillDisappear 
+         *  viewDidDisappear
+         *  dealloc 回收资源
+         */
+         viewWillAppear(animated:boolean):void
+         {
+
+
+         }
+
+         viewDidAppear(animated:boolean):void
+         {
+
+
+         }
+
+         viewWillDisappear(animated:boolean):void
+         {
+
+
+         }
+
+         viewDidDisappear(animated:boolean):void
+         {
+
+         }
+
+         dealloc():void
+         {
+            this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTouchBegan,this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,this.onTouchMove,this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_END,this.onTouchEnd,this);
+
+         }
+
+         /**
+         * 切换页面
+         * @param target 目标view
+         * @param mode   切换模式
+         */
+         onChangeView(target :any,mode? :number):void
+         {
+
+            
+         }
+
+         /**进入前台
+         * applicationDidBecomeActive
+         */
+         applicationDidBecomeActive(event :any):void
+         {
+
+
+         }
+
+         /**进入后台
+         * applicationDidBecomeActive
+         */
+         applicationWillEnterForeground(event :any):void
+         {
+
+
+         }
+
+         private async createWelComeView()
+         {
+
+            let rootLayout = new eui.Component();
+            this.addChild(rootLayout);
+
+            //背景
+            let sky = utils.createBitmapByName("background_png");
+            this.addChild(sky);
+
+            //Logo
+            let logo = utils.createBitmapByName("logo_name_00_png");
+            this.addChild(logo);
+            utils.setAnchorCenter(logo)
+            logo.x = 667;
+            logo.y = 330;
+
+            egret.Tween.get( logo, { loop:true} )
+            .to( { "alpha": 0.2 }, 2000)
+            .to( { "alpha": 1.0 }, 2000)
+
+            //copyright
+            let copyright = utils.createBitmapByName("copyright_png");
+            this.addChild(copyright);
+            utils.setAnchorMidBottom(copyright)
+            copyright.x = 667;
+            copyright.y = 700;
+
+            let colorLabel = new egret.TextField();
+            colorLabel.textColor = 0xffffff;
+            colorLabel.textAlign = "center";
+            colorLabel.text = "资源加载中,请稍后...";
+            colorLabel.size = 24;
+            utils.setAnchorCenter(colorLabel)
+            colorLabel.x = 667;
+            colorLabel.y = 540;
+            this.addChild(colorLabel);
+
+            //加载大厅资源
+            await this.loadPlazaResource()
+
+            //loadingbar
+            let loadingbar = new eui.ProgressBar()
+            loadingbar.direction = eui.Direction.LTR;
+            loadingbar.skinName ="resource/eui_skins/ProgressBarSkin_1.exml"
+            loadingbar.maximum = 100;
+            loadingbar.minimum = 0;
+            loadingbar.slideDuration = 5000;
+            loadingbar.$setValue(10);
+            loadingbar.labelDisplay.text = `${loadingbar.value}/${ loadingbar.maximum}`;
+            loadingbar.labelDisplay.textColor = 0xffffff
+            loadingbar.labelDisplay.size = 24;
+            utils.setAnchorCenter(loadingbar);
+            loadingbar.x = 667;
+            loadingbar.y = 580;
+            this.addChild(loadingbar)
+
+
+            let loadingCallFunc = (e:egret.Event)=>
+             {
+                loadingbar.value += 1;
+                if(loadingbar.value == 100)
+                {
+                    this.removeEventListener(egret.Event.ENTER_FRAME,loadingCallFunc,this);
+                    
+                    //切换场景
+                   managers.GameManager.getInstance().replaceScene(new controller.LoginController(),true);
+                }
+             }
+            this.addEventListener(egret.Event.ENTER_FRAME,loadingCallFunc,this);
+
+            //设置当前视图
+            managers.GameManager.getInstance().setRunningController(this);
+
+         }
+
+        //加载资源
+        private async loadPlazaResource() 
+        {
+            try {
+                await RES.loadGroup("client",0)
+                await RES.loadGroup("game",0)
+            }
+            catch (e) 
+            {
+                console.error(e);
+            }
+         }
+
+        
+          /** 触摸事件
+          * onTouchBegan
+          * onTouchMove
+          * onTouchEnd
+         */
+         private onTouchBegan(event:egret.TouchEvent)
+         {
+             console.log("onTouch Began");
+         }
+
+         private onTouchMove(event:egret.TouchEvent)
+         {
+             console.log("onTouch move");
+         }
+
+         private onTouchEnd(event:egret.TouchEvent)
+         {
+             console.log("onTouch end");
+         }
+
+         /**
+          * 获取登录信息
+          */
+         public httpGetLogonInfo()
+         {
+             managers.GameManager.getInstance().ReLoadHttpInfo().then(()=>{
+
+             }).catch((err)=>{
+                //获取本地信息
+                var logonDomin = egret.localStorage.getItem("logonDomin");
+                var logonPort = egret.localStorage.getItem("logonPort");
+                var webAddr = egret.localStorage.getItem("webAddr");
+                if (logonDomin && logonPort && webAddr)
+                {
+                    //保存最近登录信息
+                    managers.GameManager.getInstance().m_DefaultServerInfo.domain = logonDomin;
+                    managers.GameManager.getInstance().m_DefaultServerInfo.port = logonPort;
+                    managers.GameManager.getInstance().m_DefaultServerInfo.webAddr = webAddr
+                }else
+                {
+                    managers.GameManager.getInstance().showToast("登录信息获取失败");
+                }
+             });
+         }
+    }
+
+}

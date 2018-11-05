@@ -1,0 +1,295 @@
+namespace client
+{
+    export class ClientLayer extends eui.UILayer
+    {
+         protected createChildren(): void {
+             super.createChildren();
+            
+             this.once(egret.Event.ADDED_TO_STAGE,this.onInitLayer,this);
+             this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+
+             //注册触摸
+             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTouchBegan,this);
+             this.addEventListener(egret.TouchEvent.TOUCH_MOVE,this.onTouchMove,this);
+             this.addEventListener(egret.TouchEvent.TOUCH_END,this.onTouchEnd,this);
+         }
+
+        //初始化
+        private onInitLayer():void
+        {
+            let componet = new eui.Component();
+            this.addChild(componet);
+
+            componet.skinName ="resource/eui_skins/Plaza.exml";
+
+            //排行按钮
+            let rank = componet.getChildByName("bt_rank");
+            rank.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //分享
+            let share = componet.getChildByName("bt_share");
+            share.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //设置
+            let set = componet.getChildByName("bt_set");
+            set.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //充值
+            let purchase = componet.getChildByName("bt_shop");
+            purchase.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+             //兑换
+            let exchange = componet.getChildByName("bt_exchange");
+            exchange.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //活动
+            let activity = componet.getChildByName("bt_activity");
+            activity.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //战绩
+            let archive = componet.getChildByName("bt_archive");
+            archive.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //茶馆
+            let teaHouse = componet.getChildByName("bt_tea");
+            teaHouse.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //比赛
+            let match = componet.getChildByName("bt_match");
+            match.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //进入游戏
+            let games = componet.getChildByName("bt_game1");
+            games.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            games = componet.getChildByName("bt_game2");
+            games.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            games = componet.getChildByName("bt_game3");
+            games.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClick,this);
+
+            //邀请Image
+            let inviteImage = componet.getChildByName("Invite_image");
+            egret.assert(null != inviteImage);
+            inviteImage.$setTouchEnabled(false);
+        
+            let tw = egret.Tween.get(inviteImage,{ loop:true})
+                     .to({scaleX:0.8,scaleY:0.8},800)
+                     .to({scaleX:1.0,scaleY:1.0},800)
+
+            //活动红包
+            let redPacket = componet.getChildByName("active_icon");
+            egret.assert(null != redPacket);
+            tw = egret.Tween.get(redPacket,{ loop:true})
+                     .to({scaleX:0.2,scaleY:0.2},300)
+                     .to({scaleX:1.0,scaleY:1.0},300)
+                     .to({scaleX:1.2,scaleY:1.2},300)
+                     .wait(500);
+
+            //比赛动画
+            let scorll = <eui.Scroller>componet.getChildByName("lightScroll");
+            let group  = <eui.Group>scorll.getChildByName("lightGroup");
+            let light = <eui.Image>group.getChildByName("light");
+
+            tw = egret.Tween.get(light,{loop:true})
+                .to({x:-15,y:100},1200)
+                .wait(2000);
+
+            for (let i = 0;i < 5;i++)
+            {   
+                let str = "star"+`${i+1}`;
+                let delay = Math.random()*(2000-1000);
+                let star = <eui.Image>componet.getChildByName(str);
+                tw = egret.Tween.get(star,{loop:true}) 
+                    .to({ "alpha": 1.0,"rotation" :90,"scaleX":1.0},1000)
+                    .to({ "alpha": 0.0,"rotation" :180,"scaleX":0.1},1000)
+                    .wait(delay);
+
+            }
+                     
+             //系统公告
+            let noticeSprit = new egret.Sprite();
+            noticeSprit.width = this.width;
+            noticeSprit.height = 200;
+            utils.setAnchorMidTop(noticeSprit);
+            this.addChild(noticeSprit);
+            noticeSprit.x = 740;
+            noticeSprit.y = -15;
+
+            //公告背景
+            let systemNotice = utils.createBitmapByName("notice_bg_png");
+            utils.setAnchorCenter(systemNotice);
+            noticeSprit.addChild(systemNotice);
+            systemNotice.x = 667 ;
+            systemNotice.y = noticeSprit.height/2;
+
+            //公告icon
+            let icon = utils.createBitmapByName("notice_icon_png");
+            utils.setAnchorCenter(icon);
+            noticeSprit.addChild(icon);
+            icon.x = 360;
+            icon.y = noticeSprit.height/2;
+
+            //显示区域
+            group = new eui.Group();
+            utils.setAnchorLeftTop(group);
+            noticeSprit.addChild(group);
+            group.width = systemNotice.width - 50;
+            group.height = systemNotice.height;
+            group.x =  3;
+            group.y = 10;
+
+            //显示内容
+            let label:eui.Label = new eui.Label();
+            label.text = "欢迎您进入网狐游戏家园,祝您游戏愉快!";
+            //设置颜色等文本属性
+            label.textColor = 0XFFFFFF;
+            label.size = 18;
+            label.lineSpacing = 24;
+            label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            group.addChild(label);
+            utils.setAnchorLeftTop(label);
+            label.x = 650;
+            label.y = 10;
+
+            let scroll = new eui.Scroller;
+            scroll.width = systemNotice.width - 50;
+            scroll.height = systemNotice.height;
+            noticeSprit.addChild(scroll);
+            scroll.viewport = group;
+            utils.setAnchorCenter(scroll);
+            scroll.x = 700;
+            scroll.y = noticeSprit.height/2
+
+
+            tw = egret.Tween.get( label, { loop:true} )
+                      .to( {x:-400,y:10}, 8000)
+                      .call(()=>{
+                          label.x = 650;
+                          label.y = 10;
+                        });
+
+
+             //头像框
+            let headframe = <eui.Image>componet.getChildByName("head_frame");
+
+            var handler = function headTouch(e: egret.Event)
+            {
+                console.log("头像触摸");
+            }
+
+            var head = models.HeadSprite.createSysHeadWithCorner(null,120,120,40,40,true,handler);
+            utils.setAnchorLeftTop(head);
+            this.addChild(head);
+            head.x = 0;
+            head.y = 0;
+
+          /*  let sprite = new egret.Sprite();
+            this.addChild(sprite);
+            sprite.width = 120;
+            sprite.height = 120;
+            utils.setAnchorLeftTop(sprite);
+            sprite.x = 0;
+            sprite.y = 0;
+
+            let maskShap = new egret.Shape();
+            maskShap.graphics.beginFill(0x000000, 1.0);
+            maskShap.graphics.drawRoundRect(0, 0, 100,100,40,40);
+            maskShap.graphics.endFill();
+            utils.setAnchorCenter(maskShap)
+            sprite.addChild(maskShap);
+            maskShap.x =60;
+            maskShap.y = 60;
+           
+            //用户头像
+            var headSprite = utils.createBitmapByName("face_x_00_png");
+            sprite.addChild(headSprite);
+            headSprite.width = 120;
+            headSprite.height = 120;
+            utils.setAnchorCenter(headSprite)
+            headSprite.x = 60;
+            headSprite.y = 60;
+        
+            //设置遮罩
+            headSprite.mask = maskShap;   */
+
+            //用户昵称
+            var nick: eui.Label = <eui.Label>componet.getChildByName("nick");
+            nick.text = managers.GameManager.getInstance().m_globalUserData.nickname;
+
+            //用户ID
+            var gameid: eui.Label = <eui.Label>componet.getChildByName("gameid");
+            gameid.text = `${managers.GameManager.getInstance().m_globalUserData.userid}`
+
+            //金币
+            var lIngot = managers.GameManager.getInstance().m_globalUserData.ingot;
+            var ingot = utils.LabelAtlas.createLabel(utils.StringUtils.formatNumberThousands(lIngot),"num_list_ingot_png",",0123456789",15,26);
+            this.addChild(ingot);
+            utils.setAnchorLeftTop(ingot);
+            ingot.x = 468;
+            ingot.y = 14; 
+
+            var score = managers.GameManager.getInstance().m_globalUserData.score;
+            var gold = utils.LabelAtlas.createLabel(utils.StringUtils.formatNumberThousands(score),"num_list_gold_png",",0123456789",15,26);
+            this.addChild(gold);
+            utils.setAnchorLeftTop(gold);
+            gold.x = 811;
+            gold.y = 14; 
+        }
+
+         private onExit():void
+         {
+             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTouchBegan,this);
+             this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,this.onTouchMove,this);
+             this.removeEventListener(egret.TouchEvent.TOUCH_END,this.onTouchEnd,this);
+         }
+
+          /** 触摸事件
+          * onTouchBegan
+          * onTouchMove
+          * onTouchEnd
+         */
+         private onTouchBegan(event:egret.TouchEvent)
+         {
+             console.log("onTouch Began");
+         }
+
+         private onTouchMove(event:egret.TouchEvent)
+         {
+             console.log("onTouch move");
+
+         }
+
+         private onTouchEnd(event:egret.TouchEvent)
+         {
+             console.log("onTouch end");
+
+         }
+
+
+         /**
+          * 按钮事件
+          */
+          private onButtonClick(e:egret.Event)
+          {
+               let button = <eui.Button>e.target;
+               let name = button.name;
+
+        
+                if (name == "bt_game1" || name == "bt_game2" || name == "bt_game3")
+                {
+                    managers.GameManager.getInstance().replaceScene(new controller.GameController(),true);
+                }else
+                {
+
+                    let tw = egret.Tween.get(button)
+                            .to({scaleX:1.1,scaleY:1.1},100)
+                            .to({scaleX:1.0,scaleY:1.0},100)
+                            .call(()=>{
+                                managers.GameManager.getInstance().replaceScene(new controller.LoginController(),true);
+                            })
+
+                }
+          }
+    }
+}

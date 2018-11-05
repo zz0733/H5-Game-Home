@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.NoticeLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Panel id="Normal" width="1334" height="750" x="0" y="0" anchorOffsetX="0" anchorOffsetY="0" name="panel_normal" touchEnabled="false">
+		<e:Image id="bg" width="1110" height="692" x="667" y="375" source="general_notice_frame_png" fillMode="clip" anchorOffsetX="555" anchorOffsetY="346" touchEnabled="true"/>
+		<e:Button id="close" label="" x="1138" y="40" anchorOffsetY="0" height="74" enabled="true" anchorOffsetX="0" width="74" name="bt_close">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="general_bt_close_png" source.down="general_bt_close_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+		<e:Panel id="Title" width="240" height="46" x="552" y="42" anchorOffsetX="0" anchorOffsetY="0" name="panel_title">
+			<e:Image id="title" width="144" height="40" y="23" source="general_text_notice_png" fillMode="clip" anchorOffsetX="72" anchorOffsetY="20" name="title_notice" scaleX="1" scaleY="1" x="120"/>
+			<e:Image id="title1" width="144" height="40" x="120" y="23" fillMode="clip" anchorOffsetX="72" anchorOffsetY="20" name="title_agree" source="general_title_agreement_png" scaleX="1" scaleY="1"/>
+		</e:Panel>
+	</e:Panel>
+	<e:Panel id="Special" width="20" height="20" x="520" y="494" visible="false" locked="true"/>
+</e:Skin>

@@ -1,0 +1,171 @@
+/**
+ * 约战配置 
+ */
+namespace client {
+
+    /**
+     * 布局顺序
+     */
+    const layOutID = {
+        TYPE_USERCOUNT: 0, TYPE_PAY: 1, TYPE_CURRENCY: 2, TYPE_OTHER: 3,
+        TYPE_COUNT: 4, TYPE_TIME: 5, TYPE_CELL: 6
+    }
+
+    export class CreateConfigView extends egret.Sprite {
+        /**
+         * 构造
+         */
+        private _scene: any;
+        private _configNormal: any[] = [];
+        private _configSpecial: any[] = [];
+        private _recordConfig: any;
+        private _kindID: number = 0;
+        private _CurConfig: any;
+        constructor(scene, config, recordConfig) {
+            super();
+            this._scene = scene;
+            this._configNormal = config.optionInfo;
+            this._configSpecial = config.specialInfo;
+            this._kindID = Number(config.gameID);
+            this.width = 910;
+            this.height = 530;
+
+            this.onInitConfig();
+        }
+
+        /**
+         * 初始数据
+         */
+        //配置标识
+        private m_nCurIndex: number = 1
+        //显示高度
+        private m_nHeight: number = 0
+        //控件保存
+        private m_ControlList: { [key: number]: any } = {};
+        //当前底注
+        private m_lBaseScore: number = 0
+        //当前货币
+        private m_cbCurrencyKind: number = 0
+        //结算局数/时间
+        private m_cbSettleKind: number = 0
+        //局数
+        private m_wBalanceCount: number = 0
+        //时间
+        private m_dwBalanceTime: number = 0
+        //人数
+        private m_wPlayerCount: number = 0
+        //付款人类型
+        private m_wPayType: number = 0
+        //子项数目
+        private m_wShowCount: number = 0
+
+        /**
+         * 配置项
+         */
+        private onInitConfig() {
+
+            //人数 付款人 货币类型 配置 局数 时间 底注
+            this.createUserCountConfig()
+            this.createPayerConfig()
+            this.createCurrencyConfig()
+            this.createCustomConfig()
+            this.createRoundConfig()
+            this.createTimeConfig()
+            this.createCellConfig()
+        }
+
+        //人数
+        private createUserCountConfig() {
+            //是否多个配置
+            let tmpIndex = -1;
+            if (this._configNormal.length > 1) {
+                //记录配置标识 根据玩家习惯记录
+                const recordPlayerCount = this._recordConfig ? this._recordConfig.wPlayerCount : 0;
+                //数据
+                let config = { title: "人数：", itemCount: this._configNormal.length, seletedIdx: 0, option: [] };
+                for (let i = 0; i < this._configNormal.length; i++) {
+                    config.option.push(`${this._configNormal[i].wPlayerCount}人`);
+                    if (recordPlayerCount == this._configNormal[i].wPlayerCount) {
+                        config.seletedIdx = i;
+                        tmpIndex = i;
+                        this.m_wPlayerCount = this._configNormal[i].wPlayerCount;
+                    }
+                }
+
+                if (-1 == tmpIndex) {
+
+                    //当前标识
+                    this.m_nCurIndex = 0;
+                    //当前配置
+                    this._CurConfig = this._configNormal[0]
+                    //当前人数
+                    this.m_wPlayerCount = this._configNormal[0].wPlayerCount;
+                }
+                //保存控件
+                this.m_ControlList[layOutID.TYPE_USERCOUNT] = { config: config, currentConfig: this._CurConfig };
+            } else {
+                //当前标识
+                this.m_nCurIndex = 1
+                //当前配置
+                this._CurConfig = this._configNormal[0];
+                //当前人数
+                this.m_wPlayerCount = this._configNormal[0].wPlayerCount;
+            }
+        }
+
+        //付款人
+        private createPayerConfig() {
+
+        }
+
+        //货币类型
+        private createCurrencyConfig() {
+
+        }
+
+        //配置
+        private createCustomConfig() {
+
+        }
+
+        //局数
+        private createRoundConfig() {
+
+        }
+
+        //时间
+        private createTimeConfig() {
+
+        }
+
+        //底分
+        private createCellConfig() {
+
+        }
+
+        //人数改变事件
+        private onUserCoutChange(index: number, data: any) {
+
+        }
+
+        //时间结算改变事件
+        private onTimeChange(index: number, data: any) {
+
+        }
+
+        //局数结算改变事件
+        private onRoundChange(index: number, data: any) {
+
+        }
+
+        //玩法改变事件
+        private onCustomChange(index: number, data: any) {
+
+        }
+
+        //变更事件
+        private onConfigChangeEvent(tag, index1, index2) {
+
+        }
+    }
+}

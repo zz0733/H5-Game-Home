@@ -1,0 +1,238 @@
+/**加密模块
+ * 1.0 数据加密
+ * 2.0 数据解密
+ * 3.0 数据映射
+ */
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var network;
+(function (network) {
+    //数据类型
+    network.DK_MAPPED = 0x01; //映射类型
+    network.DK_ENCRYPT = 0x02; //加密类型
+    //加密类型
+    network.ENCRYPT_KIND = network.DK_MAPPED | network.DK_ENCRYPT; //加密类型 (3)
+    //长度定义
+    network.SOCKET_TCP_WEB = 4; //协议包头
+    network.SOCKET_TCP_CMD = 16; //协议包头
+    network.VER_SOCKET = 1; //网络版本
+    //映射字符
+    var m_cbSendByteMap = [
+        0x71, 0x3C, 0x9F, 0xDD, 0x30, 0x94, 0x50, 0x23, 0x43, 0x80, 0xF3, 0xC7, 0x3D, 0xEE, 0x09, 0xD0,
+        0xB5, 0xAD, 0x0E, 0xD1, 0x7D, 0x65, 0x56, 0xB0, 0x6E, 0xAA, 0x5B, 0xBF, 0x0A, 0x8E, 0x45, 0x76,
+        0x5A, 0xDF, 0x29, 0xB1, 0x0C, 0xF6, 0x3F, 0x32, 0x2E, 0x4D, 0x5D, 0x47, 0x24, 0x55, 0xCF, 0x4E,
+        0x96, 0x04, 0x85, 0xB3, 0x89, 0x9B, 0xF0, 0xD8, 0x57, 0x70, 0x62, 0xD9, 0x91, 0x68, 0xC1, 0xCD,
+        0x1D, 0x79, 0x66, 0xCC, 0xA5, 0x2A, 0x75, 0x1F, 0xAE, 0x3B, 0x5F, 0x44, 0x98, 0xB2, 0x8C, 0x61,
+        0xE1, 0xE2, 0xE4, 0x46, 0xA4, 0x2F, 0x00, 0x7F, 0x40, 0x7B, 0xD2, 0x4A, 0x35, 0x7C, 0x82, 0xE9,
+        0x83, 0x28, 0x05, 0x69, 0xA2, 0x2C, 0x22, 0xC2, 0x33, 0x78, 0xFC, 0xB6, 0x12, 0x1A, 0xFA, 0x13,
+        0x8B, 0x42, 0x7E, 0xDB, 0xD4, 0xEF, 0x67, 0xE8, 0x72, 0xB9, 0xE5, 0xF8, 0x84, 0x17, 0x4F, 0x9D,
+        0x53, 0x8F, 0x16, 0x6B, 0x54, 0x0F, 0x5E, 0x9C, 0x34, 0xC3, 0xA0, 0x9A, 0xEC, 0xF5, 0x36, 0x58,
+        0x60, 0x6D, 0x52, 0xED, 0xA3, 0x41, 0xA9, 0xFD, 0xAF, 0x8A, 0x14, 0x2D, 0xBE, 0x37, 0x18, 0x2B,
+        0xEB, 0xB7, 0x92, 0xA1, 0xF7, 0x77, 0x95, 0x31, 0xE3, 0x6C, 0xC6, 0x99, 0x6F, 0x4B, 0x38, 0x64,
+        0x1B, 0x93, 0x5C, 0xD6, 0xE7, 0x49, 0xD7, 0xF9, 0xA7, 0xF1, 0x10, 0x01, 0x07, 0x3E, 0x81, 0xEA,
+        0x90, 0x21, 0xD3, 0x8D, 0x48, 0xCA, 0xAC, 0xB4, 0x87, 0x26, 0x9E, 0xC9, 0x19, 0xBB, 0x27, 0xF2,
+        0xCE, 0xFF, 0xC0, 0xA6, 0xFE, 0xD5, 0xFB, 0x63, 0xC4, 0x73, 0xBC, 0x02, 0xBD, 0xDC, 0xCB, 0xF4,
+        0xC8, 0x88, 0xBA, 0x20, 0x0B, 0x08, 0x4C, 0xE0, 0x03, 0x39, 0x0D, 0x51, 0xDA, 0x74, 0x06, 0xC5,
+        0xB8, 0x1E, 0x1C, 0x7A, 0x25, 0x97, 0x59, 0xAB, 0x86, 0x6A, 0xA8, 0xDE, 0x3A, 0xE6, 0x15, 0x11
+    ];
+    //映射字符
+    var m_cbRecvByteMap = [
+        0x56, 0xBB, 0xDB, 0xE8, 0x31, 0x62, 0xEE, 0xBC, 0xE5, 0x0E, 0x1C, 0xE4, 0x24, 0xEA, 0x12, 0x85,
+        0xBA, 0xFF, 0x6C, 0x6F, 0x9A, 0xFE, 0x82, 0x7D, 0x9E, 0xCC, 0x6D, 0xB0, 0xF2, 0x40, 0xF1, 0x47,
+        0xE3, 0xC1, 0x66, 0x07, 0x2C, 0xF4, 0xC9, 0xCE, 0x61, 0x22, 0x45, 0x9F, 0x65, 0x9B, 0x28, 0x55,
+        0x04, 0xA7, 0x27, 0x68, 0x88, 0x5C, 0x8E, 0x9D, 0xAE, 0xE9, 0xFC, 0x49, 0x01, 0x0C, 0xBD, 0x26,
+        0x58, 0x95, 0x71, 0x08, 0x4B, 0x1E, 0x53, 0x2B, 0xC4, 0xB5, 0x5B, 0xAD, 0xE6, 0x29, 0x2F, 0x7E,
+        0x06, 0xEB, 0x92, 0x80, 0x84, 0x2D, 0x16, 0x38, 0x8F, 0xF6, 0x20, 0x1A, 0xB2, 0x2A, 0x86, 0x4A,
+        0x90, 0x4F, 0x3A, 0xD7, 0xAF, 0x15, 0x42, 0x76, 0x3D, 0x63, 0xF9, 0x83, 0xA9, 0x91, 0x18, 0xAC,
+        0x39, 0x00, 0x78, 0xD9, 0xED, 0x46, 0x1F, 0xA5, 0x69, 0x41, 0xF3, 0x59, 0x5D, 0x14, 0x72, 0x57,
+        0x09, 0xBE, 0x5E, 0x60, 0x7C, 0x32, 0xF8, 0xC8, 0xE1, 0x34, 0x99, 0x70, 0x4E, 0xC3, 0x1D, 0x81,
+        0xC0, 0x3C, 0xA2, 0xB1, 0x05, 0xA6, 0x30, 0xF5, 0x4C, 0xAB, 0x8B, 0x35, 0x87, 0x7F, 0xCA, 0x02,
+        0x8A, 0xA3, 0x64, 0x94, 0x54, 0x44, 0xD3, 0xB8, 0xFA, 0x96, 0x19, 0xF7, 0xC6, 0x11, 0x48, 0x98,
+        0x17, 0x23, 0x4D, 0x33, 0xC7, 0x10, 0x6B, 0xA1, 0xF0, 0x79, 0xE2, 0xCD, 0xDA, 0xDC, 0x9C, 0x1B,
+        0xD2, 0x3E, 0x67, 0x89, 0xD8, 0xEF, 0xAA, 0x0B, 0xE0, 0xCB, 0xC5, 0xDE, 0x43, 0x3F, 0xD0, 0x2E,
+        0x0F, 0x13, 0x5A, 0xC2, 0x74, 0xD5, 0xB3, 0xB6, 0x37, 0x3B, 0xEC, 0x73, 0xDD, 0x03, 0xFB, 0x21,
+        0xE7, 0x50, 0x51, 0xA8, 0x52, 0x7A, 0xFD, 0xB4, 0x77, 0x5F, 0xBF, 0xA0, 0x8C, 0x93, 0x0D, 0x75,
+        0x36, 0xB9, 0xCF, 0x0A, 0xDF, 0x8D, 0x25, 0xA4, 0x7B, 0xB7, 0x6E, 0xD6, 0x6A, 0x97, 0xD4, 0xD1
+    ];
+    var Crypt = (function () {
+        /**
+         * 构造
+         */
+        function Crypt() {
+            /**
+             * 加密标志 默认DK_MAPPED
+             */
+            this.m_cbDataFlag = network.DK_MAPPED;
+            /**
+             * 缓冲长度
+             */
+            this.m_wBufferSize = 0;
+            //随机密码
+            this.productCryptKey();
+        }
+        /**
+         * 设置加密标识
+         */
+        Crypt.prototype.setDataFlag = function (cbFlag) {
+            this.m_cbDataFlag = cbFlag;
+        };
+        /**
+         * 获取加密标识
+         */
+        Crypt.prototype.getDataFlag = function () {
+            return this.m_cbDataFlag;
+        };
+        /**
+         * 设置缓冲长度
+         */
+        Crypt.prototype.setBufferSize = function (wSize) {
+            this.m_wBufferSize = wSize;
+        };
+        /**
+         * 设置密匙
+         */
+        Crypt.prototype.setEncryptKey = function (cbSendEncrypt, cbRecvEncrypt) {
+            this.m_cbRecvEncrypt = cbSendEncrypt;
+            this.m_cbSendEncrypt = cbRecvEncrypt;
+        };
+        /**
+         * 设置TCPInfo
+         */
+        Crypt.prototype.setTCPInfo = function (info) {
+            this.m_TCPInfo = info;
+        };
+        /**
+         * 生成密匙
+         */
+        Crypt.prototype.productCryptKey = function () {
+            //随机生成
+            var encrypt = Math.floor(Math.random() * 0xFF);
+            //设置密匙
+            this.setEncryptKey(encrypt, encrypt);
+        };
+        //验证字符
+        Crypt.prototype.getValidateKey = function (szCompilation) {
+            var validateKey = 0;
+            //Unicode值
+            for (var idx = 0; idx < szCompilation.length; idx++) {
+                validateKey += szCompilation.charCodeAt(idx);
+            }
+            return validateKey;
+        };
+        //映射数据
+        Crypt.prototype.MappedBuffer = function (buffer, wSize) {
+            //缓冲长度
+            this.m_wBufferSize = wSize;
+            //设置包头
+            var cbDataKind = 0;
+            var cbCheckCode = 0;
+            var wPacketSize = wSize;
+            //字节映射
+            for (var i = df.Len_Tcp_Info; i < wSize; i++) {
+                //校验字段
+                cbCheckCode += buffer.bytes[i];
+                //防止字节溢出
+                cbCheckCode = utils.MathUtils.getUnsignedByte(cbCheckCode);
+                //防止索引溢出
+                var index = utils.MathUtils.getUnsignedByte(buffer.bytes[i] + i);
+                //防止字节溢出
+                buffer.bytes[i] = utils.MathUtils.getUnsignedByte((m_cbSendByteMap[index] + i));
+            }
+            //包头信息
+            cbDataKind |= network.DK_MAPPED;
+            cbCheckCode = ~cbCheckCode + 1;
+            //溢出操作
+            cbCheckCode = utils.MathUtils.getUnsignedByte(cbCheckCode);
+            //数据类型 检验码 缓冲长度
+            return [cbDataKind, cbCheckCode, wPacketSize];
+        };
+        //映射数据
+        Crypt.prototype.UnMappedBuffer = function (buffer, wSize, offset) {
+            if (offset === void 0) { offset = 0; }
+            //校验长度
+            egret.assert(wSize >= df.Len_Tcp_Head);
+            egret.assert(wSize == this.m_wBufferSize);
+            if ((wSize != this.m_wBufferSize) || (wSize < df.Len_Tcp_Head)) {
+                egret.error("映射失败");
+                return false;
+            }
+            //数据类型
+            var cbDataKind = this.m_TCPInfo[0];
+            //效验字段
+            var cbCheckCode = this.m_TCPInfo[1];
+            //数据大小
+            var wPacketSize = this.m_TCPInfo[2];
+            //映射数据
+            if ((cbDataKind & network.DK_MAPPED) != 0) {
+                //效验字节
+                for (var i = df.Len_Tcp_Info + offset; i < this.m_wBufferSize + offset; i++) {
+                    //指定索引
+                    var index = utils.MathUtils.getUnsignedByte((buffer.bytes[i] - (i - offset)));
+                    //校验字段
+                    cbCheckCode += m_cbRecvByteMap[index] - (i - offset);
+                    cbCheckCode = utils.MathUtils.getUnsignedByte(cbCheckCode);
+                    //重置索引
+                    index = utils.MathUtils.getUnsignedByte(buffer.bytes[i] - (i - offset));
+                    var temp = utils.MathUtils.getUnsignedByte(m_cbRecvByteMap[index] - (i - offset));
+                    buffer.bytes[i] = temp;
+                }
+                //结果判断
+                //egret.assert(cbCheckCode == 0);
+                if (cbCheckCode != 0)
+                    return true;
+            }
+            return true;
+        };
+        ;
+        //加密数据
+        Crypt.prototype.EncryptBuffer = function (buffer, wSize, dataKind) {
+            //加密类型
+            var cbDataKind = dataKind | network.DK_ENCRYPT;
+            //字节加密
+            for (var i = 0; i < wSize - df.Len_Tcp_Info; i++) {
+                //字节位操作
+                buffer.bytes[i] ^= this.m_cbSendEncrypt;
+                //防止溢出
+                buffer.bytes[i] = utils.MathUtils.getUnsignedByte(buffer.bytes[i]);
+                //重置秘钥
+                this.m_cbSendEncrypt = ((this.m_cbSendEncrypt * i + 0x70)) % 0xFF;
+            }
+            return cbDataKind;
+        };
+        //解密数据
+        Crypt.prototype.CrevasseBuffer = function (buffer, wSize, offset) {
+            if (offset === void 0) { offset = 0; }
+            //校验长度
+            egret.assert(wSize >= df.Len_Tcp_Head);
+            egret.assert(wSize == this.m_wBufferSize);
+            if ((wSize != this.m_wBufferSize) || (wSize < df.Len_Tcp_Head)) {
+                egret.error("解密失败");
+                return false;
+            }
+            //数据类型
+            var cbDataKind = this.m_TCPInfo[0];
+            //效验字段
+            var cbCheckCode = this.m_TCPInfo[1];
+            //数据大小
+            var wPacketSize = this.m_TCPInfo[2];
+            //解密数据
+            if ((cbDataKind & network.DK_ENCRYPT) != 0) {
+                //字节解密
+                for (var i = df.Len_Tcp_Info + offset; i < this.m_wBufferSize + offset; i++) {
+                    //字节位操作
+                    buffer.bytes[i] ^= this.m_cbRecvEncrypt;
+                    //防止溢出
+                    buffer.bytes[i] = utils.MathUtils.getUnsignedByte(buffer.bytes[i]);
+                    //重置秘钥
+                    this.m_cbRecvEncrypt = ((this.m_cbRecvEncrypt * (i - offset) + 0x70)) % 0xFF;
+                }
+            }
+            return true;
+        };
+        return Crypt;
+    }());
+    network.Crypt = Crypt;
+    __reflect(Crypt.prototype, "network.Crypt");
+})(network || (network = {}));
+//# sourceMappingURL=Crypt.js.map

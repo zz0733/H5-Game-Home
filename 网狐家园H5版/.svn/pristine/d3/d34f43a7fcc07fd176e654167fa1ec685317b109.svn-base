@@ -1,0 +1,676 @@
+/**
+ * 游戏交互
+ */
+namespace game {
+    export namespace sparrowsclm {
+        //用户头像位置
+        const HeadPoint: any[] = [{ x: 667, y: 618 }, { x: 1074, y: 172 }, { x: 144, y: 172 }];
+        export class GameViewLayer extends eui.UILayer {
+            private _gameEngine: GameClientEngine;
+            private _clockView: ClockView;
+            private _wBankerUser: number = df.INVALID_CHAIR;
+            private _bTrustee: boolean = true;
+            private _lCellScore: number = 0;
+            private _bAllowJoin: boolean = true;
+            private _bIsRuleSetting: boolean = false;
+            private _lTurnScore: number[] = [0, 0, 0, 0];
+            private _lCollectScore: number[] = [0, 0, 0, 0];
+
+            private _handCard: HandCard;
+            public _weaveCard: WeaveCard;
+            /**
+             * 构造
+             */
+            constructor(engine: any) {
+                super();
+                this._gameEngine = engine;
+                this._handCard = new HandCard(this);
+                this._weaveCard = new WeaveCard(this);
+
+            }
+            protected createChildren(): void {
+                super.createChildren();
+
+                this.name = "GameViewLayer";
+
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+
+                //注册触摸
+                this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            }
+
+            /**初始化 */
+            public _companet: eui.Component;
+            private _userList: models.UserItem[] = [];
+            private onInitLayer(): void {
+                let componet = new eui.Component();
+                this.addChild(componet);
+                this._companet = componet;
+
+                //设置皮肤
+                componet.skinName = skins.sparrowsclm.GameLayer;
+
+                //显示自己信息
+                this.showMyselfInfo();
+
+                //初始化桌面
+                this.initDesk();
+
+                //初始化用户
+                for (let i = 0; i < cmd.sparrowsclm.PLAYER_COUNT; i++) {
+                    this.onInitUser(i);
+                }
+
+                //按钮事件
+                this.initButton()
+            }
+
+            /**清理桌面 */
+            public onRestGameView() {
+
+                this._wBankerUser = df.INVALID_CHAIR;
+                this._bTrustee = true;
+                this._lCellScore = 0;
+                this._bAllowJoin = true;
+                this._bIsRuleSetting = false;
+                this._lTurnScore = [0, 0, 0, 0];
+                this._lCollectScore = [0, 0, 0, 0];
+
+                //准备
+                let bt = this._companet.getChildByName("start");
+                bt.visible = true;
+                bt.x = 840;
+
+                //换桌
+                bt = this._companet.getChildByName("changeDesk");
+                bt.visible = true;
+                bt.x = 494;
+
+                //停止动作
+                this.stopAllAction();
+
+                //隐藏
+                for (let i = 0; i < cmd.sparrowsclm.PLAYER_COUNT; i++) {
+                    //准备小手
+                    let userPanel = this._companet.getChildByName("userinfo" + i) as eui.Panel;
+                    const readyIcon = userPanel.getChildByName("ready");
+                    readyIcon.visible = false;
+
+                    //用户信息
+                    if (i != cmd.sparrowsclm.MY_VIEW) {
+                        this.onInitUser(i);
+                    }
+                }
+
+                //清空用户缓存
+                for (let i = 0; i < this._userList.length; i++) {
+                    let user = this._userList[i];
+                    this._userList.shift();
+                    user = null;
+                }
+                this._userList = [];
+
+                //初始化桌面
+                this.initDesk();
+            }
+
+            /**停止动画 */
+            public stopAllAction() {
+                //释放定时器
+                managers.TimerCtrl.getInstance().killTimer(this, "tipsWait");
+                this.showWaitTips(0, false);
+            }
+
+            /**掷骰子 */
+            public drawSice(lsice0: number, lsice1: number, callback?: any) {
+                let sice = new SiceView(lsice0, lsice1, callback);
+                this.addChild(sice);
+
+            }
+
+            /**开始发牌 */
+            public dispatchCard(dispatchInfo: any[], callback?: any) {
+
+                //组合动画
+                let actions: any[] = [];
+                for (let i = 0 ; i < dispatchInfo.length; i++) {
+                    let dispatch = dispatchInfo[i];
+                    for (let j = 0; j < dispatch.cout; j++) {
+                        let callfunc = ()=> {
+                            this._handCard.createHandCard(dispatch.viewId,dispatch.cardData);
+                        }
+                        actions.push(callfunc);
+                    }
+                }
+
+                //结束回调
+                if (null != callback) {
+                    actions.push(callback);
+                }
+
+                //开始动画
+                this._nActionIndex = 0;
+                this.startDispatch(actions);
+            }
+
+            private _nActionIndex: number = 0;
+            private startDispatch(actions: any[]) {
+                if (null == actions) return;
+
+                //递归调用
+                egret.Tween.get(this)
+                .wait(200)
+                .call(()=>{
+                    let callback = actions[this._nActionIndex];
+                    if (null != callback) {
+                        callback();
+                        this._nActionIndex++;
+
+                        if (this._nActionIndex < actions.length) {
+                            this.startDispatch(actions);
+                        }
+                    }
+                }) 
+
+                actions = null;
+            }
+
+            /**桌面基本信息 */
+            public initDesk() {
+                //桌号
+                let num = this._gameEngine._gameFrame.getTableID() + 1;
+                if (num == df.INVALID_TABLE + 1)
+                    return;
+
+                if (null != this.getChildByName("deskNum")) {
+                    let deskNum = this.getChildByName("deskNum") as utils.LabelAtlas;
+                    deskNum.initWithString(`${num}`, "yz_num_count_png", ":/0123456789", 28, 35);
+                } else {
+                    let deskNum = utils.LabelAtlas.createLabel(`${num}`, "yz_num_count_png", ":/0123456789", 28, 35);
+                    deskNum.name = "deskNum";
+                    utils.setAnchorLeftMid(deskNum);
+                    deskNum.x = 565;
+                    deskNum.y = 115;
+                    this.addChild(deskNum);
+                }
+
+                //底分
+                let formatStr = utils.StringUtils.formatNumberThousands(this._lCellScore);
+                if (null != this.getChildByName("deskCell")) {
+                    let deskCell = this.getChildByName("deskCell") as utils.LabelAtlas;
+                    deskCell.initWithString(formatStr, "yz_num_cell_png", ",0123456789", 28, 35);
+                } else {
+                    let deskCell = utils.LabelAtlas.createLabel(formatStr, "yz_num_cell_png", ",0123456789", 28, 35);
+                    deskCell.name = "deskCell";
+                    utils.setAnchorLeftMid(deskCell);
+                    deskCell.x = 815;
+                    deskCell.y = 115;
+                    this.addChild(deskCell);
+                }
+
+            }
+
+            /**显示自己信息 */
+            private showMyselfInfo() {
+                const myself = this._gameEngine.getMeUserItem();
+
+                if (null == myself) return;
+
+                if (myself.cbUserStatus == df.US_READY) {
+                    this.showUserReady(myself);
+                }
+
+                //头像
+                let headPanel = this._companet.getChildByName("userinfo0") as eui.Panel;
+                let head = models.HeadSprite.createHead(myself, 120, 120, 35, 35);
+                utils.setAnchorCenter(head);
+                headPanel.addChild(head);
+                head.x = HeadPoint[cmd.sparrowsclm.MY_VIEW].x;
+                head.y = HeadPoint[cmd.sparrowsclm.MY_VIEW].y;
+
+                //id
+                let userid = headPanel.getChildByName("userID") as eui.Label;
+                userid.text = "ID:" + myself.dwUserID;
+
+                //昵称
+                let nick = headPanel.getChildByName("userNick") as eui.Label;
+                nick.text = utils.StringUtils.clipByConfig(myself.szNickName, 150, utils.StringUtils.getSystemConfig(24));
+
+                //分数
+                let score = headPanel.getChildByName("userScore") as eui.Label;
+                score.text = utils.StringUtils.clipByConfig(utils.StringUtils.formatNumberThousands(myself.lScore), 150, utils.StringUtils.getSystemConfig(24));
+            }
+
+            /**加入缓存 */
+            private cacheUser(user: models.UserItem) {
+
+                //判断重复
+                for (let i = 0; i < this._userList.length; i++) {
+                    let target: models.UserItem = this._userList[i];
+                    if (target.dwUserID == user.dwUserID) {
+                        this._userList.splice(i, 1);
+                        break;
+                    }
+                }
+
+                //拷贝对象
+                let copy = new models.UserItem(user);
+                this._userList.push(copy);
+            }
+
+            /**移除缓存 */
+            private removeUserCache(user: models.UserItem): number {
+                if (this._userList.length == 0)
+                    return df.INVALID_ITEM;
+
+                let bSuccess: boolean = false;
+                let deleteIndex: number = df.INVALID_ITEM;
+                for (let i = 0; i < this._userList.length; i++) {
+                    let target: models.UserItem = this._userList[i];
+                    if (target.dwUserID == user.dwUserID) {
+                        this._userList.splice(i, 1);
+                        bSuccess = true;
+                        deleteIndex = this._gameEngine.switchViewChairID(target.wChairID);
+                        break;
+                    }
+                }
+                egret.assert(bSuccess);
+                return deleteIndex;
+            }
+
+            /**等待提示 */
+            private showWaitTips(nShowIndex: number, isShow: boolean) {
+                let tips = this._companet.getChildByName("waitImg") as eui.Image;
+
+                if (null == tips) return;
+
+                if (isShow == false) {
+                    tips.visible = false;
+                    for (let i = 0; i < 3; i++) {
+                        if (null != this.getChildByName("dot" + i)) {
+                            this.removeChild(this.getChildByName("dot" + i))
+                        }
+                    }
+                    return;
+                }
+
+                tips.visible = true;
+                if (nShowIndex == 0) {
+                    tips.source = "game_ready_text_wait_png";
+                } else {
+
+                }
+
+                //等待动画
+                let beginPosX = 884;
+                let dotIdx = 0;
+
+                for (let i = 0; i < 3; i++) {
+                    if (null != this.getChildByName("dot" + i))
+                        continue;
+
+                    let dot = new eui.Image(`dot_${i + 1}_png`);
+                    dot.name = "dot" + i;
+                    utils.setAnchorLeftMid(dot);
+                    this.addChild(dot);
+                    dot.visible = i == 0 ? true : false;
+
+                    dot.x = beginPosX;
+                    dot.y = 490;
+                }
+
+                //定时器
+                let curTime = egret.getTimer();
+                managers.TimerCtrl.getInstance().createTimer(this, 1000 / 60, 0, () => {
+                    console.log("游戏动画刷新");
+                    let delay = egret.getTimer();
+                    if (delay - curTime >= 500) {
+                        for (let k = 0; k < 3; k++) {
+                            let dot = this.getChildByName("dot" + k);
+                            dot.visible = (dotIdx == k) ? true : false;
+                        }
+                        dotIdx = (dotIdx + 1) % 3;
+                        curTime = egret.getTimer();
+                    }
+
+                }, "tipsWait");
+
+            }
+
+            /**显示准备 */
+            private showUserReady(user: models.UserItem, isshow: boolean = true) {
+                const userindex = this._gameEngine.switchViewChairID(user.wChairID);
+                let userPanel = this._companet.getChildByName("userinfo" + userindex) as eui.Panel;
+                let readyIcon = userPanel.getChildByName("ready");
+                readyIcon.visible = isshow;
+
+                if (!isshow || userindex != cmd.sparrowsclm.MY_VIEW) return;
+
+                //隐藏开始按钮
+                let startBt = this._companet.getChildByName("start");
+                startBt.visible = false;
+
+                //调整换桌按钮位置
+                let changeDesk = this._companet.getChildByName("changeDesk");
+                changeDesk.x = this.width / 2;
+
+                //显示等待提示
+                this.showWaitTips(0, true);
+            }
+
+            /**用户断线 */
+            private showUserOffLine(user: models.UserItem) {
+
+
+            }
+
+            /**显示用户 */
+            private showUser(user: models.UserItem, isShow: boolean) {
+
+                //加入缓存
+                if (null != user) {
+                    this.cacheUser(user);
+                }
+
+                //视图索引
+                let userIndex = this._gameEngine.switchViewChairID(user.wChairID);
+
+                //用户信息
+                let userPanel = this._companet.getChildByName("userinfo" + userIndex) as eui.Panel;
+
+                //校验重复
+                if (null != userPanel.getChildByName("userHead"))
+                    userPanel.removeChild(userPanel.getChildByName("userHead"));
+
+                if (userIndex != cmd.sparrowsclm.MY_VIEW) {
+                    let orignalBg = userPanel.getChildByName("head") as eui.Image;
+                    orignalBg.visible = false;
+
+                    let normalBg = userPanel.getChildByName("head_normal") as eui.Image;
+                    normalBg.visible = true;
+                }
+
+                //头像
+                let head = models.HeadSprite.createHead(user, 120, 120, 35, 35);
+                utils.setAnchorLeftTop(head);
+                head.name = "userHead";
+                userPanel.addChild(head);
+                head.x = HeadPoint[userIndex].x;
+                head.y = HeadPoint[userIndex].y;
+
+                //id
+                let userid = userPanel.getChildByName("userID") as eui.Label;
+                userid.visible = true;
+                userid.text = "ID:" + user.dwUserID;
+
+                //昵称
+                let nick = userPanel.getChildByName("userNick") as eui.Label;
+                nick.visible = true;
+                nick.text = utils.StringUtils.clipByConfig(user.szNickName, 150, utils.StringUtils.getSystemConfig(24));
+
+                //分数
+                let score = userPanel.getChildByName("userScore") as eui.Label;
+                score.visible = true;
+                score.text = utils.StringUtils.clipByConfig(utils.StringUtils.formatNumberThousands(user.lScore), 150, utils.StringUtils.getSystemConfig(24));
+            }
+
+            /**删除用户 */
+            private removeUser(user: models.UserItem) {
+                //查找记录
+                const userIndex = this.removeUserCache(user);
+                if (userIndex == df.INVALID_ITEM) return;
+
+                this.onInitUser(userIndex, false);
+            }
+
+            private onInitUser(userIndex: number, isShow: boolean = false) {
+                let userPanel = this._companet.getChildByName("userinfo" + userIndex) as eui.Panel;
+                userPanel.x = 0;
+                let head = userPanel.getChildByName("userHead");
+                if (null != head && !isShow) {
+                    userPanel.removeChild(head);
+                }
+
+                //隐藏准备
+                const readyIcon = userPanel.getChildByName("ready");
+                readyIcon.visible = false;
+
+                //头像框
+                if (userIndex != cmd.sparrowsclm.MY_VIEW) {
+                    let orignalBg = userPanel.getChildByName("head") as eui.Image;
+                    orignalBg.visible = true;
+
+                    let normalBg = userPanel.getChildByName("head_normal") as eui.Image;
+                    normalBg.visible = false;
+
+                    //id
+                    let userid = userPanel.getChildByName("userID") as eui.Label;
+                    userid.visible = isShow;
+
+                    //昵称
+                    let nick = userPanel.getChildByName("userNick") as eui.Label;
+                    nick.visible = isShow;
+
+                    //分数
+                    let score = userPanel.getChildByName("userScore") as eui.Label;
+                    score.visible = isShow;
+                }
+            }
+
+            /**游戏开始
+             * 头像移动
+             */
+            private gamePlayingHeadAnim(isAction: boolean = true) {
+                const offX: number[] = [-585, 115, -115];
+
+                for (let i = 0; i < cmd.sparrowsclm.PLAYER_COUNT; i++) {
+                    let userPanel = this._companet.getChildByName("userinfo" + i) as eui.Panel;
+
+                    let tw = egret.Tween.get(userPanel)
+                        .to({ x: offX[i] }, isAction ? 200 : 0);
+                }
+            }
+            /**用户变更
+             * 状态变更
+             * 分数变更
+             */
+            public onUpdataUser(user: models.UserItem, newStatus?: any, oldStatus?: any) {
+                if (null == user) return;
+                if (user.cbUserStatus >= df.US_SIT && user.cbUserStatus != df.US_LOOKON) {
+                    if (user.dwUserID != managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID) {
+                        this.showUser(user, true);
+                    }
+
+                    // if (null == newStatus || null == oldStatus)
+                    //     return;
+
+                    //用户准备
+                    if (user.cbUserStatus == df.US_READY) {
+                        this.showUserReady(user);
+                    }
+
+                    //用户断线
+                    if (user.cbUserStatus == df.US_OFFLINE) {
+                        this.showUserOffLine(user);
+                    }
+                }
+
+                //用户起立或离开
+                if (user.cbUserStatus <= df.US_FREE) {
+                    this.removeUser(user);
+                }
+            }
+
+            /**
+             * 初始按钮
+             */
+            private initButton() {
+                //返回
+                let bt = this._companet.getChildByName("back");
+                bt.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+
+                //准备
+                bt = this._companet.getChildByName("start");
+                bt.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+
+                //换桌
+                bt = this._companet.getChildByName("changeDesk");
+                bt.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+
+            }
+            /**按钮事件 */
+            private _changeRecord: number = egret.getTimer();
+            private onButtonClick(e: egret.Event) {
+                let target = e.target as eui.Button;
+                switch (target.name) {
+                    case "back":
+                        {
+                            this._gameEngine.onQueryExitGame();
+                        }
+                        break;
+                    case "start":
+                        {
+                            //判断用户状态
+                            const userItem = this._gameEngine.getMeUserItem();
+                            if (userItem.cbUserStatus >= df.US_READY)
+                                return;
+
+                            //发送准备
+                            this._gameEngine._gameFrame.onUserReady();
+
+                            target.visible = false;
+                        }
+                        break;
+                    case "changeDesk":
+                        {
+                            //频繁过滤
+                            let curTime = egret.getTimer();
+                            if (curTime - this._changeRecord < 1000) {
+                                managers.FrameManager.getInstance().showToast("亲,你换的太频繁了!");
+                                this._changeRecord = egret.getTimer();
+                                return;
+                            }
+
+                            //发送换桌
+                            managers.FrameManager.getInstance().showPopWait("");
+                            this._gameEngine._bChangeDesk = true;
+                            this._gameEngine._gameFrame.onChangeDesk();
+                            this._changeRecord = egret.getTimer();
+
+                            target.visible = false;
+                        }
+                        break;
+                }
+            }
+
+            /**刷新倒计时 */
+            public updateClockView() {
+                if (null != this._clockView) {
+                    this._clockView.onUpdateClockEvent();
+                }
+            }
+
+            /**倒计时0处理 */
+            public logicTimeZero() {
+                if (this._gameEngine._cbGameStatus == cmd.sparrowsclm.GAME_SCENE_FREE) {
+                    let userItem = this._gameEngine.getMeUserItem()
+                    if (userItem.cbUserStatus < df.US_READY) {
+                        this._gameEngine.onExitGame();
+                    }
+                } else {
+
+                }
+            }
+
+            /**显示场景 */
+            public showSceneFree(data: any) {
+                if (null == this._clockView) {
+                    this._clockView = new ClockView(this, cmd.sparrowsclm.MY_VIEW);
+                }
+                this._clockView.setClockTime(20);
+
+                //数据解析
+                let dataBuffer = data as network.Message;
+                let sceneFree = new cmd.sparrowsclm.CMD_S_StatusFree(dataBuffer.cbBuffer);
+
+                this._wBankerUser = sceneFree.wBankerUser;
+                this._bTrustee = false;
+
+                this._lCellScore = sceneFree.lCellScore;
+                this._bAllowJoin = sceneFree.bAllowJoin;
+                this._bIsRuleSetting = sceneFree.bIsRuleSetting;
+
+                this._lTurnScore = sceneFree.lTurnScore;
+                this._lCollectScore = sceneFree.lCollectScore;
+
+                //更新底分
+                this.initDesk();
+            }
+
+            /**游戏开始 */
+            public showGameStart(start: cmd.sparrowsclm.CMD_S_GameStart) {
+                //隐藏开始按钮
+                let startBt = this._companet.getChildByName("start");
+                startBt.visible = false;
+
+                //隐藏换桌按钮
+                let changeDesk = this._companet.getChildByName("changeDesk");
+                changeDesk.visible = false;
+
+                //隐藏等待提示
+                this.showWaitTips(0, false);
+
+                //释放定时器
+                managers.TimerCtrl.getInstance().killTimer(this, "tipsWait");
+
+                //隐藏准备标识
+                for (let i = 0; i < cmd.sparrowsclm.PLAYER_COUNT; i++) {
+                    let userPanel = this._companet.getChildByName("userinfo" + i) as eui.Panel;
+                    let readyIcon = userPanel.getChildByName("ready");
+                    readyIcon.visible = false;
+                }
+
+                //头像移动
+                this.gamePlayingHeadAnim();
+
+            }
+
+            /** 触摸事件
+           * onTouchBegan
+           * onTouchMove
+           * onTouchEnd
+           */
+            private onTouchBegan(event: egret.TouchEvent) {
+                //console.log("onTouch Began");
+                this._bMoved = false;
+            }
+
+            private _bMoved = false;
+            private onTouchMove(event: egret.TouchEvent) {
+                //console.log("onTouch move");
+                this._bMoved = true;
+            }
+
+            private onTouchEnd(event: egret.TouchEvent) {
+                //console.log("onTouch end");
+
+            }
+
+            /**
+             * 移除舞台 
+             */
+            private onExit() {
+                //移除触摸
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+                //释放定时器
+                managers.TimerCtrl.getInstance().killTimer(this, "tipsWait");
+            }
+        }
+    }
+}

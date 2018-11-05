@@ -1,0 +1,92 @@
+var df;
+(function (df) {
+    /**
+     * df  常量定义
+     */
+    df.szValidate = "E8CC72D714FA9ADCED7E7CC39D313F0D";
+    df.INVALID_BYTE = 0xFF;
+    df.INVALID_WORD = 0xFFFF;
+    df.INVALID_DWORD = 0xFFFFFFFF;
+    df.Len_Tcp_Head = 8; //包头固定长度
+    df.Len_Tcp_Info = 4; //数据信息长度
+    df.Len_Virtual_Info = 10; //虚拟信息长度
+    df.SOCKET_TCP_BUFFER = 16384; //网络缓冲
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //内核命令
+    df.MDM_KN_COMMAND = 0; //内核命令
+    //内核命令
+    df.SUB_KN_DETECT_SOCKET = 1; //检测命令
+    df.SUB_KN_SHUT_DOWN_SOCKET = 2; //验证命令
+    df.WORD = 0;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //数据长度
+    //资料数据
+    df.LEN_MD5 = 33; //加密密码
+    df.LEN_AREA = 16; //地区长度
+    df.LEN_CITY = 16; //城市长度
+    df.LEN_PROVINCE = 16; //省份长度
+    df.LEN_ACCOUNTS = 32; //帐号长度
+    df.LEN_PASSWORD = 33; //密码长度
+    df.LEN_GROUP_NAME = 32; //社团名字
+    df.LEN_UNDER_WRITE = 64; //签名长度
+    df.LEN_PROTECT_QUESTION = 32; //密保问题
+    df.LEN_PASSPORT_ID = 32; //证件号码
+    //数据长度
+    df.LEN_QQ = 16; //Q Q 号码
+    df.LEN_EMAIL = 33; //电子邮件
+    df.LEN_USER_UIN = 33; //UIN长度
+    df.LEN_USER_NOTE = 256; //用户备注
+    df.LEN_SEAT_PHONE = 33; //固定电话
+    df.LEN_MOBILE_PHONE = 16; //移动电话
+    df.LEN_COMPELLATION = 16; //真实名字
+    df.LEN_DWELLING_PLACE = 128; //联系地址
+    //其他数据
+    df.LEN_DOMAIN = 63; //域名长度	
+    df.LEN_ADDRESS = 16; //地址长度
+    df.LEN_VALIDATE = 33; //验证地址
+    df.LEN_ACCREDIT_ID = 33; //授权号码
+    df.LEN_COMPUTER_ID = 33; //序列长度
+    df.LEN_MACHINE_SERIAL = 33; //序列长度
+    df.LEN_NETWORK_ID = 13; //序列长度
+    df.LEN_GROUP_INTRODUCE = 128; //群组介绍
+    //视频定义
+    df.LEN_VIDEO_KEY = 33; //秘钥长度
+    df.LEN_VIDEO_CHANNEL = 22; //频道长度
+    //列表数据
+    df.LEN_TYPE = 32; //种类长度
+    df.LEN_KIND = 32; //类型长度
+    df.LEN_NODE = 32; //节点长度
+    df.LEN_SERVER = 32; //房间长度
+    df.LEN_CUSTOM = 32; //定制长度
+    df.LEN_PROCESS = 32; //进程长度
+    //////////////////////////////////////////////////////////////////////////
+    /**
+     * 时间结构体
+     */
+    function SYSTEMTIME(buffer) {
+        var struct = {
+            wYear: buffer.Pop_WORD(),
+            wMonth: buffer.Pop_WORD(),
+            wDayOfWeek: buffer.Pop_WORD(),
+            wDay: buffer.Pop_WORD(),
+            wHour: buffer.Pop_WORD(),
+            wMinute: buffer.Pop_WORD(),
+            wSecond: buffer.Pop_WORD(),
+            wMilliseconds: buffer.Pop_WORD()
+        };
+        return struct;
+    }
+    df.SYSTEMTIME = SYSTEMTIME;
+    //默认配置
+    df.ServerConfig = {
+        Host: "s201.webfox.com",
+        Port: 10000,
+        RemoteID: 1,
+        ServerKind: 1,
+        ServerIndex: 65535
+    };
+    ;
+})(df || (df = {}));
+//# sourceMappingURL=Define.js.map

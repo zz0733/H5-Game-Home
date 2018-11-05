@@ -1,0 +1,325 @@
+/**
+ * 断勾卡血战麻将
+ */
+namespace game {
+    export namespace sparrowsclm {
+        /**
+         * 游戏引擎
+         * 游戏协议
+         * 场景消息
+         * 用户服务
+         */
+        export class GameClientEngine extends models.GameModel implements df.IGameMessage, df.IUserService {
+
+            /**
+             * 构造
+             */
+            constructor(engine: any) {
+                super();
+            }
+
+            //动作队列
+            public _actionList: any[] = [];
+            readonly AK_GAME_BEGIN = 0;
+            readonly AK_OUT_CARD = 1;
+            readonly AK_SEND_CARD = 2;
+            protected createChildren(): void {
+                super.createChildren();
+
+                this.name = "GameClientEngine";
+
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+
+                //设置业务代理
+                this._gameFrame.setDelegate(this);
+
+                //注册触摸
+                this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+                //注册通知
+                this.addEventListener(customEvent.CustomEvent.EVENT_USER_ENTER, this.onUserEnter, this);
+                this.addEventListener(customEvent.CustomEvent.EVENT_USER_STATUS, this.onUserStatus, this);
+            }
+
+            /**初始化 */
+            private onInitLayer(): void {
+                this._gameviewLayer = new GameViewLayer(this);
+                this.addChild(this._gameviewLayer);
+
+            }
+            /**变量初始化 */
+            onInitEngine() {
+                super.onInitEngine();
+            }
+
+            /**变量重置*/
+            onResetEngine() {
+
+            }
+
+            /**游戏人数 */
+            gamePlayerCount() {
+                return cmd.sparrowsclm.PLAYER_COUNT;
+            }
+
+            /**倒计时事件 */
+            public onClockEvent() {
+                if (this._gameviewLayer && this._gameviewLayer.updateClockView) {
+                    this._gameviewLayer.updateClockView();
+                }
+            }
+
+            /**游戏状态 */
+            public _cbGameStatus: number = 0;
+            public getGameStatus() {
+                return this._cbGameStatus;
+            }
+
+            /**用户进入 */
+            onUserEnter(object: any): void {
+                const data = object.data;
+                let user = data.user as models.UserItem;
+
+                if (null != this._gameviewLayer) {
+                    this._gameviewLayer.onUpdataUser(user);
+                }
+
+            }
+            /**用户状态 */
+            onUserStatus(object: any): void {
+                const data = object.data;
+                let user = data.user as models.UserItem;
+                let newstatus = data.newstatus;
+                let oldstatus = data.oldstatus;
+
+                if (null != this._gameviewLayer) {
+                    this._gameviewLayer.onUpdataUser(user, newstatus, oldstatus)
+                }
+
+            }
+            /**用户聊天 */
+            onUserChat(object: any): void {
+
+            }
+            /**用户分数 */
+            onUserScore(object: any): void {
+
+            }
+            /**游戏场景 */
+            onGameScene(status: number, object: any): void {
+                console.log("GameClientEngine: 游戏场景");
+                this._cbGameStatus = status;
+
+                managers.FrameManager.getInstance().dismissPopWait();
+
+                switch (this._cbGameStatus) {
+                    case cmd.sparrowsclm.GAME_SCENE_FREE:
+                        {
+                            this.onSceneFree(object);
+                        }
+                        break;
+                    case cmd.sparrowsclm.GS_PLAYING:
+                        {
+                            this.onScenePlaying(object);
+                        }
+                        break;
+                }
+            }
+            /**游戏协议 */
+            onGameMessage(object: any): void {
+
+                let msg = object as network.Message;
+                switch (msg.wSubCmd) {
+                    case cmd.sparrowsclm.SUB_S_GAME_START:
+                        {
+                            this.onSubGameStart(msg.cbBuffer)
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_OUT_CARD:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_SEND_CARD:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_NOGANG_INFO:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_OPERATE_NOTIFY:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_OPERATE_RESULT:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_CHIHU_RESULT:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_END:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_TRUSTEE:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_VOICEPHRASE:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_ACTION_NOTIFY:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_RULE_SETTING:
+                        {
+                            let ruleSetting = new cmd.sparrowsclm.CMD_S_GAME_RULE_SETTING();
+                            ruleSetting.readBuffer(msg.cbBuffer);
+
+                            let data = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+                            data.Append_SCORE(ruleSetting.lCellScore);
+
+                            this._gameFrame.sendData(df.MDM_GF_FRAME,cmd.sparrowsclm.SUB_C_GAME_RULE_SETTING,data);
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_RULE_NOTIFY:
+                        {
+                            let ruleNotify = new cmd.sparrowsclm.CMD_S_GAME_RULE_NOTIFY()
+                            ruleNotify.readBuffer(msg.cbBuffer);
+
+                            if (true == ruleNotify.bForceExit) {
+                                this.onExitGame("对不起,您携带的分数不够,不能参与游戏!");
+                            }
+
+                            if (4 == ruleNotify.cbGamePlayer) {
+                               this.onExitGame("暂不支持4人桌游戏!"); 
+                            }
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_BAO_HU_NOTIFY:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_TRANSFER_NOTIFY:
+                        {
+
+                        }
+                        break;    
+                }
+
+                console.log("GameClientEngine: 游戏协议:",msg.wSubCmd,cmd.sparrowsclm.MS_NAME[msg.wSubCmd]);
+
+            }
+
+            private onSubGameStart(buffer: utils.ByteArray) {
+                 
+                 let start = new cmd.sparrowsclm.CMD_S_GameStart();
+                 start.readBuffer(buffer);
+
+                 if (this._gameviewLayer && this._gameviewLayer.showGameStart) {
+                     this._gameviewLayer.showGameStart(start);
+                 }
+
+                 //发牌动作
+                 let action: any = {};
+                 action.nKind = this.AK_GAME_BEGIN;
+                 action.lSiceCount = start.lSiceCount;
+                 action.wBankerUser = start.wBankerUser;
+                 action.wCurrentUser = start.wCurrentUser;
+                 action.wCurrBaoUser = start.wCurrBaoUser;
+                 action.cbCardData = start.cbCardData;
+
+                 this._actionList.push(action);
+                 this.beginGameAction();
+
+                 this._cbGameStatus = cmd.sparrowsclm.GS_PLAYING;
+                 console.log("start:",start);
+            }
+            /**系统消息 */
+            onGameSystemMessage(object: any): void {
+
+            }
+
+            private onSceneFree(data: any) {
+                if (this._gameviewLayer && this._gameviewLayer.showSceneFree) {
+                    this._gameviewLayer.showSceneFree(data);
+                }
+            }
+
+            private onScenePlaying(data: any) {
+
+            }
+
+            /**游戏动作 */
+            public beginGameAction() {
+
+            }
+
+            /** 触摸事件
+            * onTouchBegan
+            * onTouchMove
+            * onTouchEnd
+            */
+            private onTouchBegan(event: egret.TouchEvent) {
+                //console.log("onTouch Began");
+                this._bMoved = false;
+            }
+
+            private _bMoved = false;
+            private onTouchMove(event: egret.TouchEvent) {
+                //console.log("onTouch move");
+                this._bMoved = true;
+            }
+
+            private onTouchEnd(event: egret.TouchEvent) {
+                //console.log("onTouch end");
+
+            }
+
+            /**返回大厅 */
+            public onQueryExitGame() {
+                //游戏状态判断
+                const msg = this.getGameStatus() == cmd.sparrowsclm.GAME_SCENE_FREE ? "是否确定退出游戏？" : "游戏已经开始，退出将由憨憨机器人代打哦！\n 是否确定退出游戏？"
+
+                managers.FrameManager.getInstance().showDailog(df.eDialogMode.OK_CANCELL, msg, () => {
+                    managers.FrameManager.getInstance().showPopWait("", 3000);
+                    this.onExitGame();
+                });
+
+            }
+
+            /**移除舞台 */
+            public onExit() {
+                super.onExit();
+                //移除触摸
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+                //移除通知
+                this.removeEventListener(customEvent.CustomEvent.EVENT_USER_ENTER, this.onUserEnter, this);
+                this.removeEventListener(customEvent.CustomEvent.EVENT_USER_STATUS, this.onUserStatus, this);
+            }
+        }
+    }
+}

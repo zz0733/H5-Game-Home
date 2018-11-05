@@ -1,0 +1,31 @@
+/**
+ * 组合扑克
+ */
+
+namespace game {
+    export namespace sparrowsclm {
+        export class WeaveCard {
+            private _nWeaveCount: number = 0;
+            private _actionData: number[] = []
+            constructor(scene) {
+
+            }
+
+            //组合数目
+            public getWeaveItemCount() {
+                return this._nWeaveCount;
+            }
+
+            //显示组合 碰 OR 杠
+            public showWeaveItem(cbActionCard: number,cbActionMask: number,cbProvidUser: number) {
+                if (0 != (cbActionMask & cmd.sparrowsclm.WIK_GANG)) {
+                    //判断明暗杠,放杠,若是放杠,删除提供者牌
+
+                } else if (0 != (cbActionMask & cmd.sparrowsclm.WIK_PENG))　{
+                    //碰,删除提供者牌
+                }
+
+            }
+        }
+    }
+}

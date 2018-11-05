@@ -1,0 +1,233 @@
+/**
+ * 协议定义
+ */
+namespace df {
+    //////////////////////////////////////////////////////////////////////////////////
+
+    export const MDM_MB_LOGON = 100			//广场登录
+
+    export const SUB_MB_LOGON_ACCOUNTS = 2				//帐号登录
+    export const SUB_MB_REGISTER_ACCOUNTS = 3				//注册帐号
+    export const SUB_MB_LOGON_OTHERPLATFORM = 4             //其他登陆
+
+    export const SUB_MB_LOGON_GAMEID_LUA = 10			//I D 登录
+    export const SUB_MB_LOGON_ACCOUNTS_LUA = 11			//帐号登录
+    export const SUB_MB_LOGON_OTHERPLATFORM_LUA = 12			//其他登录
+    export const SUB_MB_REGISTER_ACCOUNTS_LUA = 13			//注册帐号
+
+    export const SUB_MB_LOGON_SUCCESS = 100			//登录成功
+    export const SUB_MB_LOGON_FAILURE = 101			//登录失败
+    export const SUB_MB_LOGON_FINISH = 102			//登录完成
+    export const SUB_MB_UPDATE_NOTIFY = 200			//升级提示
+
+    //////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    //列表命令
+
+    export const MDM_MB_SERVER_LIST = 101								//列表信息
+
+    //获取命令
+    export const SUB_MB_GET_LIST = 1									//获取列表
+    export const SUB_MB_GET_SERVER = 2									//获取房间
+    export const SUB_MB_GET_OPTION = 3									//获取配置
+    export const SUB_MB_GET_OPTION_LUA = 4									//获取配置
+    export const SUB_MB_GET_SERVER_AGENT = 5									//房间代理
+
+    //列表信息
+    export const SUB_MB_LIST_KIND = 100									//种类列表
+    export const SUB_MB_LIST_SERVER = 101									//房间列表
+    export const SUB_MB_LIST_MATCH = 102									//比赛列表
+    export const SUB_MB_GAME_OPTION = 104									//游戏选项
+    export const SUB_MB_CREATE_OPTION = 103									//开房选项
+    export const SUB_MB_LIST_LOGON = 105									//登录列表
+    export const SUB_MB_LIST_AGENT = 106									//代理列表
+    export const SUB_MB_SERVER_AGENT = 107									//房间代理
+    export const SUB_MB_LIST_ACCESS = 108									//网关服务
+    export const SUB_MB_LIST_FINISH = 200									//列表完成
+    export const SUB_MB_SERVER_FINISH = 201									//房间完成
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //帐号登录
+    export function CMD_MB_LogonAccounts_WEB() {
+        var struct =
+            {
+                //系统信息
+                wModuleID: 0,						    //模块标识
+                wMarketID: 0,							//渠道标识
+                cbDeviceType: 0,                         //设备类型
+                dwAppVersion: 0,						    //应用版本
+                dwPlazaVersion: 0,						//广场版本		
+
+                //登录信息
+                dwStationID: 0,						    //站点标识
+                dwMappedNum: 0,						    //映射编号
+                szPassword: "",			            	//登录密码
+                szAccounts: "",			                //登录帐号
+
+                //连接信息
+                szMachineID: "",		                    //机器标识
+                szMobilePhone: ""	                    //电话号码
+            }
+        return struct
+    };
+
+    /**
+     * 账号注册
+     */
+    export function CMD_MB_RegisterAccounts_WEB() {
+        var struct =
+            {
+                //系统信息
+                wModuleID: 0,							//模块标识
+                wMarketID: 0,							//渠道标识
+                cbDeviceType: 0,                         //设备类型
+                dwAppVersion: 0,						    //应用版本
+                dwPlazaVersion: 0,						//广场版本
+
+                //密码变量
+                dwStationID: 0,					    	//站点标识
+                szLogonPass: "",			            	//登录密码
+
+                //注册信息
+                wFaceID: 0,						    	//头像标识
+                cbGender: 0,						    	//用户性别
+                szAccounts: "",		                	//登录帐号
+                szNickName: "",		                    //用户昵称
+
+                //连接信息
+                szMachineID: "",	                    	//机器标识
+                szMobilePhone: ""	                    //电话号码
+            }
+
+        return struct;
+    };
+
+
+    /***
+     * 登录成功
+     */
+    export function CMD_MB_LogonSuccess() {
+        var struct =
+            {
+                wFaceID: 0,							//头像标识
+                cbGender: 0,						    //用户性别
+                dwCustomID: 0,						//自定头像
+                dwUserID: 0,						    //用户 I D
+                dwGameID: 0,							//游戏 I D
+                dwStationID: 0,						//站点标识
+                dwExperience: 0,						//经验数值
+                dwLoveLiness: 0,						//用户魅力
+                szNickName: "",			            //用户昵称
+                szAccounts: "",			            //登录帐号
+                szLogonPass: "",			            //登录密码
+                szInsurePass: "",			        //银行密码
+
+                //财富信息
+                lUserIngot: 0,						//用户钻石
+                lUserMedal: 0,						//用户奖牌
+                lUserScore: 0,						//用户游戏币	
+                lUserInsure: 0,						//用户银行	
+
+                //会员资料
+                cbMemberOrder: 0,					//会员等级
+                MemberOverDate: {},					//到期时间
+
+                //附加信息
+                wLockServerID: 0						//锁定房间	
+
+            }
+        return struct;
+    };
+
+    /**
+     * 登录失败
+     */
+    export function CMD_MB_LogonFailure() {
+        var struct =
+            {
+                lResultCode: 0,					//错误代码
+                szDescribeString: ""				//描述消息
+            }
+        return struct;
+    };
+
+    //////////////////////////////////////////////////////////////////////////
+    //服务命令
+
+    export const MDM_GP_USER_SERVICE			= 3									//用户服务
+
+    //////////////////////////////////////////////////////////////////////////
+
+    //账号服务
+    export const SUB_GP_MODIFY_ACCOUNTS		= 1									//修改帐号
+    export const SUB_GP_MODIFY_LOGON_PASS	= 2									//修改密码
+    export const SUB_GP_MODIFY_INSURE_PASS	= 3									//修改密码
+    export const SUB_GP_MODIFY_INDIVIDUAL	= 4									//修改资料
+    export const SUB_MB_MODIFY_INDIVIDUAL	= 5									//修改资料
+    export const SUB_GP_BIND_MACHINE		= 6									//锁定机器
+    export const SUB_GP_UN_BIND_MACHINE		= 7									//解锁机器
+    export const SUB_GP_ACCOUNT_SECURITY	= 8									//密保申请
+    export const SUB_GP_MODIFY_NICKNAME		= 9									//修改昵称
+
+    //查询命令
+    export const	SUB_GP_QUERY_INDIVIDUAL	= 10									//查询信息
+    export const SUB_GP_TEST_ACCOUNTS		= 11									//检查占用
+    export const SUB_GP_TEST_NICKNAME       = 12									//检测占用
+    export const SUB_GP_QUERY_WEALTH		= 13									//查询财富
+    export const SUB_GP_QUERY_WEALTH_LUA	= 14									//查询财富
+
+    //低保命令
+    export const SUB_GP_BASEENSURE_QUERY		= 20									//查询低保
+    export const SUB_GP_BASEENSURE_TAKE		    = 21									//领取低保	
+    export const SUB_GP_GET_VALIDATECDOE		= 22									//获取验证码	
+
+    //////////////////////////////////////////////////////////////////////////
+
+    //操作结果
+    export const SUB_GP_OPERATE_SUCCESS		= 100									//操作成功
+    export const SUB_GP_OPERATE_FAILURE		= 101									//操作失败
+
+    //查询结果
+    export const SUB_GP_USER_INDIVIDUAL		= 200									//个人资料
+    export const SUB_GP_USER_WEALTH			= 201									//用户财富
+
+    //修改头像
+    export const SUB_GP_USER_FACE_INFO		= 210									//头像信息
+    export const SUB_GP_SYSTEM_FACE_INFO	= 211									//系统头像
+    export const SUB_GP_CUSTOM_FACE_INFO	= 212									//自定头像
+
+    //低保命令
+    export const SUB_GP_BASEENSURE_INFO		= 300									//低保信息
+    export const SUB_GP_BASEENSURE_RESULT	= 301									//领取结果
+    export const SUB_GP_BASEENSURE_FAILED	= 302									//操作失败	
+    export const SUB_GP_VALIDATECDOE_INFO	= 303									//验证码信息
+
+    //////////////////////////////////////////////////////////////////////////
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //银行
+
+    export const MDM_GP_BANK_OPERATE = 4									//银行操作
+
+    //////////////////////////////////////////////////////////////////////////
+
+    export const SUB_GP_STORAGE = 1									//银行存储
+    export const SUB_GP_DRAWOUT = 2									//银行取出
+    export const SUB_GP_TRANSFER = 3									//银行转帐
+    export const SUB_GP_QUERY = 4									//查询用户
+    export const SUB_GP_UPDATE = 5									//更新金币
+
+    export function CMD_GP_BANKOPERATE() {
+        var struct = {
+            dwUserID: 0,
+            lOperateScore: 0,
+            cbOperateCode: 0,
+            dwStationID: 0,
+            szInsurePass: ""
+        }
+        return;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////
+}
+

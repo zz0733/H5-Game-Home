@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.CommonListView" minWidth="20" minHeight="20" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+    <e:HScrollBar id="horizontalScrollBar" width="100%" bottom="0" autoVisibility="false"  locked="true" visible="false"/>
+    <e:VScrollBar id="verticalScrollBar" height="100%" right="0" autoVisibility="false"  locked="true" visible="false"/>
+    <e:List id="dataList" width="100%" height="100%" x="0" y="0" name="dataList">
+        <e:layout>
+            <e:VerticalLayout horizontalAlign="center" verticalAlign="middle" />
+        </e:layout>
+    </e:List>
+</e:Skin>

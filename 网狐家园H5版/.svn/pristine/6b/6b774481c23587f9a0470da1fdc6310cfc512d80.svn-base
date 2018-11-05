@@ -1,0 +1,60 @@
+/**
+ * 商城
+ */
+namespace client {
+    export class ShopLayer extends eui.UILayer {
+        private _scene: any;
+        private _showIndex: number = 0;
+        constructor(scene: any,showIndex?: number) {
+            super();
+            this._scene = scene;
+            this._showIndex = showIndex ? showIndex : 0;
+        }
+        createChildren() {
+            super.createChildren();
+            this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+        }
+
+        /**
+         * 初始化
+         */
+        private _panel_purchase_type: eui.Panel;    //支付方式
+        private _panel_purchase_ingot: eui.Panel;   //充值钻石
+        private _panel_purchase_gold: eui.Panel;    //购买金币
+        private _panel_bank: eui.Panel;             //金币钱包
+        private _panel_exchange: eui.Panel;         //兑换商城
+        private _panel_purchase_roomCard: eui.Panel;//购买房卡
+        private _check_wechat: eui.CheckBox;        //微信支付
+        private _check_zfb: eui.CheckBox;           //支付宝支付
+        private _checkItems: eui.CheckBox[] = [];   //菜单栏
+        private _tips: eui.Label;                   //温馨提示
+        private _tips_content: eui.Label;           //提示内容
+        private _panel_medals: eui.Panel;           //奖牌
+        public onInitLayer() {
+            //加载皮肤 
+            let componet = new eui.Component();
+            this.addChild(componet);
+            componet.skinName = skins.ShopLayer;
+
+            let btn = componet.getChildByName("bt_close");
+            btn.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClickEvent, this);
+
+        }
+        public onExit() {
+
+        }
+
+        public onButtonClickEvent(e:egret.Event) {
+            var target = e.target as eui.Button;
+
+            let tw = egret.Tween.get(target)
+                .to({ scaleX: 1.1, scaleY: 1.1 }, 50)
+                .to({ scaleX: 1.0, scaleY: 1.0 }, 50);
+
+            if (target.name == "bt_close") {
+               this._scene.onChangeView();
+            }
+        }
+    }
+}

@@ -1,0 +1,10 @@
+/**
+ * 用户出牌
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class DropCard {
+            
+        }
+    }
+}

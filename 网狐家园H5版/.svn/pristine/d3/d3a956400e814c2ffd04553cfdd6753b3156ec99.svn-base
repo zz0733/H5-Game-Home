@@ -1,0 +1,171 @@
+/** 网络服务
+*直连模式
+*虚拟模式
+**/
+
+namespace managers{
+
+    export class ServiceManager
+    {
+        /**
+        *单例实例 
+        */
+        private static m_sInstance: ServiceManager;
+
+        /**
+         * 消息队列
+         */
+        MsgQueue:utils.Message[] = [];
+
+        /**
+         * 网络连接方式
+         */
+        private m_ConnectKind: number = df.SERVICE_MODE_LINK;
+
+        /**
+         * 当前服务
+         */
+        private m_pTcpService: any;
+
+        /**
+         * 服务类型 
+         */
+        private m_eServiceMode: number = df.eServiceKind.LogonService;
+
+        /**
+         * 服务模块
+         */
+        private m_ServiceModule: any ;
+
+        /**
+         * 当前代理
+         */
+        private m_pDelegate: any;
+
+        /**
+         * 网络接收
+         */
+        private _viewFrame: any;
+
+        /**
+        *获取当前实例
+        */
+        public static getInstance(): ServiceManager
+        {
+            if(this.m_sInstance == null)
+            {
+                this.m_sInstance = new ServiceManager();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+         }
+
+
+        public init():void
+        {
+            //TCP服务
+            this.m_pTcpService = null;
+
+            //服务类型
+            this.m_eServiceMode = df.eServiceKind.LogonService;
+        }
+
+        /**
+         * 设置连接方式
+         */
+        public setConnectKind(kind: number):void
+        {
+            this.m_ConnectKind = kind;
+        }
+
+        /**
+         * 设置服务类型 
+         */
+        public setServiceMode(mode: number)
+        {
+            this.m_eServiceMode = mode;
+        }
+
+        /**
+         * 设置委托
+         */
+        public setDelegate(delegate: any)
+        {   
+            this.m_pDelegate = null;
+            this.m_pDelegate = delegate;
+        }
+
+        public getDelegate()
+        {
+            return this.m_pDelegate ? this.m_pDelegate : null;
+        }
+        
+        /**
+         * 获取服务模块
+         */
+        public getServiceModule()
+        {
+            return this.m_ServiceModule ? this.m_ServiceModule : null;
+        }
+
+        /**
+         * 网络接收
+         */
+        public setViewFrame(view: any)
+        {
+            this._viewFrame = null;
+            this._viewFrame = view;
+        }
+
+        public getViewFrame()
+        {
+            return this._viewFrame ? this._viewFrame : null;
+        }
+
+        /**
+         * 获取TCP服务
+         */
+        public getTcpService()
+        {
+            return this.m_pTcpService ? this.m_pTcpService : null;
+        }
+
+        //启动服务
+        public LoadService(service,serviceModule,serviceMode)
+        {
+            //释放引用
+            this.m_pTcpService = null;
+
+            //保存服务
+            this.m_pTcpService = service;
+
+            //服务类型
+            this.m_eServiceMode = serviceMode;
+
+            //服务模块
+            this.m_ServiceModule = serviceModule;
+        }
+
+         /**
+          * 刷新服务
+          */
+         onUpdate():void
+         {
+             //服务刷新
+            if (this.m_pTcpService && this.m_pTcpService.onUpdate)
+            {
+                this.m_pTcpService.onUpdate();
+            }
+
+            //处理队列
+            if (this.m_pDelegate && this.m_pDelegate.onMessage)
+            {   
+                if (this.MsgQueue.length == 0) return;
+
+                var msg = this.MsgQueue[0];
+                this.m_pDelegate.onMessage(msg);
+                this.MsgQueue.shift();
+            }
+         }
+    }
+}    

@@ -1,0 +1,21 @@
+var df;
+(function (df) {
+    //////////////////////////////////////////////////////////////////////////////////
+    //登录命令
+    df.MDM_MP_LOGON = utils.MAIN_COMMAND(256 /* CMD_LOGON */, 200); //广场登录
+    //////////////////////////////////////////////////////////////////////////////////
+    //登录模式
+    df.SUB_MP_LOGON_ACCOUNTS = 100; //帐号登录
+    df.SUB_MP_LOGON_TOURISTS = 101; //游客登录
+    df.SUB_MP_LOGON_EXTERNAL = 102; //他发登录
+    df.SUB_MP_LOGON_SECRETKEY = 103; //密钥登录
+    df.SUB_MP_REGISTER_ACCOUNTS = 104; //注册帐号
+    //登录结果
+    df.SUB_MP_LOGON_SUCCESS = 200; //登录成功
+    df.SUB_MP_LOGON_FAILURE = 201; //登录失败
+    df.SUB_MP_LOGON_COMPLETE = 202; //登录完成
+    //升级提示
+    df.SUB_MP_UPDATE_NOTIFY = 300; //升级提示
+    //////////////////////////////////////////////////////////////////////////////////
+})(df || (df = {}));
+//# sourceMappingURL=CMD_LogonServer.js.map

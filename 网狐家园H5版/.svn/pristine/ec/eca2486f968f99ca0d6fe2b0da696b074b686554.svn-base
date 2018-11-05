@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.GameListItem" width="470" height="150" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Button id="button" x="13" y="0" width="446" height="150" enabled="true" label="" iconDisplay="">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="446" height="150" source.up="gamelist_bt_game_28_0_png" source.down="gamelist_bt_game_28_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+    
+</e:Skin>

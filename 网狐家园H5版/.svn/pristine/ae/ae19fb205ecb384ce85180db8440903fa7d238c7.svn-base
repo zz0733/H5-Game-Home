@@ -1,0 +1,597 @@
+/**
+ * TCP服务
+ */
+namespace service
+{
+     /**
+     * 心跳维护时间
+     */
+    const HeartTime:number = 5000;
+
+    /**
+     * 验证时间
+     */
+    const ValidateTimeOut: number = 5000;
+
+    const CONNECT_SUCCESS = true;
+    const CONNECT_FAILURE = false;
+
+    export class TcpSocketService implements df.IBindSocket,df.ISocketService
+    {
+         /**
+         * 加密实例
+         */
+        private m_Crypt: network.Crypt;
+
+        /**
+         * 接收长度
+         */
+        private m_wRecvSize: number = 0;
+
+        /**
+         * 重连次数
+         */
+        m_ReConnectCount: number;
+
+         /**
+          * 最大连接
+          */
+        m_ReConnectMax: number = 5
+
+
+          /**
+           * 连接超时
+           */
+        m_ReConnectTimeOut: number = 10;
+
+
+        /**
+         * SOCKET实例
+         */
+        private m_Socket: network.TcpSocket;
+
+
+         /**
+         * 事件实例
+         */
+        private m_EventDispatcher: egret.EventDispatcher;
+
+        /**
+         * 挂接对象
+         */
+        private m_ConnectModule: any;
+
+        /**
+         * 连接方式
+         */
+        private m_ConnectKind: number = df.SERVICE_MODE_LINK
+
+        /**
+         * 当前时间
+         */
+        private m_CurTime: number = 0;
+
+        /**
+         * 接收容器
+         */
+        private m_RecvQueue: utils.__ByteArray[] = [];
+
+        /**
+         * 构造
+         */
+        constructor(socket: network.TcpSocket)
+        {
+            //websocket
+            this.m_Socket = socket;
+
+            //事件实例
+            this.m_EventDispatcher = new egret.EventDispatcher();
+
+            //加密实例
+            this.m_Crypt = new network.Crypt();
+
+            //接收大小
+            this.m_wRecvSize = 0;
+
+            //缓冲队列
+            this.m_RecvQueue = [];
+        }
+
+        //缓冲队列
+        public pushRecvBuffer(buffer):void
+        {
+            this.m_RecvQueue.push(buffer);
+        }
+
+        //连接模块
+        public setConnectModule(module):void
+        {
+            this.m_ConnectModule = module;
+        }
+
+        //服务类型
+        public setConnectKind(kind):void
+        {
+            this.m_ConnectKind = kind;
+        }
+
+        /**
+         * 解密数据
+         */
+        public setSocketBuffer(buffer: utils.__ByteArray)
+        {
+            //重置变量
+            this.m_CurTime = egret.getTimer();
+          
+            //验证成功
+            this.m_EventDispatcher.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_VALIDATE_SUCCESS));
+
+            return new Promise((resolve,reject)=>{
+
+                    let offset = 0;       //记录偏移
+                    let splicing = false; //粘包标记
+
+                    try {
+                            //网络长度
+                            this.m_wRecvSize = buffer.getLength();
+
+                            //解密映射
+                            while (this.m_wRecvSize >= df.Len_Tcp_Head) 
+                            {
+                                if (offset > 0)
+                                {
+                                    splicing = true
+                                }
+
+                                //设置偏移
+                                buffer.position(offset);
+
+                                //数据类型
+                                var cbDataKind  = utils.MathUtils.getUnsignedByte(buffer.Pop_Byte()); 
+                                //校验字段
+                                var cbCheckCode = utils.MathUtils.getUnsignedByte(buffer.Pop_Byte()); 
+                                //缓冲长度
+                                var wPacketSize = buffer.Pop_WORD();
+                                this.m_Crypt.setBufferSize(wPacketSize);
+
+                                //设置包头
+                                this.m_Crypt.setTCPInfo([cbDataKind,cbCheckCode,wPacketSize]);
+
+                                //长度校验
+                                egret.assert((wPacketSize>=df.Len_Tcp_Info)&&(wPacketSize<=df.SOCKET_TCP_BUFFER))
+                                if ((wPacketSize < df.Len_Tcp_Info) || (wPacketSize > df.SOCKET_TCP_BUFFER))
+                                {
+                                    throw new Error("消息包错误");
+                                }
+
+                                //完整判断
+                                if (this.m_wRecvSize < wPacketSize)
+                                {   
+                                    throw new Error("消息包接收不完整");
+                                }
+
+                                //解密数据
+                                if (this.m_Crypt.CrevasseBuffer(buffer.getByteArray(),wPacketSize,offset) == false)
+                                {
+                                    egret.assert(false);
+                                    throw new Error("解密失败");
+                                }
+
+                                //映射数据
+                                if (this.m_Crypt.UnMappedBuffer(buffer.getByteArray(),wPacketSize,offset) == false)
+                                {
+                                    egret.assert(false);
+                                    throw new Error("映射失败");;
+                                }
+
+                                //读取命令码
+                                var wMain = buffer.Pop_WORD();
+                                var wSub  = buffer.Pop_WORD();
+
+                                console.log(`主命令: ${wMain},子命令: ${wSub}`);
+                     
+                                if (wMain == df.MDM_KN_COMMAND)
+                                {
+                                    //内核命令
+                                    if (wSub == df.SUB_KN_DETECT_SOCKET)
+                                    {
+                                    
+                                    }else if (wSub == df.SUB_KN_VIRTUAL_VOID)
+                                    {
+                                        //当前服务器为非网关服务器 以直接方式连接
+                                        if (null != this.m_ConnectModule)
+                                        {
+                                            egret.assert(this.m_ConnectModule.getServiceModule())
+                                            if (null == this.m_ConnectModule.getServiceModule())
+                                            {
+                                                console.log("服务模块为空");
+                                            }
+
+                                            var service = this.m_ConnectModule.getServiceModule();
+                                            service.connectSuccess();
+                                        }
+
+                                    }else if (wSub == df.SUB_KN_VIRTUAL_SUCCESS)
+                                    {
+                                        //当前服务器为网关服务器，需要采用虚拟模式进行后续的数据处理或者中断连接
+                                        let virtualSucces = network.onSubVirtualSuccess(buffer);
+
+                                        //设置活动连接
+                                        if (null != this.m_ConnectModule)
+                                        {
+                                            egret.assert(null != this.m_ConnectModule.getServiceModule());
+                                            if (null == this.m_ConnectModule.getServiceModule())
+                                            {
+                                                console.log("服务模块为空");
+                                                break;
+                                            }
+
+                                            var service = this.m_ConnectModule.getServiceModule();
+                                            var config = 
+                                            {
+                                                ClientID:virtualSucces.dwClientID,
+                                                ServerKind:df.eServerKind.PLAZA,
+                                                ServerID:virtualSucces.dwServerID
+                                            }
+
+                                            service.setActiveConnect(config);
+
+                                            //通知连接成功
+                                            service = this.m_ConnectModule.getServiceModule();
+                                            service.connectSuccess();
+                                        }
+                                    
+                                    }else if (wSub == df.SUB_KN_VIRTUAL_SHUT)
+                                    {
+                                        //虚拟连接关闭 真实SOCKET也需要关闭
+                                        egret.assert(null != this.m_ConnectModule.getServiceModule());
+                                        if (null == this.m_ConnectModule.getServiceModule())
+                                        {
+                                            console.log("服务模块为空");
+                                            break;
+                                        }
+
+                                        //通知连接关闭
+                                        var service = this.m_ConnectModule.getServiceModule();
+                                        service.virtualConnectShut();
+
+                                    }else if (wSub == df.SUB_KN_VIRTUAL_DATA)
+                                    {
+                                        //组装数据包
+                                        var wDataSize  = buffer.Pop_WORD();
+                                        var dwRemoteID = buffer.Pop_INT();
+                                        var wMainCmd   = buffer.Pop_WORD();
+                                        var wSubCmd    = buffer.Pop_WORD();
+
+                                        let msgBuffer = new utils.__ByteArray();
+                                        utils.Memory.CopyMemory(msgBuffer,buffer,wDataSize,0,buffer.getPosition());
+                                        let message = new utils.Message(wMainCmd,wSubCmd,wDataSize,msgBuffer);
+
+                                        //加入待处理队列
+                                        var instance = managers.ServiceManager.getInstance();
+                                        instance.MsgQueue.push(message);
+
+                                        console.log(`虚拟模式 主命令: ${wMainCmd},子命令: ${wSubCmd}`);
+                                        console.log(`虚拟模式 消息长度: ${wDataSize}`);
+                                    }
+                                }else
+                                {
+
+                                }
+                                //处理长度
+                                this.m_wRecvSize -= wPacketSize;
+                                egret.assert(this.m_wRecvSize>=0);
+
+                                //记录偏移
+                                offset += wPacketSize;
+                                
+                                //判断完成
+                                if (this.m_wRecvSize < df.Len_Tcp_Head)
+                                {
+                                    resolve(); 
+                                    buffer = null;
+                                }
+
+                                console.log(`已处理长度: ${wPacketSize},剩余长度: ${this.m_wRecvSize}`);
+                            }
+
+                    } catch (e) {
+                        //释放引用
+                        buffer = null;
+
+                        //处理长度
+                        this.m_wRecvSize -= wPacketSize;
+
+                        //记录偏移
+                        offset += wPacketSize;
+
+                        reject("数据解析异常");
+                    }
+            })
+        }
+
+        /**
+         * 发送数据
+         */
+        public SendSocketData(wMainCmd: number,wSubCmd: number,data: any,wSize: number):boolean
+        {
+             //加密消息包
+            let packages =  <utils.__ByteArray>(this.initSocketData(wMainCmd,wSubCmd,data,wSize));
+
+            //发送数据
+            if (this.m_Socket)
+            {
+                //偏移前置
+                packages.position(0);
+
+                //写流
+                this.m_Socket.writeBytes(packages.getByteArray());
+        
+                //引用释放
+                packages = null;
+            } 
+            return true;
+        }
+
+        /***
+         * 封包加密
+         */
+        public initSocketData(wMainCmd: number,wSubCmd: number,data: any,wSize: number):any
+        {
+            //定义变量
+            let packages: utils.__ByteArray;
+            let mapResult: Array<any>;
+            let buffer = <utils.__ByteArray>data;
+
+            //映射数据
+            if (((this.m_Crypt.getDataFlag()&network.DK_MAPPED) != 0))
+            {
+                //设置偏移
+                buffer.position(df.Len_Tcp_Info);  
+
+                //设置命令码
+                buffer.Append_WORD(wMainCmd);
+                buffer.Append_WORD(wSubCmd);
+
+                //映射数据
+                mapResult = this.m_Crypt.MappedBuffer(buffer.getByteArray(),wSize);
+            }
+
+            //加密数据
+            if (((this.m_Crypt.getDataFlag()&network.DK_ENCRYPT) != 0))
+            {
+                //数据类型
+                let dataKind = mapResult[0]
+                dataKind = this.m_Crypt.EncryptBuffer(buffer.getByteArray(),wSize, dataKind);
+            }
+            
+            //构造数据包
+            packages = new utils.__ByteArray();
+            
+            //偏移前置
+            buffer.position(0);
+
+            //填充包头
+            buffer.Append_Byte(mapResult[0])
+            buffer.Append_Byte(mapResult[1])
+            buffer.Append_WORD(mapResult[2]);
+
+            packages.Append_Bytes(buffer.getByteArray());
+
+            //引用置空
+            buffer.clear();
+            buffer = null;
+
+            return packages;
+        }
+
+        //连接成功
+        public socketBindSuccess():void
+        {
+             //发送验证
+            this.netValidate().then(()=>{ 
+              
+                    //连接状态
+                    this.m_Socket.setConnectStatus(df.eSocketStatus.soc_connected);
+
+                    //记录时间
+                    this.m_CurTime = egret.getTimer();
+
+                    console.log("验证通过");
+                }).catch((err)=>{
+                    console.log(err);
+                });   
+
+               this.m_ConnectModule.socketBindSuccess();
+        }
+
+        //发送虚拟模式请求
+        public sendVitualMode():void
+        {
+            let item ;
+
+            try {
+                    if (this.m_ConnectModule && this.m_ConnectModule.getServiceModule)
+                    {
+                        let serviceModule = this.m_ConnectModule.getServiceModule();
+                        let virturalItem  = serviceModule.createVitualItem();
+                        item =
+                        [
+                            virturalItem.getRamoteID(),
+                            virturalItem.getServerKindID(),
+                            virturalItem.getServerIndex()
+                        ]
+
+                    }else
+                    {
+                       console.log("连接模块为空");
+                       throw new Error();  
+                    }
+                
+            } catch (e)
+            {
+                item =
+                [
+                    df.ServerConfig.RemoteID,
+                    df.ServerConfig.ServerKind,
+                    df.ServerConfig.ServerIndex
+                ];
+            }
+            
+            //构造数据
+            network.sendServiceLink(this,item);
+        }
+
+        //以虚拟方式请求连接
+        public VirtualConnect(dwClientIndex: number, cbServiceKind: number, wServiceIndex:number):boolean
+        {
+            //判断是否绑定SOCKET
+            egret.assert(this.m_Socket != null)
+
+            //参数效验
+            egret.assert(cbServiceKind != df.INVALID_BYTE);
+            if (cbServiceKind == df.INVALID_BYTE) return CONNECT_FAILURE;
+
+            //参数效验
+            egret.assert(dwClientIndex != df.INVALID_DWORD);
+            if (dwClientIndex == df.INVALID_DWORD) return CONNECT_FAILURE;
+
+            //发送数据
+            network.sendServiceLink(this,[dwClientIndex,cbServiceKind,wServiceIndex]);
+
+            //返回结果
+            return CONNECT_SUCCESS;
+        }
+
+        //网络验证
+        public netValidate()
+        {
+           //记录时间
+           this.m_CurTime = egret.getTimer();
+
+           return new Promise((resolve, reject) => {
+                //构造数据
+                let args = 
+                [
+                    network.VER_SOCKET,
+                    network.ENCRYPT_KIND,
+                    this.m_Crypt.m_cbSendEncrypt,
+                    this.m_Crypt.m_cbRecvEncrypt,
+                    this.m_Crypt.getValidateKey(df.szValidate)
+                ];
+
+                //发送验证
+                network.sendValidPacket(this,args);
+
+
+                //验证超时
+                let timeOut = ()=>{
+                    reject("验证超时");
+                };
+                //启动延时
+                let timer = setTimeout(timeOut,ValidateTimeOut);
+
+                //验证通过
+                this.m_EventDispatcher.once(customEvent.CustomEvent.EVENT_VALIDATE_SUCCESS,()=>{
+                     resolve();
+                     clearTimeout(timer);
+                },this);
+            }) ;
+        }
+
+        /**
+         * socket响应
+         */
+        public socketBindFailure():void
+        {
+            if (null != this.m_ConnectModule)
+            {
+                this.m_ConnectModule.socketBindFailure();
+            }
+        }
+
+        /**
+         * 关闭服务
+         */
+        closeService():void
+        {
+            //关闭socket
+            if (null != this.m_Socket)
+            {
+               if (this.m_Socket.isConnected())
+               {
+                   this.m_Socket.close();
+               }
+               this.m_Socket = null;
+            }
+
+            //释放引用
+            if (null != this.m_Crypt)
+            {
+                this.m_Crypt = null;
+            }
+
+            console.log("TcpService服务关闭");
+        }
+        /**
+         * 重连机制
+         */
+        reconnectionService()
+        {
+
+
+        }
+
+        /**
+         * 重连超时
+         */
+        reconnectTimeOut()
+        {
+
+        }
+
+        /**
+         * 刷新
+         */
+        public onUpdate():void
+        {
+            //时间差
+            let curTime: number = egret.getTimer();
+            let delay = curTime - this.m_CurTime;
+
+           // console.log(`spend ${delay}毫秒`)
+
+           if (null == this.m_Socket)
+           {
+               return;
+           }
+
+            //发送心跳
+            if (delay >= HeartTime && (true == this.m_Socket.isConnected()))
+            {
+                do{
+                    network.sendPing(this);
+                    this.m_CurTime = egret.getTimer();
+                    console.log("发送心跳");
+
+                }while(false)
+            }
+
+            //缓冲队列处理
+            if (this.m_RecvQueue.length > 0)
+            {
+                var buffer = this.m_RecvQueue[0];
+
+                this.setSocketBuffer(buffer)
+                .then(()=>{
+                    this.m_RecvQueue.shift();
+                })
+                .catch((err)=>{
+                    console.error(err);
+                    //移除错误包,继续解析 
+                    this.m_RecvQueue.shift();
+                });
+            }
+        }
+    }
+}

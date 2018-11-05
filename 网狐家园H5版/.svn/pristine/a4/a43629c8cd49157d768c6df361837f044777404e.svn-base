@@ -1,0 +1,58 @@
+var df;
+(function (df) {
+    //////////////////////////////////////////////////////////////////////////////////
+    df.MDM_MB_LOGON = 100; //广场登录
+    df.SUB_MB_LOGON_ACCOUNTS = 2; //帐号登录
+    df.SUB_MB_REGISTER_ACCOUNTS = 3; //注册帐号
+    df.SUB_MB_LOGON_OTHERPLATFORM = 4; //其他登陆
+    df.SUB_MB_LOGON_GAMEID_LUA = 10; //I D 登录
+    df.SUB_MB_LOGON_ACCOUNTS_LUA = 11; //帐号登录
+    df.SUB_MB_LOGON_OTHERPLATFORM_LUA = 12; //其他登录
+    df.SUB_MB_REGISTER_ACCOUNTS_LUA = 13; //注册帐号
+    df.SUB_MB_LOGON_SUCCESS = 100; //登录成功
+    df.SUB_MB_LOGON_FAILURE = 101; //登录失败
+    df.SUB_MB_LOGON_FINISH = 102; //登录完成
+    df.SUB_MB_UPDATE_NOTIFY = 200; //升级提示
+    //////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    //列表命令
+    df.MDM_MB_SERVER_LIST = 101; //列表信息
+    //获取命令
+    df.SUB_MB_GET_LIST = 1; //获取列表
+    df.SUB_MB_GET_SERVER = 2; //获取房间
+    df.SUB_MB_GET_OPTION = 3; //获取配置
+    df.SUB_MB_GET_OPTION_LUA = 4; //获取配置
+    df.SUB_MB_GET_SERVER_AGENT = 5; //房间代理
+    //列表信息
+    df.SUB_MB_LIST_KIND = 100; //种类列表
+    df.SUB_MB_LIST_SERVER = 101; //房间列表
+    df.SUB_MB_LIST_MATCH = 102; //比赛列表
+    df.SUB_MB_SERVER_AGENT = 107; //房间代理
+    df.SUB_MB_LIST_ACCESS = 108; //网关服务
+    df.SUB_MB_LIST_FINISH = 200; //列表完成
+    df.SUB_MB_SERVER_FINISH = 201; //房间完成
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    //帐号登录
+    function CMD_MB_LogonAccounts_Lua() {
+        var struct = {
+            //系统信息
+            wModuleID: 0,
+            wMarketID: 0,
+            cbDeviceType: 0,
+            dwAppVersion: 0,
+            dwPlazaVersion: 0,
+            //登录信息
+            dwStationID: 0,
+            dwMappedNum: 0,
+            szPassword: "",
+            szAccounts: "",
+            //连接信息
+            szMachineID: "",
+            szMobilePhone: "" //电话号码
+        };
+        return struct;
+    }
+    df.CMD_MB_LogonAccounts_Lua = CMD_MB_LogonAccounts_Lua;
+    ;
+})(df || (df = {}));
+//# sourceMappingURL=CMD_LogonServer.js.map

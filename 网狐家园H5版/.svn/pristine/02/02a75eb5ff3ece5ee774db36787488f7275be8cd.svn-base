@@ -1,0 +1,37 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+/*单例
+*游戏定时器管理类
+*多定时器队列处理
+*定时器实例生命周期
+*/
+var managers;
+(function (managers) {
+    var TimerControl = (function () {
+        function TimerControl() {
+        }
+        /**
+         * 时间队列
+         */
+        /**
+       *获取实例
+       */
+        TimerControl.getInstance = function () {
+            if (this.m_sInstance == null) {
+                this.m_sInstance = new TimerControl();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+        };
+        /**
+        * 初始化
+        */
+        TimerControl.prototype.init = function () {
+        };
+        return TimerControl;
+    }());
+    managers.TimerControl = TimerControl;
+    __reflect(TimerControl.prototype, "managers.TimerControl");
+})(managers || (managers = {}));
+//# sourceMappingURL=TimerControl.js.map

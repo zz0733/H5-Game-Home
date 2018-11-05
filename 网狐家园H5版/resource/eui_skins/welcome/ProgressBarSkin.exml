@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ProgressBarSkin_1" minWidth="663" minHeight="30" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:tween="egret.tween.*">
+	<w:Declarations>
+		<tween:TweenGroup/>
+	</w:Declarations>
+	<e:Image source="progress_frame_png" scale9Grid="1,1,4,4" width="100%"
+			 height="100%" verticalCenter="0"/>
+	<e:Image id="thumb" height="100%" width="100%" source="progress_image_png"/>
+	<e:Label id="labelDisplay" textAlign="center" verticalAlign="middle"
+			 size="15" fontFamily="Tahoma" textColor="0x707070"
+			 horizontalCenter="0" verticalCenter="0"/>
+</e:Skin>

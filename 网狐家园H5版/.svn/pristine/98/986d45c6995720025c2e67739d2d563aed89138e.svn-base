@@ -1,0 +1,205 @@
+/**
+ * 触摸阻断
+ */
+namespace models {
+    export class PopWait extends eui.UILayer implements df.IPopWait {
+
+        /**
+         * 显示内容
+         */
+        private _content: string;
+
+        /**
+         * 超时时间
+         */
+        private _timeOut: number;
+
+        /**
+         *  超时回调
+         */
+        private _timeOutHandler: any = null;
+
+        /**
+         * 关闭处理
+         */
+        private _closeHandler: any = null;
+
+        /**
+         * 延时句柄
+         */
+        private _delayHandler: number = 0;
+
+        /**
+         * 关闭标识
+         */
+        private _isClose: boolean = false;
+
+        /**
+         * 构造
+         * @param content        提示内容
+         * @param timeout        超时时间
+         * @param isClose        关闭按钮
+         * @param timeoutHandler 超时处理
+         * @param closeHandler   关闭处理
+         */
+        constructor(content: string, timeout: number = 20000, isClose: boolean = false, timeoutHandler?: any, closeHandler?: any) {
+            super();
+
+            this._content = content;
+            this._timeOut = timeout;
+            this._isClose = isClose;
+            this._timeOutHandler = timeoutHandler;
+            this._closeHandler = closeHandler;
+
+        }
+        protected createChildren(): void {
+            super.createChildren();
+            this.name = "PopWait";
+
+            this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+        }
+
+        //初始化
+        private _dot: string[] = [".", "..", "..."]
+        private _dotIdx: number = 0;
+        private _aniLabel: eui.Label;
+        private onInitLayer(): void {
+            //遮罩
+            let mask = new egret.Shape();
+            mask.graphics.beginFill(0x000000, 1.0);
+            mask.graphics.drawRect(0, 0, this.width, this.height);
+            mask.graphics.endFill();
+            mask.alpha = 0.5;
+            utils.setAnchorCenter(mask)
+            this.addChild(mask);
+            mask.x = this.width / 2;
+            mask.y = this.height / 2;
+
+            //狐狸
+            let fox = utils.createBitmapByName("wait_ani_frame_png");
+            utils.setAnchorCenter(fox);
+            this.addChild(fox);
+            fox.x = this.width / 2;
+            fox.y = this.height / 2
+
+            //圈圈
+            let circle = utils.createBitmapByName("wait_ani_round_png");
+            utils.setAnchorCenter(circle);
+            circle.name = "circle"
+            this.addChild(circle);
+            circle.x = this.width / 2;
+            circle.y = this.height / 2
+
+            //内容
+            let label: eui.Label = new eui.Label();
+            label.text = this._content;
+            label.textColor = 0XFFFFFF;
+            label.size = 24;
+            label.lineSpacing = 10;
+            label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            this.addChild(label);
+            utils.setAnchorCenter(label);
+            label.x = 667;
+            label.y = 500;
+
+            //动画label
+            this._aniLabel = new eui.Label();
+            this._aniLabel.text = this._dot[this._dotIdx];
+            this._aniLabel.textColor = 0XFFFFFF;
+            this._aniLabel.size = 24;
+            this._aniLabel.multiline = false;
+            this._aniLabel.textAlign = egret.HorizontalAlign.JUSTIFY;
+            this.addChild(this._aniLabel);
+            utils.setAnchorLeftMid(this._aniLabel);
+            this._aniLabel.x = label.x + label.width / 2;
+            this._aniLabel.y = label.y;
+
+            //关闭按钮
+            if (this._isClose) {
+                let bt = new eui.Button();
+                this.addChild(bt);
+                bt.x = 750;
+                bt.y = 270;
+                bt.skinName = skins.GeneralButton;
+                bt.addEventListener(egret.TouchEvent.TOUCH_BEGIN, () => { this.onClose() }, this);
+            }
+
+            //定时器
+            managers.TimerCtrl.getInstance().createTimer(this, 1000 / 60, 0, this.popWaitAnimation, "PopWait")
+
+            //延时回调
+            this._delayHandler = setTimeout(() => {
+                this.onTimeOut();
+            }, this._timeOut);
+
+        }
+
+        //移除舞台
+        private onExit(): void {
+            //取消延时
+            if (this._delayHandler != 0) {
+                clearTimeout(this._delayHandler);
+            }
+
+            //移除定时
+            managers.TimerCtrl.getInstance().killTimer(this, "PopWait");
+
+            //引用置空
+            this._timeOutHandler = null
+            this._closeHandler = null;
+        }
+
+        //超时处理
+        onTimeOut(): void {
+            //移除定时
+            managers.FrameManager.getInstance().dismissPopWait()
+            managers.TimerCtrl.getInstance().killTimer(this, "PopWait");
+
+            //句柄置空
+            this._delayHandler = 0;
+
+            //超时操作
+            if (null != this._timeOutHandler) {
+                this._timeOutHandler();
+            }
+        }
+
+        //关闭处理
+        onClose(): void {
+            //移除定时
+            managers.FrameManager.getInstance().dismissPopWait()
+            managers.TimerCtrl.getInstance().killTimer(this, "PopWait");
+
+            //取消延时
+            if (this._delayHandler != 0) {
+                clearTimeout(this._delayHandler);
+            }
+
+            //句柄置空
+            this._delayHandler = 0;
+
+            //关闭操作
+            if (null != this._closeHandler) {
+                this._closeHandler();
+            }
+        }
+
+        private _curTime = egret.getTimer();
+        private popWaitAnimation(e: egret.Event): void {
+            var delay = egret.getTimer();
+            if (delay - this._curTime >= 500) {
+                this._dotIdx = (this._dotIdx + 1) % 3
+                this._aniLabel.text = this._dot[this._dotIdx];
+                this._curTime = egret.getTimer();
+            }
+
+            //圈圈
+            var circle = this.getChildByName("circle");
+            circle.rotation += 6;
+            if (circle.rotation > 360) {
+                circle.rotation -= 360;
+            }
+        }
+    }
+}

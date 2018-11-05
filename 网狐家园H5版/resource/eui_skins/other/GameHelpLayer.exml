@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.GameHelpLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="bg" width="1110" height="692" x="667" y="375" source="general_notice_frame_png" fillMode="clip" anchorOffsetX="555" anchorOffsetY="346" touchEnabled="true"/>
+	<e:Button id="close" label="" x="1138" y="40" anchorOffsetY="0" height="74" enabled="true" anchorOffsetX="0" width="74" name="bt_close">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_close_png" source.down="general_bt_close_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="143" height="41" x="667" y="65.58" source="general_text_rule_png" fillMode="clip" anchorOffsetX="71.5" anchorOffsetY="20.5"/>
+</e:Skin>

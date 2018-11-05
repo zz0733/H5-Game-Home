@@ -1,0 +1,98 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+/*单例
+*游戏定时器管理类
+*多定时器队列处理
+*定时器实例生命周期
+*/
+var managers;
+(function (managers) {
+    var TimerControl = (function () {
+        function TimerControl() {
+            /**
+             * 时间队列
+             */
+            this._timerQueue = [];
+        }
+        /**
+       *获取实例
+       */
+        TimerControl.getInstance = function () {
+            if (this.m_sInstance == null) {
+                this.m_sInstance = new TimerControl();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+        };
+        /**
+        * 初始化
+        */
+        TimerControl.prototype.init = function () {
+            this.clean();
+        };
+        /**
+         * 创建定时器
+         */
+        TimerControl.prototype.createTime = function (target, delay, repeat, callback, key) {
+            if (delay === void 0) { delay = 1000.0 / 60.0; }
+            //遍历查找
+            this._timerQueue.forEach(function (timer) {
+                if (timer.key == key) {
+                    console.log("队列中存在相同key的定时器");
+                    return false;
+                }
+            });
+            //创建定时
+            var obj = {
+                target: target,
+                key: key,
+                func: callback
+            };
+            var timer = new egret.Timer(delay, repeat);
+            timer.addEventListener(egret.TimerEvent.TIMER, callback, target);
+            timer.start();
+            //加入定时队列
+            this._timerQueue.push(obj);
+            return true;
+        };
+        /**
+         * 关闭定时器
+         */
+        TimerControl.prototype.killTime = function (target, key) {
+            var _this = this;
+            this._timerQueue.forEach(function (timer) {
+                if (timer.key == key) {
+                    egret.assert(target == timer.target);
+                    if (target != timer.target) {
+                        console.log("对象不匹配");
+                        return false;
+                    }
+                    //回调方法
+                    var callback = timer.func;
+                    //移除定时
+                    target.removeEventListener(egret.TimerEvent.TIMER, callback, target);
+                    _this._timerQueue.shift();
+                    return true;
+                }
+            });
+            return true;
+        };
+        /**
+         * 移除所有定时器
+         */
+        TimerControl.prototype.clean = function () {
+            this._timerQueue.forEach(function (timer) {
+                //移除定时
+                var target = timer.target;
+                var callback = timer.func;
+                target.removeEventListener(egret.TimerEvent.TIMER, callback, target);
+            });
+            this._timerQueue = [];
+        };
+        return TimerControl;
+    }());
+    managers.TimerControl = TimerControl;
+    __reflect(TimerControl.prototype, "managers.TimerControl");
+})(managers || (managers = {}));
+//# sourceMappingURL=TimerControl.js.map

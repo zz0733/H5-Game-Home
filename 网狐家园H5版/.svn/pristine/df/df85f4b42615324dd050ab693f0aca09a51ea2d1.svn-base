@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:client="client.*" xmlns:w="http://ns.egret.com/wing" xmlns:tween="egret.tween.*">
+	<w:Declarations>
+	</w:Declarations>
+	<e:Image width="1334" height="750" x="0" y="0" source="game_back_1_png" fillMode="clip" locked="true"/>
+	<e:Image width="124" height="124" x="76" y="395" fillMode="clip" source="head_back_1_png" locked="true"/>
+	<e:Image width="124" height="124" x="1187.51" y="117.12" source="head_back_1_png" fillMode="clip" locked="true"/>
+	<e:Image width="124" height="124" x="14" y="132.39" source="head_back_1_png" fillMode="clip" locked="true"/>
+	<e:Button x="1215.51" y="22.42" width="68" height="68" name="bt_back" locked="true">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_back_0_png" source.down="game_menu_back_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="151" height="201" x="447.72" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="487.62" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="523.78" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="568.52" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="608.42" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="645.99" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="689.32" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="729.22" y="321.03" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="828.62" y="100.72" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="865.89" y="100.72" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="908.71" y="100.72" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="949.42" y="100.72" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="172.97" y="124" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="212.36" y="124" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="250.24" y="124" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+	<e:Image width="151" height="201" x="293.77" y="124" source="game_card_handcard_png" fillMode="clip" rotation="0" scaleX="0.8" scaleY="0.8"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</e:Skin>

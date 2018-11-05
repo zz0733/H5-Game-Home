@@ -1,0 +1,45 @@
+namespace client{
+    export class GameListInfo{
+        public _Info: any[] = [];
+        public _Favourite: any[] = [];
+        public _FavouriteTimes: number = 10;
+
+        /**
+         * 本地加载游戏喜好
+         */
+        public loadGameFavourite():void
+        {
+
+        }
+        
+        /**
+         * 获取游戏喜好
+         */
+        public getGameFavourite():void
+        {
+
+        }
+
+        /**
+         * 设置游戏喜好
+         */
+        public setGameFavourite(kind: number,value: number):void
+        {
+
+
+        }
+
+        /**
+         * 是否支持
+         */
+        public isGameSupport(kind: number,show?: boolean)
+        {
+
+        }
+
+        public isVideoSupport(kind: number)
+        {
+
+        }
+    }
+}

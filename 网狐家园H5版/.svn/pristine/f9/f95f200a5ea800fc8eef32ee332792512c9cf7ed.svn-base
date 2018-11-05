@@ -1,0 +1,516 @@
+/**
+ * 断勾卡血战麻将
+ */
+namespace game {
+    export namespace sparrowsclm {
+        /**
+         * 游戏引擎
+         * 游戏协议
+         * 场景消息
+         * 用户服务
+         */
+        export class GameClientEngine extends models.GameModel implements df.IGameMessage, df.IUserService {
+
+            /**
+             * 构造
+             */
+            constructor(engine: any) {
+                super();
+            }
+
+            //动作队列
+            public _actionList: any[] = [];
+            readonly AK_GAME_BEGIN = 0; //游戏开始
+            readonly AK_OUT_CARD = 1;   //游戏出牌
+            readonly AK_SEND_CARD = 2;  //游戏抓牌
+            readonly AK_DISPATCH_CARD = 3;//游戏发牌
+            readonly AK_SICE = 4;       //色子动画
+            private _bBaoHuFlag: boolean = false;
+            protected createChildren(): void {
+                super.createChildren();
+
+                this.name = "GameClientEngine";
+
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+
+                //设置业务代理
+                this._gameFrame.setDelegate(this);
+
+                //注册触摸
+                this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+                //注册通知
+                this.addEventListener(customEvent.CustomEvent.EVENT_USER_ENTER, this.onUserEnter, this);
+                this.addEventListener(customEvent.CustomEvent.EVENT_USER_STATUS, this.onUserStatus, this);
+            }
+
+            /**初始化 */
+            private onInitLayer(): void {
+                this._gameviewLayer = new GameViewLayer(this);
+                this.addChild(this._gameviewLayer);
+
+            }
+            /**变量初始化 */
+            onInitEngine() {
+                super.onInitEngine();
+            }
+
+            /**变量重置*/
+            onResetEngine() {
+
+            }
+
+            /**游戏人数 */
+            gamePlayerCount() {
+                return cmd.sparrowsclm.PLAYER_COUNT;
+            }
+
+            /**倒计时事件 */
+            public onClockEvent() {
+            
+                if (this._gameviewLayer && this._gameviewLayer.updateClockView) {
+                    this._gameviewLayer.updateClockView();
+                }
+            }
+
+            /**游戏状态 */
+            public _cbGameStatus: number = 0;
+            public getGameStatus() {
+                return this._cbGameStatus;
+            }
+
+            /**用户进入 */
+            onUserEnter(object: any): void {
+                const data = object.data;
+                let user = data.user as models.UserItem;
+
+                if (null != this._gameviewLayer) {
+                    this._gameviewLayer.onUpdataUser(user);
+                }
+
+            }
+            /**用户状态 */
+            onUserStatus(object: any): void {
+                const data = object.data;
+                let user = data.user as models.UserItem;
+                let newstatus = data.newstatus;
+                let oldstatus = data.oldstatus;
+
+                if (null != this._gameviewLayer) {
+                    this._gameviewLayer.onUpdataUser(user, newstatus, oldstatus)
+                }
+
+            }
+            /**用户聊天 */
+            onUserChat(object: any): void {
+
+            }
+            /**用户分数 */
+            onUserScore(object: any): void {
+
+            }
+            /**游戏场景 */
+            onGameScene(status: number, object: any): void {
+                console.log("GameClientEngine: 游戏场景");
+                this._cbGameStatus = status;
+
+                managers.FrameManager.getInstance().dismissPopWait();
+
+                switch (this._cbGameStatus) {
+                    case cmd.sparrowsclm.GAME_SCENE_FREE:
+                        {
+                            this.onSceneFree(object);
+                        }
+                        break;
+                    case cmd.sparrowsclm.GS_PLAYING:
+                        {
+                            this.onScenePlaying(object);
+                        }
+                        break;
+                }
+            }
+            /**游戏协议 */
+            onGameMessage(object: any): void {
+
+                let msg = object as network.Message;
+                switch (msg.wSubCmd) {
+                    case cmd.sparrowsclm.SUB_S_GAME_START:
+                        {
+                            this.onSubGameStart(msg.cbBuffer)
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_OUT_CARD:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_SEND_CARD:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_NOGANG_INFO:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_OPERATE_NOTIFY:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_OPERATE_RESULT:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_CHIHU_RESULT:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_END:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_TRUSTEE:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_VOICEPHRASE:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_ACTION_NOTIFY:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_RULE_SETTING:
+                        {
+                            let ruleSetting = new cmd.sparrowsclm.CMD_S_GAME_RULE_SETTING();
+                            ruleSetting.readBuffer(msg.cbBuffer);
+
+                            let data = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+                            data.Append_SCORE(ruleSetting.lCellScore);
+
+                            this._gameFrame.sendData(df.MDM_GF_FRAME, cmd.sparrowsclm.SUB_C_GAME_RULE_SETTING, data);
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_GAME_RULE_NOTIFY:
+                        {
+                            let ruleNotify = new cmd.sparrowsclm.CMD_S_GAME_RULE_NOTIFY()
+                            ruleNotify.readBuffer(msg.cbBuffer);
+
+                            if (true == ruleNotify.bForceExit) {
+                                this.onExitGame("对不起,您携带的分数不够,不能参与游戏!");
+                            }
+
+                            if (4 == ruleNotify.cbGamePlayer) {
+                                this.onExitGame("暂不支持4人桌游戏!");
+                            }
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_BAO_HU_NOTIFY:
+                        {
+
+                        }
+                        break;
+                    case cmd.sparrowsclm.SUB_S_TRANSFER_NOTIFY:
+                        {
+
+                        }
+                        break;
+                }
+
+                console.log("GameClientEngine: 游戏协议:", msg.wSubCmd, cmd.sparrowsclm.MS_NAME[msg.wSubCmd]);
+
+            }
+
+            /**游戏开始 */
+            private onSubGameStart(buffer: utils.ByteArray) {
+
+                let start = new cmd.sparrowsclm.CMD_S_GameStart();
+                start.readBuffer(buffer);
+
+                if (this._gameviewLayer && this._gameviewLayer.showGameStart) {
+                    this._gameviewLayer.showGameStart(start);
+                }
+
+                this._bBaoHuFlag = false;
+
+                //开始动作
+                let action: any = {};
+                action.bLock = false;
+                action.nKind = this.AK_GAME_BEGIN;
+                action.actions = utils.allocArray<Number>(3, Number);
+                action.actions[0] = this.AK_SICE;              //色子动画
+                action.actions[1] = this.AK_DISPATCH_CARD;     //发牌动画
+                action.actions[2] = this.AK_SEND_CARD;         //庄家抓牌
+
+                action.lSiceCount = start.lSiceCount;
+                action.wBankerUser = start.wBankerUser;
+                action.wCurrentUser = start.wCurrentUser;
+                action.wCurrBaoUser = start.wCurrBaoUser;
+                action.cbCardData = start.cbCardData;
+                action.cbUserAction = start.cbUserAction;
+
+                this._actionList.push(action);
+                this.beginGameAction();
+
+                this._cbGameStatus = cmd.sparrowsclm.GS_PLAYING;
+                console.log("start:", start);
+            }
+            /**系统消息 */
+            onGameSystemMessage(object: any): void {
+
+            }
+
+            /**空闲场景 */
+            private onSceneFree(data: any) {
+                if (this._gameviewLayer && this._gameviewLayer.showSceneFree) {
+                    this._gameviewLayer.showSceneFree(data);
+
+                    let action: any = {};
+                    action.bLock = false;
+                    action.nKind = this.AK_GAME_BEGIN;
+                    action.actions = utils.allocArray<Number>(3, Number);
+                    action.actions[0] = this.AK_SICE;              //色子动画
+                    action.actions[1] = this.AK_DISPATCH_CARD;     //发牌动画
+                    action.actions[2] = this.AK_SEND_CARD;         //庄家抓牌
+
+                    action.lSiceCount = 0;
+                    action.wBankerUser = 2;
+                    action.wCurrentUser = 2;
+                    action.wCurrBaoUser = 65535;
+                    action.cbCardData = [0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x21,0x22];
+
+                    this._actionList.push(action);
+                    this.startGameAction(action, this.AK_DISPATCH_CARD);
+                }
+            }
+
+            /**游戏场景 */
+            private onScenePlaying(data: any) {
+
+            }
+
+            /**游戏动作 */
+            public beginGameAction() {
+                let action = this._actionList[0];
+                if (null == action || action.bLock) return;
+
+                action.bLock = true;
+                if (action.nKind == this.AK_GAME_BEGIN) {
+                    this.startGameAction(action, this.AK_SICE);
+                }
+            }
+
+            /**游戏开始动作 */
+            private startGameAction(action: any, index: number) {
+                if (action.actions.length > 0) {
+                    if (index == this.AK_SICE) {
+
+                        if (action.lSiceCount == 0) {
+                            this.startGameAction(this._actionList[0], this.AK_DISPATCH_CARD);
+                            return;
+                        }
+
+                        this.startSice(action.lSiceCount & 0x0000FFFF);
+                    } else if (index == this.AK_DISPATCH_CARD) {
+                        //构造发牌数据
+                        let dispatchInfo: any[] = [];
+                        let nPos = action.wBankerUser;
+                        let nIndex: number = -1;
+                        for (let i = 0; i < cmd.sparrowsclm.PLAYER_COUNT; i++) {
+                            for (let j = 0; j < (cmd.sparrowsclm.MAX_COUNT - 1) / 2; j++) {
+                                let dispatch: any = {};
+                                //玩家视图
+                                const viewId = this.switchViewChairID(nPos);
+                                if (viewId == cmd.sparrowsclm.MY_VIEW) nIndex++;
+                                nPos = (nPos + 1) % cmd.sparrowsclm.PLAYER_COUNT;;
+                                //发牌位置
+                                dispatch.viewId = viewId;
+                                //每次两张
+                                dispatch.cout = 2;
+                                //扑克数据
+                                dispatch.cardData = utils.allocArray<Number>(2, Number);
+                                dispatch.cardData[0] = (viewId == cmd.sparrowsclm.MY_VIEW) ? action.cbCardData[nIndex * 2 + 0] : 0xFF;
+                                dispatch.cardData[1] = (viewId == cmd.sparrowsclm.MY_VIEW) ? action.cbCardData[nIndex * 2 + 1] : 0xFF
+                                //加入队列
+                                dispatchInfo.push(dispatch);
+                            }
+                        }
+                        let callback = () => {
+                            this.startGameAction(this._actionList[0], this.AK_SEND_CARD);
+                        }
+                        this.startDispatchCard(dispatchInfo, callback);
+
+                    } else if (index == this.AK_SEND_CARD) {
+                        //庄家起牌
+                        console.log("庄家起牌");
+                        //构造发牌数据
+                        let dispatchInfo: any[] = [];
+                        let dispatch: any = {};
+                        //玩家视图
+                        const viewId = this.switchViewChairID(action.wBankerUser);
+                        //发牌位置
+                        dispatch.viewId = viewId;
+                        //庄家起牌数目
+                        dispatch.cout = 1;
+                        //扑克数据
+                        dispatch.cardData = utils.allocArray<Number>(1, Number);
+                        dispatch.cardData[0] = (viewId == cmd.sparrowsclm.MY_VIEW) ? action.cbCardData[cmd.sparrowsclm.MAX_COUNT-1] : 0xFF;
+                        //加入队列
+                        dispatchInfo.push(dispatch);
+
+                        //动作回调
+                        let callback = ()=> {
+                           this.onFanAnalysis(true);
+                           this.removeGameAction()
+                        }
+
+                        this.startDispatchCard(dispatchInfo);
+                    }
+                }
+            }
+
+            /**移除动作 */
+            private removeGameAction(bContinue?: boolean) {
+                let action = this._actionList[0];
+                if (null == action || !action.bLock) return;
+
+                let nkind: number = action.nKind;
+                if (nkind == this.AK_GAME_BEGIN) {
+                    this.finishStartAction(action);
+                } 
+
+                //移除队列
+                this._actionList.splice(0,1);
+
+                //下一动作
+                if (bContinue == true && this._actionList.length > 0) {
+                    this.beginGameAction();
+                }
+            }
+
+            /**掷骰子动画 */
+            private startSice(lsice: number) {
+                if (lsice > 0) {
+                    const sice2 = (lsice & 0x00ff);
+                    const sice1 = ((lsice >> 8) & 0x00ff);
+                    if (this._gameviewLayer) {
+                        let callback = () => {
+                            this.startGameAction(this._actionList[0], this.AK_DISPATCH_CARD);
+                        }
+                        this._gameviewLayer.drawSice(sice1, sice2, callback);
+                    }
+                }
+            }
+
+            /**发牌动画 */
+            private startDispatchCard(dispatchInfo: any[], callback?: any) {
+                if (this._gameviewLayer) {
+                    this._gameviewLayer.dispatchCard(dispatchInfo, callback);
+                }
+            }
+
+            /**开始动作完成 */
+            private finishStartAction(action: any) {
+                const wCurrBaoUser = action.wCurrBaoUser;
+                const wCurrentUser = action.wCurrentUser;
+                const cbActionMask = action.cbActionMask;
+
+                this.onUpdateFanTips();
+
+                //报叫提示
+                if (wCurrBaoUser == df.INVALID_CHAIR) {
+                    this._gameviewLayer._handCard.setAllowOutCardStats(false);
+
+                    if (wCurrentUser == this._gameFrame.getMeUserItem().wChairID) {
+                        if (cbActionMask != 0) {
+                            this._gameviewLayer.setOperateNotify(cbActionMask);
+                        } else {
+                            this._gameviewLayer._handCard.setAllowOutCardStats(!this._bBaoHuFlag);
+                        }
+
+                        if (wCurrentUser != df.INVALID_CHAIR) {
+                            const viewId = this.switchViewChairID(wCurrentUser);
+                            this._gameviewLayer.setGameClock(cmd.sparrowsclm.TIME_OPERATE_CARD,cmd.sparrowsclm.IDI_OPERATE_CARD,viewId);
+                        }
+                    } 
+                } else {
+                    this._gameviewLayer._handCard.setAllowOutCardStats(false);
+
+                    if (wCurrBaoUser == this._gameFrame.getMeUserItem().wChairID) {
+                        this._gameviewLayer.setOperateNotify(cmd.sparrowsclm.WIK_BAO_HU)
+                    } 
+
+                    const viewId = this.switchViewChairID(wCurrBaoUser);
+                    this._gameviewLayer.setGameClock(cmd.sparrowsclm.TIME_BAO_JIAO,cmd.sparrowsclm.IDI_BAO_JIAO,viewId);
+                }
+            }
+
+            private onUpdateFanTips() {
+
+            }
+
+            private onFanAnalysis(bAnalyse: boolean) {
+
+            }
+            /** 触摸事件
+            * onTouchBegan
+            * onTouchMove
+            * onTouchEnd
+            */
+            private onTouchBegan(event: egret.TouchEvent) {
+                //console.log("onTouch Began");
+                this._bMoved = false;
+            }
+
+            private _bMoved = false;
+            private onTouchMove(event: egret.TouchEvent) {
+                //console.log("onTouch move");
+                this._bMoved = true;
+            }
+
+            private onTouchEnd(event: egret.TouchEvent) {
+                //console.log("onTouch end");
+
+            }
+
+            /**返回大厅 */
+            public onQueryExitGame() {
+                //游戏状态判断
+                const msg = this.getGameStatus() == cmd.sparrowsclm.GAME_SCENE_FREE ? "是否确定退出游戏？" : "游戏已经开始，退出将由憨憨机器人代打哦！\n 是否确定退出游戏？"
+
+                managers.FrameManager.getInstance().showDailog(df.eDialogMode.OK_CANCELL, msg, () => {
+                    managers.FrameManager.getInstance().showPopWait("", 3000);
+                    this.onExitGame();
+                });
+
+            }
+
+            /**移除舞台 */
+            public onExit() {
+                super.onExit();
+                //移除触摸
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+                //移除通知
+                this.removeEventListener(customEvent.CustomEvent.EVENT_USER_ENTER, this.onUserEnter, this);
+                this.removeEventListener(customEvent.CustomEvent.EVENT_USER_STATUS, this.onUserStatus, this);
+            }
+        }
+    }
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ServiceLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image width="1334" height="750" x="0" y="838" source="userinfo_back_frame_2_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="750"/>
+	<e:Button label="" x="50.5" y="50.5" anchorOffsetX="50.5" anchorOffsetY="50.5" name="bt_return">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png" source.disabled="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:CheckBox label="" x="155" y="49" name="check_0">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_choose_0_png" source.down="userinfo_choose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:CheckBox label="" x="415" y="49" name="check_1">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_choose_0_png" source.down="userinfo_choose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:CheckBox label="" x="675" y="49" enabled="true" selected="true" name="check_2">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_choose_0_png" source.down="userinfo_choose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:CheckBox label="" x="935" y="49" name="check_3">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_choose_0_png" source.down="userinfo_choose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:Image width="157" height="39" x="203.5" y="80" source="option_text_question_png" fillMode="clip" anchorOffsetY="0" touchEnabled="false" name="common_check"/>
+	<e:Image width="157" height="39" x="462.5" y="80" fillMode="clip" anchorOffsetY="0" touchEnabled="false" source="option_text_notice_png" name="notice_check"/>
+	<e:Image width="157" height="39" x="722.5" y="80" fillMode="clip" anchorOffsetY="0" touchEnabled="false" source="option_text_service_png"/>
+	<e:Image width="157" height="39" x="982.5" y="80" fillMode="clip" anchorOffsetY="0" touchEnabled="false" source="option_text_about_png" name="about_check"/>
+	<e:Panel width="1329" height="592" x="2" y="154" anchorOffsetY="0" anchorOffsetX="0" name="panel_2">
+		<e:Image width="1324" height="598" x="3" y="3" source="general_image_service_png" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0"/>
+	</e:Panel>
+	<e:Panel width="1324.02" height="583.64" x="2.55" y="160.97" anchorOffsetX="0" anchorOffsetY="0" name="panel_3" visible="false">
+		<e:Image width="538.17" height="304.85" x="465.06" y="52.89" source="general_general_logo_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" scaleX="0.7" scaleY="0.7"/>
+		<e:Image width="521.15" height="29.21" x="418.57" y="520.61" source="copyright_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+		<e:Label text="游戏家园是由深圳市网狐科技有限公司运营的大型综合网络休闲娱乐游戏平台" x="254.09" y="277.25" fontFamily="Arial" textColor="0xffe4bb" size="24"/>
+		<e:Label text="致力于为全球广大玩家提供轻松娱乐，休闲放松的网络休闲娱乐游戏平台" x="280.75" y="310.46" fontFamily="Arial" textColor="0xFFE4BB" size="24"/>
+		<e:Label text="凭借十余年来积累沉淀的丰厚的运营经验及雄厚的技术优势，网狐科技将全力专注于" x="206.45" y="342.77" fontFamily="Arial" textColor="0xFFE4BB" size="24"/>
+		<e:Label text="互联网游戏平台的经营，努力追求“让虚拟世界连接真实世界，让网络娱乐深入民心”的目标" x="172.45" y="376.65" fontFamily="Arial" textColor="0xFFE4BB" size="24"/>
+	</e:Panel>
+	<e:Panel width="1321.02" height="576.64" x="7.55" y="164.97" anchorOffsetX="0" anchorOffsetY="0" name="panel_1" visible="false"/>
+	<e:Panel width="1314.11" height="583.64" x="8.55" y="167.97" anchorOffsetX="0" anchorOffsetY="0" name="panel_0" visible="false">
+	</e:Panel>
+</e:Skin>

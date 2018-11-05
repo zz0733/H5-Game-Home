@@ -1,0 +1,38 @@
+/**
+ * 游戏公用父类 
+ */
+namespace models {
+    export class GameModel extends eui.UILayer {
+        private _gameFrame: frame.GameFrame ;
+        constructor() {
+            super();
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+            this.onInitEngine();
+        }
+
+        onInitEngine() {
+            this._gameFrame = managers.TcpServiceCtrl.getInstance().getDelegate();
+        }
+
+        onRestEngine() {
+
+        }
+        /**获取玩家自己 */
+        public getMeUserItem() {
+            if (null != this._gameFrame) {
+                return this._gameFrame.getMeUserItem();
+            }
+
+            return null;
+        }
+
+        public onExit() {
+            //业务代理置空
+            this._gameFrame.setDelegate(null);
+            this._gameFrame = null;
+
+            //网络代理置空
+            managers.TcpServiceCtrl.getInstance().setDelegate(null);
+        }
+    }
+}

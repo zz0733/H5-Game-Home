@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.sparrowsclm.GameLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="BG" width="1334" height="750" x="-0.67" y="-2" source="game_back_0_png" fillMode="clip" locked="true"/>
+	<e:Image id="Logo" width="304" height="66" x="667" y="165" source="game_back_logo_png" fillMode="clip" anchorOffsetX="152" anchorOffsetY="33"/>
+	<e:Panel id="HandCard0" width="1034" height="636" x="156" y="81" anchorOffsetX="0" anchorOffsetY="0" includeInLayout="false" touchEnabled="true" name="handcardArea0" touchChildren="false">
+	</e:Panel>
+	<e:Panel id="HandCard1" width="138" height="466" x="1030" y="76" anchorOffsetX="0" anchorOffsetY="0" includeInLayout="true" touchEnabled="false" name="handcardArea1">
+	</e:Panel>
+	<e:Panel id="HandCard2" width="138" height="466" x="169" y="76" anchorOffsetX="0" anchorOffsetY="0" includeInLayout="true" touchEnabled="false" name="handcardArea2">
+	</e:Panel>
+	<e:Image id="MenuBg" width="1050" height="100" x="665" y="0" source="bg_top_menu_png" fillMode="clip" anchorOffsetX="525" anchorOffsetY="0"/>
+	<e:Image id="TableNum" width="88" height="40" x="481" y="100" source="word_yz_desk_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image id="CellNum" width="88" height="40" x="731" y="100" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="game_flag_cellscore_png"/>
+	<e:Image id="LastCards" width="52" height="60" x="0" y="6" source="game_last_card_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button id="Chat" label="" x="520" y="38" anchorOffsetX="30" anchorOffsetY="30">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_talk_0_png" source.down="game_menu_talk_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Chat0" label="" x="1274" y="588" anchorOffsetX="48" anchorOffsetY="48">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_chat_0_png" source.down="bt_chat_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Chat1" label="" x="1274" y="692" anchorOffsetX="48" anchorOffsetY="48">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_speak_0_png" source.down="bt_speak_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Auto" label="" x="620" y="38" anchorOffsetX="30" anchorOffsetY="30">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_auto_0_png" source.down="game_menu_auto_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Option" label="" x="720" y="38" anchorOffsetX="30" anchorOffsetY="30">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_menu_0_png" source.down="game_menu_menu_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Back" label="" x="820" y="38" anchorOffsetX="30" anchorOffsetY="30" name="back">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_back_0_png" source.down="game_menu_back_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Ready" label="" x="840" y="425" anchorOffsetX="150" anchorOffsetY="63" name="start">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_startgame_0_png" source.down="bt_startgame_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="ChangeDesk" label="" x="494" y="427" anchorOffsetX="150" anchorOffsetY="63" name="changeDesk">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_changedesk_3_png" source.down="bt_changedesk_4_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="Tips" width="422" height="74" x="456" y="464" source="game_ready_text_wait_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" name="waitImg" visible="false"/>
+	<e:Panel id="UserInfo2" width="1334" height="750" x="-115" y="0" name="userinfo2" locked="true">
+		<e:Image id="Head2" width="114" height="168" x="147" y="173" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="flag_upuser_png" name="head" scaleX="1" scaleY="1"/>
+		<e:Image id="Head_Normal2" width="236" height="236" x="203" y="230" fillMode="clip" anchorOffsetX="118" anchorOffsetY="118" source="flag_face_normal_png" scaleY="0.5" scaleX="0.5" name="head_normal" visible="false"/>
+		<e:Label id="Nick2" text="Kobe24" x="205" y="293" size="24" width="150" anchorOffsetX="75" textAlign="center" multiline="false" name="userNick" visible="false"/>
+		<e:Label id="ID2" text="ID:20603040" x="205" y="146" size="24" width="160" anchorOffsetX="80" textAlign="center" textColor="0x8CFFC8" multiline="false" name="userID" visible="false"/>
+		<e:Label id="Score2" text="654000" x="205" y="323" size="24" width="150" anchorOffsetX="75" textAlign="center" textColor="0xF0F000" multiline="false" name="userScore" visible="false"/>
+		<e:Image width="54" height="62" x="261" y="195" id="Ready2" source="ready_png" fillMode="clip" name="ready" visible="false"/>
+	</e:Panel>
+	<e:Panel id="UserInfo1" width="1334" height="750" x="115" y="0" touchEnabled="false" name="userinfo1" locked="true">
+		<e:Image id="Head1" width="114" height="168" x="1189" y="173" source="flag_downuser_png" fillMode="clip" anchorOffsetX="114" anchorOffsetY="0" name="head"/>
+		<e:Label id="ID1" text="ID:20603040" x="1135" y="146" size="24" width="160" anchorOffsetX="80" textAlign="center" textColor="0x8CFFC8" multiline="false" name="userID" scaleX="1" scaleY="1" visible="false"/>
+		<e:Label id="Nick1" text="Kobe24" x="1135" y="293" size="24" width="150" anchorOffsetX="75" textAlign="center" multiline="false" name="userNick" visible="false"/>
+		<e:Label id="Score1" text="654000" x="1135" y="323" size="24" width="150" anchorOffsetX="75" textAlign="center" textColor="0xF0F000" multiline="false" name="userScore" visible="false"/>
+		<e:Image id="Head_Normal1" width="236" height="236" x="1133" y="230" fillMode="clip" anchorOffsetX="118" anchorOffsetY="118" source="flag_face_normal_png" scaleY="0.5" scaleX="0.5" name="head_normal" visible="false"/>
+		<e:Image width="54" height="62" x="1022" y="195" id="Ready1" source="ready_png" fillMode="clip" name="ready" visible="false"/>
+	</e:Panel>
+	<e:Panel id="UserInfo0" width="1334" height="750" x="-580" y="0" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false" name="userinfo0" locked="true">
+		<e:Image id="Head0" width="236" height="236" x="667" y="614" fillMode="clip" anchorOffsetX="118" anchorOffsetY="118" source="flag_face_normal_png" scaleY="0.5" scaleX="0.5" name="head0"/>
+		<e:Label id="Score" text="654000" x="667" y="703" size="24" width="150" anchorOffsetX="75" textAlign="center" textColor="0xf0f000" multiline="false" name="userScore"/>
+		<e:Label id="ID" text="ID:20603040" x="667" y="534" size="24" width="160" anchorOffsetX="80" textAlign="center" textColor="0x8cffc8" multiline="false" name="userID" scaleX="1" scaleY="1"/>
+		<e:Label id="Nick" text="Kobe24" x="667" y="675" size="24" width="150" anchorOffsetX="75" textAlign="center" multiline="false" name="userNick" scaleX="1" scaleY="1"/>
+		<e:Image id="Ready0" width="54" height="62" x="554" y="587" source="ready_png" fillMode="clip" name="ready" visible="false"/>
+	</e:Panel>
+	<e:Image id="ClcokBG" width="166" height="166" x="667" y="194" source="game_time_back_png" anchorOffsetX="83"/>
+	<e:Panel id="clock0" width="159" height="49" x="588" y="308" anchorOffsetX="0" anchorOffsetY="0" name="clock0">
+		<e:Image id="time0" width="166" height="54" x="-6" y="-3" name="image" source="game_time_normal_back_png"/>
+	</e:Panel>
+	<e:Panel id="clock3" width="159" height="49" x="636" y="199" anchorOffsetX="0" anchorOffsetY="0" rotation="90" name="clock3">
+		<e:Image id="time3" width="166" height="54" x="-5" y="-3" name="image" source="game_time_normal_back_png" fillMode="clip"/>
+	</e:Panel>
+	<e:Panel id="clock2" width="159" height="49" x="745" y="247" anchorOffsetX="0" anchorOffsetY="0" rotation="180" name="clock2">
+		<e:Image id="time2" width="166" height="54" x="-4" y="-4" name="image" fillMode="clip" source="game_time_normal_back_png"/>
+	</e:Panel>
+	<e:Panel id="clock1" width="159" height="49" x="699" y="357" anchorOffsetX="0" anchorOffsetY="0" rotation="270" name="clock1">
+		<e:Image id="time1" width="166" height="54" x="-4" y="-6" name="image" source="game_time_normal_back_png"/>
+	</e:Panel>
+	<e:Image id="direction0" width="166" height="54" x="667" y="306" source="game_east_0_png" anchorOffsetX="83" name="direction0" locked="true"/>
+	<e:Image id="direction1" width="166" height="54" x="641" y="276" anchorOffsetX="83" rotation="90" source="game_north_0_png" name="direction3" locked="true"/>
+	<e:Image id="direction2" width="166" height="54" x="669" y="247" anchorOffsetX="83" rotation="180" source="game_west_0_png" fillMode="clip" name="direction2" locked="true"/>
+	<e:Image id="direction3" width="166" height="54" x="694" y="276" anchorOffsetX="83" rotation="270" source="game_south_0_png" fillMode="clip" name="direction1" locked="true"/>
+	<e:Panel id="OpreatView" width="700" height="120" x="667" y="416" anchorOffsetX="350" anchorOffsetY="0" touchEnabled="false"/>
+	<e:Panel id="DeskCard0" width="688" height="186" x="326" y="366" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false"/>
+	<e:Panel id="DeskCard1" width="252" height="270" x="762" y="84" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false"/>
+	<e:Panel width="252" height="270" x="316" y="84" anchorOffsetX="0" anchorOffsetY="0" id="DeskCard2" touchEnabled="false"/>
+</e:Skin>

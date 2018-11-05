@@ -1,0 +1,19 @@
+{
+	"skins": {},
+	"autoGenerateExmlsList": true,
+	"exmls": [
+		"resource/eui_skins/LogonLayer.exml",
+		"resource/eui_skins/LogonModeView.exml",
+		"resource/eui_skins/TextInputLogon.exml",
+		"resource/eui_skins/LogonView.exml",
+		"resource/eui_skins/NoticeLayer.exml",
+		"resource/eui_skins/OptionSlider.exml",
+		"resource/eui_skins/TextInputRegist.exml",
+		"resource/eui_skins/OptionLayer.exml",
+		"resource/eui_skins/Plaza.exml",
+		"resource/eui_skins/RegistView.exml",
+		"resource/eui_skins/ServiceLayer.exml",
+		"resource/eui_skins/welcome/ProgressBarSkin.exml"
+	],
+	"path": "resource/default.thm.json"
+}

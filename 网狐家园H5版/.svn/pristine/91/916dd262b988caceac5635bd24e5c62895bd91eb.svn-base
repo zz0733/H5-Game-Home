@@ -1,0 +1,487 @@
+namespace client{
+    /**
+     * 登录层
+     */
+    export class LogonLayer extends eui.UILayer
+    {
+        /**
+         * 操作类型  
+         */
+        readonly OperateRigest = 0; //注册
+        readonly OperateLogin  = 1; //账号登录 
+        readonly OperateWechat = 2; //微信登录
+
+        /**
+         * 默认账号登录
+         */
+        private _operateCode: number = this.OperateLogin;
+
+        /**
+         * 账号
+         */
+        public _account: string = "";
+
+        /**
+         * 密码
+         */
+        public _password: string = "";
+
+        /**
+         * 提示语
+         */
+        public _tipsInfo: any  = [];
+
+        /**
+         *提示标签
+         */
+        public _tipsLabel: eui.Label;
+
+        /**
+         * 提示气泡
+         */
+        public _bubble: eui.Image;
+
+        /**
+         * 提示人物
+         */
+        public _lora: eui.Button;
+
+        public _serviceBtn: eui.Button;
+        public _optionBtn: eui.Button;
+
+        /**
+         * 滚动公告
+         */
+        public _rollNotice: models.RollNotice;
+
+        /**
+         * 皮肤组件
+         */
+        public _component: eui.Component;
+
+        /**
+         * 构造
+         */
+        protected createChildren(): void {
+             super.createChildren();
+
+             this.name = "LogonLayer";
+
+             var stationid = df.STATION_ID;
+             if ( stationid == 2008)
+             {
+
+                this._tipsInfo =  ["你好，我是贝拉，登录遇到困难？点我可以获得帮助哦！", "注册帐号，您可以使用游戏中的更多功能！"]
+              
+            }else
+            {
+                this._tipsInfo = [ "你好，我是劳拉，登录遇到困难？点我可以获得帮助哦！","注册帐号，您可以使用游戏中的更多功能！"]
+            }
+             
+             //注册监听
+             this.once(egret.Event.ADDED_TO_STAGE,this.onInitLayer,this);
+             this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+
+             //注册通知
+             this.addEventListener(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE,this.connectComplete,this);
+             this.addEventListener(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH,this.onMessage,this)
+         }
+
+         /**
+          * 初始化
+          */
+         private onInitLayer():void
+         {
+            //加载皮肤 
+            this._component = new eui.Component();
+            this.addChild(this._component);
+            this._component.skinName ="resource/eui_skins/LogonLayer.exml";
+
+            //设置根VIEW
+            managers.FrameManager.getInstance().getRunningController().setRoot(this);
+
+            //显示登录
+            this.onChangeView(df.MODE_CHOOSE);
+
+            //提示语
+            this._tipsLabel = <eui.Label>this._component.getChildByName("tips_label");
+            this._tipsLabel.text = this._tipsInfo[0];
+            var width = this._tipsLabel.width;
+            var height = this._tipsLabel.height;
+
+            //气泡
+            let bubble = <eui.Image>this._component.getChildByName("tips_bg");
+            bubble.width = width + 40;
+            bubble.height = height + 60;
+            utils.setAnchorLeftBottom(bubble);
+            bubble.x = 188;
+            bubble.y = 248;
+            this._bubble = bubble;
+
+            //lora
+            this._lora = <eui.Button>this._component.getChildByName("bt_lora");
+            this._lora.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClickEvent,this);
+
+            //系统公告
+            var msg = ["清凉一夏,昏地主来袭","平台严禁赌博"];
+            this._rollNotice = models.RollNotice.createNotice("general_notice_bg_png",700,44,msg,true,df.eRollMode.VERTICAL,"general_notice_icon_png");
+            utils.setAnchorMidTop(this._rollNotice);
+            this.addChild(this._rollNotice);
+            this._rollNotice.x = 667;
+            this._rollNotice.y = 10;
+
+            this._rollNotice.setTouchHandler((e: egret.Event)=>{
+                console.log("系统公告");
+                let controller =  managers.FrameManager.getInstance().getRunningController();
+                controller.addWindow(new NoticeLayer(this,df.MODE_NOTICE));
+            });
+
+            //客服
+            var btn = <eui.Button>this._component.getChildByName("btn_service");
+            btn.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClickEvent,this);
+            this._serviceBtn = btn;
+
+            //设置
+            btn = <eui.Button>this._component.getChildByName("btn_set");
+            btn.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onButtonClickEvent,this);
+            this._optionBtn = btn; 
+
+            // let webview = new utils.WebView("resource/assets/client/info/agreement.html?v=<?=$ver?>");
+            // webview.x=0;
+            // webview.y=0;
+            // webview.width = 1334;
+            // webview.height = 750;
+            // webview.show();
+
+           
+        
+            //注册触摸
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTouchBegan,this);
+            this.addEventListener(egret.TouchEvent.TOUCH_MOVE,this.onTouchMove,this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END,this.onTouchEnd,this);
+         }
+
+         /**
+          *切换view 
+          */
+        public onChangeView(viewMode?: number)
+        {
+            var controller: models.Controller = managers.FrameManager.getInstance().getRunningController();
+    
+            if (viewMode == null)
+            {
+                controller.popView();
+                this._lora.visible = true;
+                this._bubble.visible = true;
+                this._tipsLabel.visible = true;
+                this._optionBtn.visible = true;
+                this._rollNotice.visible = true;
+                this._serviceBtn.visible = true;
+            }else
+            {
+                if (viewMode == df.MODE_SERVICE || viewMode ==  df.MODE_OPTION)
+                {
+                    this._lora.visible = false;
+                    this._bubble.visible = false;
+                    this._tipsLabel.visible = false;
+                    this._optionBtn.visible = false;
+                    this._rollNotice.visible = false;
+                    this._serviceBtn.visible = false;
+                }
+
+                switch(viewMode)
+                {
+                    case df.MODE_CHOOSE:
+                    {
+                        //启动登录
+                        var logonMode: LogonModeView = new LogonModeView(this);
+                        logonMode.x = -this.width;
+                        logonMode.y = 0;
+
+                        controller.showView(logonMode,df.eControllerKind.LOGON,true);
+                        break;
+                    }
+
+                    case df.MODE_ACCOUNT:
+                    {
+                        //登录输入
+                        var logonView = new LogonView(this);
+                        logonView.x = -this.width;
+                        logonView.y = 0;
+
+                        controller.showView(logonView,df.eControllerKind.LOGON,true);
+
+                        break;
+                    }
+
+                    case df.MODE_REGISTER:
+                    {
+                        //注册账号
+                        var regist = new Regist(this);
+                        regist.x = -this.width;
+                        regist.y = 0;
+
+                        controller.showView(regist,df.eControllerKind.LOGON,true);
+                        break;
+                    } 
+                    case df.MODE_SERVICE:
+                    {
+                        //客服
+                        var service = new ServiceLayer(this);
+                        service.x = -this.width;
+                        service.y = 0;
+
+                        controller.showView(service,df.eControllerKind.LOGON,true);
+                        break;
+                    }
+                    case df.MODE_OPTION:
+                    {
+                        //设置
+                        var option = new OptionLayer(this)
+                        option.x = -this.width;
+                        option.y = 0;
+
+                        controller.showView(option,df.eControllerKind.LOGON,true);
+                        break;
+                    }
+                }
+            }
+        }
+
+       
+         /**
+         * 按钮事件
+         */
+        public onButtonClickEvent(e:egret.Event)
+        {
+            var button = <eui.Button>e.target;
+            let tw = egret.Tween.get(button)
+            .to({scaleX:1.1,scaleY:1.1},50)
+            .to({scaleX:1.0,scaleY:1.0},50)
+
+            switch(button.name)
+            {
+                case "btn_service":
+                case "bt_lora":
+                {
+                    this.onChangeView(df.MODE_SERVICE)
+                    break;
+                }
+                case "btn_set":
+                {
+                    this.onChangeView(df.MODE_OPTION)
+                    break;
+                }
+
+                default:
+                {
+                    break;
+                }
+            }
+        }
+
+        //注册
+         public onRegist():void
+         {
+             this._operateCode = this.OperateRigest;
+
+             var host = managers.ServiceManager.getInstance().m_DefaultServerInfo.domain;
+             var port = managers.ServiceManager.getInstance().m_DefaultServerInfo.port;
+             managers.ServiceManager.getInstance().createSocketService(host,port);
+             managers.ServiceManager.getInstance().setViewFrame(this);
+
+             managers.FrameManager.getInstance().showPopWait("正在加载中");
+         }
+
+         //登录
+         public onLogon()
+         {
+             this._operateCode = this.OperateLogin;
+             var host = managers.ServiceManager.getInstance().m_DefaultServerInfo.domain;
+             var port = managers.ServiceManager.getInstance().m_DefaultServerInfo.port;
+             managers.ServiceManager.getInstance().createSocketService(host,port);
+             managers.ServiceManager.getInstance().setViewFrame(this);
+
+             managers.FrameManager.getInstance().showPopWait("正在加载中");
+         }
+
+         //连接成功
+         public connectComplete():void
+         {
+            var instance = managers.ServiceManager.getInstance();
+            let tcpService = instance.getTcpService();
+
+            if (this._operateCode == this.OperateRigest)
+            {
+                //发送注册
+                var regist = df.CMD_MB_RegisterAccounts_WEB();
+                regist.wModuleID = df.INVALID_WORD;                         //模块标识
+                regist.wMarketID = df.MARKET_ID;							//渠道标识
+                regist.cbDeviceType = df.DEVICE_TYPE;                       //设备类型
+                regist.dwAppVersion = utils.PROCESS_VERSION(1,1,0,1);		//应用版本
+                regist.dwPlazaVersion = utils.PROCESS_VERSION(1,1,0,0);		//广场版本
+
+                regist.dwStationID = df.STATION_ID;				    	    //站点标识
+                regist.szLogonPass = this._password;			           	//登录密码
+
+                //注册信息
+                regist.wFaceID = Math.floor(Math.random()*19);				//头像标识
+                regist.cbGender= Math.floor(Math.random()*2);				//用户性别
+                regist.szAccounts = this._account;		                	//登录帐号
+                regist.szNickName = this._account;		                    //用户昵称
+
+                //连接信息
+                regist.szMachineID = utils.StringUtils.getGUID();	        //机器标识
+                regist.szMobilePhone = "";                                  //电话号码
+
+                network.sendRegister(tcpService,regist);
+            }else
+            {
+                //发送登录
+                var logonAccounts  = df.CMD_MB_LogonAccounts_WEB();
+                logonAccounts.wModuleID = df.INVALID_WORD;
+                logonAccounts.wMarketID = df.MARKET_ID;
+                logonAccounts.cbDeviceType = df.DEVICE_TYPE;
+                logonAccounts.dwAppVersion = utils.PROCESS_VERSION(1,1,0,1);
+                logonAccounts.dwPlazaVersion = utils.PROCESS_VERSION(1,1,0,1);
+                logonAccounts.dwStationID = df.STATION_ID;
+                logonAccounts.dwMappedNum = 0;
+                logonAccounts.szPassword = this._password;
+                logonAccounts.szAccounts = this._account;
+                logonAccounts.szMachineID = "";
+                logonAccounts.szMobilePhone = "";
+
+                network.sendLogon(tcpService,logonAccounts);
+            }
+         }
+
+         /**
+          * 网络消息
+          */
+         public onMessage(e: egret.Event):void
+         {
+             let msg = <network.Message>e.data;
+             var wMainCmd = msg.wMainCmd;
+             switch (wMainCmd)
+             {
+                 //广场登录
+                 case df.MDM_MB_LOGON:
+                 {
+                    return this.onSubMessageLogon(msg);
+                 }
+
+                 //列表信息
+                 case df.MDM_MB_SERVER_LIST:
+                 {
+                     return this.onSubMessgeServerList(msg)
+                 }
+                 default:
+                 {
+                     egret.assert(false,"未知消息");
+                 }
+                  
+             }
+         }
+          /**
+           * 广场登录协议
+           */
+          public onSubMessageLogon(msg: network.Message)
+          {
+              switch (msg.wSubCmd) 
+              {
+                  //登录成功
+                  case df.SUB_MB_LOGON_SUCCESS:
+                  {
+                     return this.onSubLogonSuccess(msg);
+                  }
+                  //登录失败 
+                  case df.SUB_MB_LOGON_FAILURE:
+                  {
+                     return this.onSubLogonFailure(msg);
+                  }
+                  default:
+                      break;
+              }
+          }
+
+          /**
+           * 列表消息
+           */
+          public onSubMessgeServerList(msg: network.Message)
+          {
+               switch (msg.wSubCmd) 
+               {
+                   case df.SUB_MB_LIST_KIND:
+                   {
+                       break;
+                   }
+
+                   default:
+                     break;
+               }
+          }
+
+          /**登录成功 */
+          public onSubLogonSuccess(msg: network.Message)
+          {
+              let LogonSuccess = network.onSubLogonSuccess(msg.cbBuffer); 
+              
+              //保存用户
+              var userData = new models.UserData(LogonSuccess);
+              managers.FrameManager.getInstance().m_GlobalUserData = userData;
+            
+              //切换场景
+              let CientController = new controller.ClientController();
+              managers.FrameManager.getInstance().replaceScene(CientController,true);
+
+              managers.FrameManager.getInstance().dismissPopWait();
+
+          }
+
+          /**登录失败 */
+          public onSubLogonFailure(msg: network.Message)
+          {
+              let LogonFailure = network.onSubLogonFailure(msg.cbBuffer); 
+              managers.FrameManager.getInstance().showToast(LogonFailure.szDescribeString);
+
+              managers.FrameManager.getInstance().dismissPopWait()
+
+              //关闭socket
+              managers.ServiceManager.getInstance().closeService();
+          }
+
+
+         /** 触摸事件
+          * onTouchBegan
+          * onTouchMove
+          * onTouchEnd
+         */
+         private onTouchBegan(event:egret.TouchEvent)
+         {
+             console.log("onTouch Began");
+         }
+
+         private onTouchMove(event:egret.TouchEvent)
+         {
+             console.log("onTouch move");
+
+         }
+
+         private onTouchEnd(event:egret.TouchEvent)
+         {
+             console.log("onTouch end");
+         }
+
+         //登录层退出
+         private onExit():void
+         {
+             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.onTouchBegan,this);
+             this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,this.onTouchMove,this);
+             this.removeEventListener(egret.TouchEvent.TOUCH_END,this.onTouchEnd,this);
+             this.removeEventListener(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE,this.connectComplete,this);
+             this.removeEventListener(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH,this.onMessage,this)
+
+             managers.ServiceManager.getInstance().setViewFrame(null);
+         }
+    }
+}

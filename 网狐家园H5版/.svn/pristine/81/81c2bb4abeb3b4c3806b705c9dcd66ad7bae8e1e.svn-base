@@ -1,0 +1,195 @@
+namespace df {
+
+    export const URL_TEAHOUSE_SHARE = "http://testwww.foxuc.com/Mobile/WxGroupShare.aspx";
+
+    /////////////////////////////////////////////////////////////////////////////////
+
+    //IM定义
+    //更新类型
+    export const UPDATE_KIND_WEALTH = 0x01									    //财富类型
+    export const UPDATE_KIND_PROPERTY = 0x02									//属性类型
+    export const UPDATE_KIND_BATTLERULE = 0x04									//规则类型
+
+    //消息类型
+    export const APPLY_MSG_TYPE_REQUEST = 1									//请求消息
+    export const APPLY_MSG_TYPE_RESPOND = 2									//响应消息
+
+    //申请状态
+    export const APPLY_STATUS_NONE = 0										    //审核状态
+    export const APPLY_STATUS_AGREE = 1										//同意状态
+    export const APPLY_STATUS_REFUSE = 2										//拒绝状态
+    export const APPLY_STATUS_REPEAL = 3										//撤销状态
+
+    export const GROUP_BATTLE_MASK_GYKF = 0x01                                  //馆员开房
+
+    //////////////////////////////////////////////////////////////////////////////////
+    //命令定义
+
+    //约战服务
+    export const MDM_GA_BATTLE_SERVICE = 1									//约战服务
+
+    //桌子操作
+    export const SUB_GA_QUERY_TABLE = 110									//查询桌子
+    export const SUB_GA_CREATE_TABLE = 111									//创建桌子
+    export const SUB_GA_DISMISS_TABLE = 112									//解散桌子
+    export const SUB_GA_GET_TABLE_USERLIST = 113									//获取列表
+
+    //操作结果
+    export const SUB_GA_TABLE_ITEM = 200									//桌子信息
+    export const SUB_GA_TABLE_LIST = 201									//桌子列表
+    export const SUB_GA_OPERATE_FAILED = 202							    //操作失败
+    export const SUB_GA_BATTLE_RECORD = 203									//约战记录
+    export const SUB_GA_TABLE_PARAMLIST = 204									//桌子参数
+    export const SUB_GA_TABLE_USERLIST = 205									//用户列表
+    export const SUB_GA_DISMISS_RESULT = 206									//解散结果
+
+    //消息推送
+    export const SUB_GA_USER_SITDOWN = 300									//用户坐下
+    export const SUB_GA_USER_STANDUP = 301									//用户起立
+    export const SUB_GA_TABLE_PARAM = 302									//桌子参数
+    export const SUB_GA_TABLE_DISMISS = 303									//桌子解散
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+
+    //桌子用户
+    export function tagTableUserItem() {
+        //用户信息
+        let struct = {
+            wFaceID: 0,    								//头像标识 2
+            wChairID: 0,	  							//用户方位 4
+            dwUserID: 0,							    //用户标识 8
+            dwGameID: 0, 								//游戏标识 12
+            dwCustomID: 0, 								//头像标识 16
+            szNickName: "" 							    //用户昵称 80
+        }
+        return struct
+    }
+
+
+    //查询桌子
+    export function CMD_GA_QueryTable() {
+        let struct = {
+            wKindID: 0,							//类型标识
+            dwUserID: 0,						//用户标志
+            cbQueryKind: 0,						//查询类型
+            dwQueryArgKey: 0,					//查询关键字
+        }
+
+    }
+
+    //创建桌子
+    export function CMD_GA_CreateTable() {
+
+        let struct = {
+            //用户信息
+            dwUserID: 0,							//用户标识
+            dwStationID: 0,						    //站点标识
+            szPassword: "",			                //用户密码
+
+            //群组信息
+            dwGroupID: 0,							//群组标识
+            dwGroupCreaterID: 0,					//群主标识
+
+            //创建信息
+            wKindID: 0,							    //类型标识	
+            wPayType: 0,							//支付类型
+            wPlayerCount: 0,						//游戏人数
+            cbSettleKind: 0,						//结算方式
+            cbVideoMode: 0,						    //视频模式
+            cbCurrencyKind: 0,						//货币类型
+            cbForbidSameIP: 0,						//禁止同IP	
+            wPlayCount: 0,							//游戏局数
+            dwPlayTime: 0,							//游戏时长
+            lBaseScore: 0,							//游戏底分
+
+            //客户信息
+            szMachineID: "",		//机器序列
+        }
+
+        return struct;
+
+    }
+
+    //解散桌子
+    export function CMD_GA_DismissTable() {
+        let struct = {
+            wKindID: 0,							//类型标识
+            dwMappedNum: 0,						//桌子编号
+            dwUserID: 0,						//用户标识
+            szPassword: "",			            //用户密码	
+        }
+    }
+
+    //获取列表
+    export function CMD_GA_GetTableUserList() {
+        let struct = {
+            wKindID: 0,							//类型标识
+            dwMappedNum: 0,						//映射编号	
+        }
+    }
+
+    //桌子列表
+    export function CMD_GA_TableList() {
+        let struct = {
+            wTableCount: 0,						//桌子数目
+        }
+
+    }
+
+    //用户坐下
+    export function CMD_GA_UserSitdown() {
+        let struct = {
+            dwUserID: 0,							//用户标识
+            dwMappedNum: 0,						    //映射编号
+            TableUserItem: tagTableUserItem(),		//用户信息
+        }
+
+    }
+
+    //用户起立
+    export function CMD_GA_UserStandup() {
+        let struct = {
+            wChairID: 0,							//用户椅子
+            dwUserID: 0,							//用户标识
+            dwMappedNum: 0,						    //映射编号	
+        }
+    }
+
+    //桌子参数
+    export function CMD_GA_TableParam() {
+        let struct = {
+            dwMappedNum: 0,						//映射编号
+            dwStartTime: 0,						//开始时间
+            wFinishCount: 0,					//完成局数
+        }
+    }
+
+    //桌子解散
+    export function CMD_GA_TableDismiss() {
+        let struct = {
+            dwGroupID: 0,						//群组标识
+            dwMappedNum: 0,						//映射编号
+        }
+    }
+
+    //解散结果
+    export function CMD_GA_DismissResult() {
+        let struct = {
+            cbResultCode: 0,					//结果代码
+            szDescribeString: "",				//描述信息
+        }
+    }
+
+    //用户列表
+    export function CMD_GA_TableUserList() {
+        let struct = {
+            dwMappedNum: 0,						//映射编号
+            wUserCount: 0,						//用户数量
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+
+}

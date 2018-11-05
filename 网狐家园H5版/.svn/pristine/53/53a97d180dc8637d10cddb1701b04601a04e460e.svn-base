@@ -1,0 +1,75 @@
+namespace network
+{
+    /**
+     * 虚拟实例
+     */
+    export class SocketItem
+    {
+        /**
+         * Host 
+         */
+        private Host: string;
+
+        /**
+         * 端口
+         */
+        private Port: number;
+
+        /**
+         * 网络标识
+         */
+        private m_RemoteID: number = df.INVALID_DWORD;
+
+        /**
+         * 服务类型
+         */
+        private m_ServerKind: number = df.INVALID_BYTE;
+
+        /**
+         * 服务索引
+         */
+        private m_ServerIndex: number = df.INVALID_WORD;
+
+        /**
+         * 构造
+         */
+        constructor(RemoteID: number,Serverkind: number,ServerIndex?: number,Host?: string,Port?: number)
+        {
+            this.m_RemoteID    = RemoteID;
+            this.m_ServerKind  = Serverkind ? Serverkind : df.eServerKind.PLAZA;
+            this.m_ServerIndex = ServerIndex ? ServerIndex : df.INVALID_WORD;
+
+            this.Host = Host ? Host : df.ServerConfig.Host;
+            this.Port = Port ? Port : df.ServerConfig.Port;
+        }
+
+        /**
+         * GET 方法
+         */
+        public getRamoteID(): number
+        {
+            return this.m_RemoteID;
+        }
+
+        public getServerKindID(): number
+        {
+            return this.m_ServerKind;
+        }
+
+        public getServerIndex(): number
+        {
+            return this.m_ServerIndex;
+        }
+
+        public getHost(): string
+        {
+            return this.Host;
+        }
+
+        public getPort(): number
+        {
+            return this.Port;
+        }
+
+    }
+}

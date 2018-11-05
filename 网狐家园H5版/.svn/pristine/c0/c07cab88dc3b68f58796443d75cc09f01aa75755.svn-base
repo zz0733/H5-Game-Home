@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.BattleListLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="BG" width="1334" height="750" x="0" y="0" source="general_background3_png" fillMode="clip"/>
+	<e:Button id="Return" label="" x="0" y="13">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Return0" label="" x="1198" y="72.5" anchorOffsetX="102" anchorOffsetY="41.5">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_record_0_png" source.down="battle_bt_record_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Return2" label="" x="1053" y="640" anchorOffsetX="81.5" anchorOffsetY="61">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_list_recharge_0_png" source.down="general_bt_list_recharge_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Return3" label="" x="1218.5" y="640" anchorOffsetX="81.5" anchorOffsetY="61">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_list_bank_0_png" source.down="general_bt_list_bank_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Return1" label="" x="667" y="640" anchorOffsetX="183" anchorOffsetY="60">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_create_room_0_png" source.down="battle_bt_create_room_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="398" height="174" x="459" y="0" source="battle_frame_2_png" fillMode="clip"/>
+	<e:Image width="308" height="80" x="510" y="21" source="battle_title_battle_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Label text="约战房间" x="667" y="127" size="26" textColor="0xffeb8b" anchorOffsetX="52" anchorOffsetY="13"/>
+	<e:Image width="692" height="202" x="667" y="447" source="battle_non_room_tip_png" fillMode="clip" anchorOffsetX="346" anchorOffsetY="101"/>
+	<e:Image width="266" height="154" x="24" y="542" source="info_frame_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="116" height="32" x="101" y="554" source="room_title_info_png" anchorOffsetX="0" anchorOffsetY="0" fillMode="clip"/>
+	<e:Image width="65.33" height="25.34" x="42.5" y="606.33" source="battle_text_ingot_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="65.33" height="25.34" x="42.5" y="640" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="battle_text_gold_png"/>
+
+</e:Skin>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="SetLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="Bg" width="1332" height="750" x="1" y="0" fillMode="clip" source="general_back_frame_0_png" scaleX="1" scaleY="1" name="bg_normal"/>
+	<e:Image id="Bg1" width="1334" height="750" x="-1" y="96" fillMode="clip" source="userinfo_back_frame_2_png" name="bg_extern" visible="false"/>
+	<e:Panel id="Option" width="1334" height="750" x="0" y="0" name="panel_option">
+		<e:Image width="116" height="52" x="266" y="280" source="option_game_language_png" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0" scaleX="1" scaleY="1"/>
+		<e:Image width="116" height="52" x="266" y="380" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0" source="option_text_music_png" scaleX="1" scaleY="1"/>
+		<e:Image width="116" height="52" x="266" y="480" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0" source="option_text_sound_png" scaleX="1" scaleY="1"/>
+		<e:Image width="116" height="52" x="266" y="580" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0" source="option_text_voice_png" scaleX="1" scaleY="1"/>
+		<e:Image width="49.34" height="50.67" x="404.67" y="286" source="userinfo_bt_choose_0_png" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0" scaleX="1" scaleY="1"/>
+		<e:Image width="49.34" height="50.67" x="670.66" y="286" source="userinfo_bt_choose_0_png" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0" scaleX="1" scaleY="1"/>
+		<e:RadioButton label="" x="430.67" y="313" name="radio_language_0" selected="true" enabled="true" anchorOffsetX="26" anchorOffsetY="26" scaleX="1" scaleY="1">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_choose_0_png" source.down="userinfo_bt_choose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+		</e:RadioButton>
+		<e:Label text="方言" x="469.67" y="296" size="34" textColor="0xf6d292" scaleX="1" scaleY="1"/>
+		<e:Label text="低" x="671" y="389" size="34" textColor="0xF6D292" scaleX="1" scaleY="1"/>
+		<e:Label text="高" x="1034.33" y="389" size="34" textColor="0xF6D292" scaleX="1" scaleY="1"/>
+		<e:Label text="高" x="1034.33" y="472" size="34" textColor="0xF6D292" scaleX="1" scaleY="1"/>
+		<e:Label text="高" x="1034.33" y="589" size="34" textColor="0xF6D292" scaleX="1" scaleY="1"/>
+		<e:Label text="低" x="671" y="489" size="34" textColor="0xF6D292" scaleX="1" scaleY="1"/>
+		<e:Label text="低" x="671" y="589" size="34" textColor="0xF6D292" scaleX="1" scaleY="1"/>
+		<e:Label text="普通话" x="738" y="296" size="34" textColor="0xF6D292" scaleX="1" scaleY="1"/>
+		<e:RadioButton label="" x="671" y="286" name="radio_language_1" selected="false" scaleX="1" scaleY="1">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_choose_0_png" source.down="userinfo_bt_choose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+		</e:RadioButton>
+		<e:CheckBox label="" x="472" y="410.19" anchorOffsetX="85" anchorOffsetY="29" selected="true" scaleX="1" scaleY="1">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="option_cbt_opener_0_png" source.down="option_cbt_opener_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+		</e:CheckBox>
+		<e:CheckBox label="" x="472" y="509" anchorOffsetX="85" anchorOffsetY="29" selected="true" scaleX="1" scaleY="1">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="option_cbt_opener_0_png" source.down="option_cbt_opener_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+		</e:CheckBox>
+		<e:CheckBox label="" x="472" y="610" anchorOffsetX="85" anchorOffsetY="29" selected="true" scaleX="1" scaleY="1">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="option_cbt_opener_0_png" source.down="option_cbt_opener_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+		</e:CheckBox>
+		<e:HSlider width="163.67" height="72" x="720" y="367.19" skinName="skins.OptionSlider" enabled="true" minimum="0" maximum="100" touchEnabled="true" anchorOffsetY="0" anchorOffsetX="0" name="slider_music" scaleX="1" scaleY="1"/>
+		<e:HSlider width="163.67" height="72" x="720" y="471.13" skinName="skins.OptionSlider" enabled="true" minimum="0" maximum="100" touchEnabled="true" anchorOffsetY="0" anchorOffsetX="0" name="slider_sound" scaleX="1" scaleY="1"/>
+		<e:HSlider width="163.67" height="72" x="720" y="572.63" skinName="skins.OptionSlider" enabled="true" minimum="0" maximum="100" touchEnabled="true" anchorOffsetY="0" anchorOffsetX="0" name="slider_language" scaleX="1" scaleY="1"/>
+	</e:Panel>
+	<e:Panel id="Switch" width="1334" height="244" x="0" y="3" anchorOffsetY="0" name="panel_switch0">
+		<e:Image width="1334" height="126" x="0" y="119" source="benefit_frame_up_png" scaleX="1" scaleY="1"/>
+		<e:Image width="366" height="146" x="670.66" y="131" source="benefit_frame_top_png" anchorOffsetX="183" anchorOffsetY="73" scaleX="1" scaleY="1"/>
+		<e:Image width="142" height="40" x="595" y="111" source="option_text_option_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" scaleX="1" scaleY="1"/>
+	</e:Panel>
+	<e:Panel id="Switch1" width="1334" height="150" x="-2" y="71" anchorOffsetY="0" name="panel_switch1" visible="false">
+		<e:CheckBox label="" x="517" y="47" touchEnabled="true" selected="true" anchorOffsetX="252" anchorOffsetY="54" name="check_option">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_choose_0_png" source.down="userinfo_choose_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:CheckBox>
+		<e:CheckBox label="" x="817" y="47" touchEnabled="true" selected="false" anchorOffsetY="54" name="check_change">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_choose_0_png" source.down="userinfo_choose_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:CheckBox>
+		<e:CheckBox label="" x="667" y="47" touchEnabled="true" selected="false" anchorOffsetX="126" anchorOffsetY="54" name="check_confirm">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="userinfo_choose_0_png" source.down="userinfo_choose_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:CheckBox>
+		<e:Image width="142" height="48" x="320" y="20" source="option_text_option_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false" name="check_option"/>
+		<e:Image width="154" height="48" x="596" y="20" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false" source="option_title_binding_png"/>
+		<e:Image width="150" height="48" x="872" y="20" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false" source="option_title_exchange_png" name="check_change"/>
+	</e:Panel>
+	<e:Panel id="Confirm" width="1334" height="750" x="0" y="0" name="panel_confirm" visible="false">
+		<e:Image width="264" height="58" x="248" y="244" source="option_certificate_text_4_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+		<e:Image width="264" height="58" x="248" y="380" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="option_certificate_text_6_png"/>
+		<e:TextInput width="536" height="126" x="480" y="209" skinName="skins.TextInputRegist"/>
+		<e:TextInput width="536" height="126" x="480" y="345" skinName="skins.TextInputRegist"/>
+		<e:Label text="*根据《网络游戏管理暂行办法》的要求，请您尽快完成实名认证。" x="352" y="486" size="24" textColor="0xffe4bb"/>
+		<e:Label text="*身份信息只能提交一次，不能随意修改，请慎重填写！" x="352" y="521" size="24" textColor="0xFFE4BB"/>
+		<e:Button label="" x="667" y="645" anchorOffsetX="225" anchorOffsetY="77">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="option_certificate_bt_0_png" source.down="option_certificate_bt_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+	</e:Panel>
+	<e:Panel id="Change" width="1334" height="750" x="0" y="0" name="panel_change" visible="false">
+		<e:Image id="tips" width="740" height="300" x="667" y="439" source="option_text_exchange_png" fillMode="clip" anchorOffsetX="370" anchorOffsetY="150"/>
+		<e:Button id="exchange" label="" x="667" y="568" enabled="true" anchorOffsetX="224.5" anchorOffsetY="79">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="option_bt_exit_0_png" source.down="option_bt_exit_1_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+	</e:Panel>
+	<e:Button id="Back" label="" x="50.5" y="50.5" anchorOffsetX="50.5" anchorOffsetY="50.5" name="bt_return">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

@@ -1,0 +1,172 @@
+/**连接服务 
+*直接连接
+*虚拟连接
+*/
+namespace network
+{
+    export class ClientConnect 
+    {
+        /**
+         * socket服务
+         */
+        private m_TcpService: service.TcpSocketService;
+
+        /**
+         * 连接模式
+         */
+        private m_ConnectKind: number = df.SERVICE_MODE_LINK;
+
+        /**
+         * 连接信息
+         */
+        private m_ConfigServer ={};
+
+        /**
+         * 当前服务模块
+         */
+
+        private m_ServiceModule: any; 
+
+        /**
+         * 构造
+         */
+        constructor(serviceModule: any)
+        {
+          
+            if (null != this.m_ServiceModule)
+            {
+                this.m_ServiceModule = null;
+            }
+            this.m_ServiceModule = serviceModule;
+        }
+
+        //连接服务器
+        connectServer(serviceMode: number,ServerAddr: string,wServerPort: number,cbServiceKind?: number, wServiceIndex?:number)
+        {
+
+            //连接模式
+            this.m_ConnectKind =  df.SERVICE_MODE_LINK;
+
+            //socket实例
+            let tcpSocket = new TcpSocket();
+
+            //socket服务
+            this.m_TcpService = new service.TcpSocketService(tcpSocket);
+            
+            //设置当前连接模块
+            this.m_TcpService.setConnectModule(this);
+            tcpSocket.setServiceModule(this.m_TcpService);
+
+            //连接服务器
+            tcpSocket.connect(ServerAddr,wServerPort)
+
+            //启动服务
+            managers.ServiceManager.getInstance().LoadService(this.m_TcpService,this.m_ServiceModule,serviceMode);
+        }
+
+        //连接服务器 虚拟连接
+        connectServerKind(serviceMode: number,dwClientIndex: number, cbServiceKind: number, wServiceIndex:number)
+        {
+            if (this.m_TcpService) 
+            {
+                this.m_TcpService.closeService();
+                this.m_TcpService = null;
+            }
+
+            //连接模式
+            this.m_ConnectKind =  df.SERVICE_MODE_GATE;
+
+            //socket实例
+            let tcpSocket = new TcpSocket();
+
+            //socket服务
+            this.m_TcpService = new service.TcpSocketService(tcpSocket);
+            
+            //设置当前连接模块
+            this.m_TcpService.setConnectModule(this);
+            tcpSocket.setServiceModule(this.m_TcpService);
+
+            //绑定socket
+            let config = this.m_ServiceModule.getActiveConnect();
+            tcpSocket.connect(config.getHost(),config.getPort());
+
+            //保存连接
+            this.m_ConfigServer["ClientID"] = dwClientIndex;
+            this.m_ConfigServer["ServiceKind"] = cbServiceKind;
+            this.m_ConfigServer["ServiceIndex"] = wServiceIndex;
+
+            //启动服务
+            managers.ServiceManager.getInstance().LoadService(this.m_TcpService,this.m_ServiceModule,serviceMode);
+        }
+
+        //socket连接失败
+        public socketBindFailure():void
+        {
+            //绑定通知
+            if (null != this.m_ServiceModule)
+            {
+                this.m_ServiceModule.socketBindFailure();
+            }
+
+            //失败处理
+            if (null != this.m_TcpService)
+            {
+                this.m_TcpService.closeService();
+                this.m_TcpService = null
+            }
+        }
+
+        //socket连接成功
+        public socketBindSuccess():void
+        {
+            //绑定通知
+            if (null != this.m_ServiceModule)
+            {
+                this.m_ServiceModule.socketBindSuccess();
+            }
+
+            //直连启动
+            if ( this.m_ConnectKind == df.SERVICE_MODE_LINK)
+            {
+                //请求虚拟节点
+                if (this.m_TcpService)
+                {
+                   this.m_TcpService.sendVitualMode();
+                }
+            }else if (this.m_ConnectKind == df.SERVICE_MODE_GATE)
+            {
+                //请求以虚拟方式连接
+                let ClientID = this.m_ConfigServer["ClientID"];
+                let ServerKind = this.m_ConfigServer["ServiceKind"];
+                let ServerIndex = this.m_ConfigServer["ServiceIndex"];
+
+                if (false == this.m_TcpService.VirtualConnect(ClientID,ServerKind,ServerIndex ))
+                {
+                    if (null != this.m_ServiceModule)
+                    {
+                        //连接通知
+                        this.m_ServiceModule.connectFailure();
+                    }
+                }
+            }
+        }
+
+        //获取服务模块
+        public getServiceModule()
+        {
+            return this.m_ServiceModule;
+        }
+
+        /**
+         * 返回当前TCP服务
+         */
+        public getTcpService(): any
+        {
+            return this.m_TcpService ? this.m_TcpService : null;
+        }
+    }
+}
+
+
+
+

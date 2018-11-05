@@ -1,0 +1,191 @@
+/**
+ * 跑马灯 公告
+ */
+namespace models{
+    export class NoticeSprite extends egret.Sprite
+    {
+        /**
+         * 内容队列
+         */
+        private _noticeQueue: string[] = [];
+
+        /**
+         * 播放当前索引
+         */
+        private _noticeIndex: number = 0;
+
+        /**
+         * 循环播放
+         */
+        private _bLoop: boolean = false;
+
+        /**
+         * 每条播放时间 默认8秒
+         */
+        private m_OnePerformTime = 8000;
+
+        /**
+         * 显示标签
+         */
+        private _label :eui.Label;
+
+        /**
+         * 构造
+         */
+        constructor()
+        {
+            super();
+
+            this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+        }
+
+        /**
+         * 静态方法
+         */
+        public static createNoticeSprite(backGroundRes: string,width: number,height: number,msg:any[],isLoop: boolean,icon?: string): NoticeSprite
+        {
+            var ret = new NoticeSprite();
+            if (ret && ret.initNoticeSprite(backGroundRes,width,height,msg,isLoop,icon))
+            {
+                return ret;
+            }
+            return null;
+        }
+
+        /**
+         * 初始化
+         */
+        public initNoticeSprite(backGroundRes: string,width: number,height: number,msg:any[],isLoop: boolean,icon?: string):boolean
+        {
+            if (width==0 && height==0)
+                return false
+
+            this.width = width;
+            this.height = height;
+
+            this._noticeQueue = ["11111111","22222","3333333"];
+            this._bLoop = isLoop;
+
+            //公告背景
+            let backGround = utils.createBitmapByName(backGroundRes);
+            utils.setAnchorCenter(backGround);
+            this.addChild(backGround);
+            backGround.x = this.width/2 ;
+            backGround.y = this.height/2;
+
+             //显示区域
+            let group = new eui.Group();
+            utils.setAnchorLeftTop(group);
+            this.addChild(group);
+            group.width = this.width-50;
+            group.height = this.height;
+            group.x = 50;
+            group.y = 0;
+
+            //滑动组件
+            let scroll = new eui.Scroller;
+            scroll.enabled = false;
+            scroll.width = this.width-50;
+            scroll.height = this.height;
+            this.addChild(scroll);
+            scroll.viewport = group;
+            utils.setAnchorLeftMid(scroll);
+            scroll.x = 50;
+            scroll.y = this.height/2
+
+            //显示标签
+            this._label =  new eui.Label();
+            this._label.text = "欢迎您进入游戏家园,祝您游戏愉快!";
+            //设置颜色等文本属性
+            this._label.textColor = 0XFFFFFF;
+            this._label.size = 18;
+            this._label.lineSpacing = 24;
+            this._label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            group.addChild(this._label);
+            utils.setAnchorLeftMid(this._label);
+            this._label.x = this.width;
+            this._label.y = this.height/2;
+
+            //设置ICON
+            if (null != icon)
+              this.setNoticeIcon(icon);
+
+            //启动播放
+            this._noticeIndex = 0;
+            this.performNotice();
+
+            return true;
+        }
+
+        /**
+         * 设置ICON
+         */
+        public setNoticeIcon(texture: string)
+        {
+            let icon = utils.createBitmapByName("notice_icon_png");
+            utils.setAnchorRightMid(icon);
+            this.addChild(icon);
+            icon.x = 50;
+            icon.y = this.height/2;
+        }
+
+        /**
+         * 播放公告
+         */
+        public performNotice()
+        {
+            if (null == this._label) return;
+
+            var msg = this._noticeQueue[this._noticeIndex];
+         
+            this._label.text = msg;
+            this._label.x = this.width;
+            this._label.y = this.height/2;
+
+            //移动动画
+            var tw = egret.Tween.get(this._label)
+            .to({x:-400,y:this.height/2},this.m_OnePerformTime)
+            .call(()=>{
+                this._noticeIndex++;
+                if (this._noticeIndex == this._noticeQueue.length)
+                {
+                    if (!this._bLoop) return;
+                    this._noticeIndex = 0;
+                }
+                //递归调用
+                this.performNotice();
+             });        
+        }
+
+        /**
+         * 插入公告
+         */
+        public insertNotice(notice: string)
+        {
+            this._noticeQueue.push(notice);
+        }
+
+        /**
+         * 设置索引
+         */
+        public setNoitceIndex(index: number)
+        {
+            this._noticeIndex = (index<this._noticeQueue.length) ? index :this._noticeIndex;
+        }
+
+        /**
+         * 移除视图
+         */
+        public onExit()
+        {
+            egret.Tween.removeTweens(this._label);
+
+            this._noticeQueue.forEach(element => {
+                element = null;
+            });
+
+            this._noticeQueue = null;
+            this._label = null;
+        }
+    }
+}

@@ -1,0 +1,10 @@
+/**
+ * 扑克操作
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class CardSprite extends egret.Sprite {
+            
+        }
+    }
+}

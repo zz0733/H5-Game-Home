@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.OptionSlider" minWidth="20" minHeight="8" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+    <e:Image id="track" width="300"
+             height="21" verticalCenter="0" fillMode="clip" scale9Grid="8,7,20,8" touchEnabled="true" anchorOffsetX="0" x="0" source="option_progress_2_png" smoothing="true"/>
+	<e:Image id="trackHighlight" width="298" height="21" fillMode="clip" scale9Grid="8,7,20,8" touchEnabled="true" anchorOffsetX="0" x="1" source="option_progress_1_png" verticalCenter="0"/>
+    <e:Image id="thumb" verticalCenter="2.5" x="27" fillMode="scale" source="option_bt_move_png" touchEnabled="true" anchorOffsetX="0" width="40.5" anchorOffsetY="0" height="68"/>
+</e:Skin>

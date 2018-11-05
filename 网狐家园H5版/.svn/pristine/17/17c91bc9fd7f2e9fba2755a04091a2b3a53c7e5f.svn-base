@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.BattleRecordLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="BG" width="1334" height="750" x="0" y="0" source="general_background3_png" fillMode="clip"/>
+	<e:Button id="Return" label="" x="0" y="13" name="bt_close">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="CheckVedio" label="" x="1198" y="72.5" anchorOffsetX="102" anchorOffsetY="41.5">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_other_video_0_png" source.down="battle_bt_other_video_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="IconBG" width="398" height="174" x="459" y="0" source="battle_frame_2_png" fillMode="clip"/>
+	<e:Image id="Icon" width="308" height="80" x="510" y="21" source="battle_title_battle_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Label id="Record" text="约战记录" x="667" y="127" size="26" textColor="0xffeb8b" anchorOffsetX="52" anchorOffsetY="13"/>
+	<e:Image id="NoRoom" width="692" height="202" x="667" y="447" source="battle_non_room_tip_png" fillMode="clip" anchorOffsetX="346" anchorOffsetY="101" name="battle_no_room"/>
+	<e:Label id="Tips" text="只保存最近10条记录" x="1049" y="707"/>
+
+</e:Skin>

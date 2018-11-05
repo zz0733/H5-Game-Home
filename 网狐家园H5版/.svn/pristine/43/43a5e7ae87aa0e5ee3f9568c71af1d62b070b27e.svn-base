@@ -1,0 +1,22 @@
+/**
+ * 操作提示
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class OperateView extends egret.DisplayObjectContainer {
+            private _scene: any;
+            private _callback: any;
+            constructor(scene,callback) {
+                super();
+                this._scene = scene;
+                this._callback = callback;
+            }
+
+            public setOperateNotify(cbActionMask: number,cbActionData: number) {
+                if (cbActionMask == cmd.sparrowsclm.WIK_NULL) return;
+
+
+            }
+        }
+    }
+}

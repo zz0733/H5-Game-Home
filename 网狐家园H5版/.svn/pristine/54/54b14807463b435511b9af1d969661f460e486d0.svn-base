@@ -1,0 +1,55 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var network;
+(function (network) {
+    /**
+     * 虚拟实例
+     */
+    var SocketItem = (function () {
+        /**
+         * 构造
+         */
+        function SocketItem(RemoteID, Serverkind, ServerIndex, Host, Port) {
+            /**
+             * 网络标识
+             */
+            this.m_RemoteID = df.INVALID_DWORD;
+            /**
+             * 服务类型
+             */
+            this.m_ServerKind = df.INVALID_BYTE;
+            /**
+             * 服务索引
+             */
+            this.m_ServerIndex = df.INVALID_WORD;
+            this.m_RemoteID = RemoteID;
+            this.m_ServerKind = Serverkind ? Serverkind : 1 /* PLAZA */;
+            this.m_ServerIndex = ServerIndex ? ServerIndex : df.INVALID_WORD;
+            this.Host = Host ? Host : df.ServerConfig.Host;
+            this.Port = Port ? Port : df.ServerConfig.Port;
+        }
+        /**
+         * GET 方法
+         */
+        SocketItem.prototype.getRamoteID = function () {
+            return this.m_RemoteID;
+        };
+        SocketItem.prototype.getServerKindID = function () {
+            return this.m_ServerKind;
+        };
+        SocketItem.prototype.getServerIndex = function () {
+            return this.m_ServerIndex;
+        };
+        SocketItem.prototype.getHost = function () {
+            return this.Host;
+        };
+        SocketItem.prototype.getPort = function () {
+            return this.Port;
+        };
+        return SocketItem;
+    }());
+    network.SocketItem = SocketItem;
+    __reflect(SocketItem.prototype, "network.SocketItem");
+})(network || (network = {}));
+//# sourceMappingURL=SocketItem.js.map

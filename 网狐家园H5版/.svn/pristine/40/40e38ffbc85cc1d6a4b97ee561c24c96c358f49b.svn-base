@@ -1,0 +1,77 @@
+/**
+ * 选择组合 多选
+ */
+
+namespace client {
+    export class CheckBoxGroup extends eui.Component {
+        /**
+         * 构造
+         */
+        private _title: eui.Label;
+        private _scene: any;
+        private _config: any;
+        private _showData: any;
+        private _seletedValues: number[] = [];
+        private _changeListener: any;
+        /**
+         * showData {title:"",itemCount: 0,seletedValue: 0,option:["xxx","xxx","xxx"...]}
+         */
+        constructor(scene, showData, config, changeHandler) {
+            super();
+            this._scene = scene;
+            this._config = config;
+            this._showData = showData
+            this.skinName = skins.RadioGroup;
+
+            // 0未选 1选中
+            this._seletedValues = showData.selectedValue;
+
+            this.onInitGroup();
+
+        }
+
+        private onInitGroup() {
+
+
+            //标题
+            this._title.text = this._showData.title;
+
+            //选项
+            for (let i = 0; i < this._showData.itemCount; i++) {
+
+                //checkbox
+                let checkbox = this.getChildByName(`checkbox_${i + 1}`) as eui.CheckBox;
+                checkbox.visible = true;
+
+                if (1 == this._seletedValues[i]) {
+                    checkbox.selected = true;
+
+                } else {
+                    checkbox.selected = false;
+                }
+
+                checkbox.addEventListener(egret.Event.CHANGE, this.onEventChange, this);
+
+                //选项
+                let option = this.getChildByName(`title${i + 1}`) as eui.Label;
+                option.visible = true;
+                option.text = this._showData.option[i];
+            }
+        }
+
+        private onEventChange(e: egret.Event) {
+            //checkbox_
+            let target = e.target as eui.CheckBox;
+            const idx = Number(target.name.substr(9, target.name.length)) - 1;
+            this._seletedValues[idx] = (target.selected == true) ? 1 : 0;
+
+            if (null != this._changeListener) {
+                this._changeListener(idx, this._config[idx]);
+            }
+        }
+
+        private getSelectValue() {
+            return this._seletedValues;
+        }
+    }
+}

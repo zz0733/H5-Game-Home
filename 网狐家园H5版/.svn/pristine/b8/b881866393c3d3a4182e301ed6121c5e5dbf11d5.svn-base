@@ -1,0 +1,12 @@
+/**
+ * 用户数据 
+ */
+namespace utils 
+{
+    export class UserData 
+    {
+
+
+    }
+
+}

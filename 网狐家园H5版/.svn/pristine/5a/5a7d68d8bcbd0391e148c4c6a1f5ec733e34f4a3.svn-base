@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.UserInfoLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="Bg" width="1329.1" height="689.69" x="0" y="82.63" source="userinfo_back_frame_2_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button id="Return" label="" x="58" y="47" anchorOffsetX="50.5" anchorOffsetY="50.5" name="bt_return">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:CheckBox id="CheckBox" label="" x="667" y="49" anchorOffsetX="126" enabled="true" touchEnabled="false">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_choose_1_png" source.down="userinfo_choose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:Image id="Title" width="156.36" height="47.28" x="593.51" y="76.12" source="userinfo_text_info_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image id="InfoBg" width="766" height="564" x="361" y="166" source="userinfo_back_frame_0_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image id="HeadBg" width="322" height="228" x="144" y="161" source="userinfo_head_frame_0_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" name="headBg"/>
+	<e:Button id="Modify_Head" label="" x="260" y="452" anchorOffsetX="100" anchorOffsetY="42" name="modifyHead">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_modify_head_0_png" source.down="userinfo_bt_modify_head_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Modify_Password" label="" x="258" y="552" anchorOffsetX="100" anchorOffsetY="42" name="modifyPassword">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_modify_password_0_png" source.down="userinfo_bt_modify_password_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Modify_Info" label="" x="258" y="652" anchorOffsetX="100" anchorOffsetY="42" name="modifyInfo">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_modify_info_0_png" source.down="userinfo_bt_modify_info_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="VIP" label="" x="822" y="420" anchorOffsetX="69" anchorOffsetY="26.5" name="right">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_vip_0_0_png" source.down="userinfo_bt_vip_0_0_png" source.disabled="userinfo_bt_vip_0_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Join" label="" x="972" y="420" anchorOffsetX="69" anchorOffsetY="26.5" name="join">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_vip_1_0_png" source.down="userinfo_bt_vip_1_0_png" source.disabled="userinfo_bt_vip_1_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Purchase" label="" x="972" y="476" anchorOffsetX="69" anchorOffsetY="26.5" name="purchase">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_recharge_0_png" source.down="userinfo_bt_recharge_0_png" source.disabled="userinfo_bt_recharge_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Bank" label="" x="978" y="638" anchorOffsetX="69" anchorOffsetY="26.5" name="bank">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="userinfo_bt_bank_0_png" source.down="userinfo_bt_bank_0_png" source.disabled="userinfo_bt_bank_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Label id="ID" text="Label" x="553" y="240" textColor="0xffe4bb" size="26" name="ID"/>
+	<e:Label id="Nick" text="JACKZOE0504" x="553" y="298" textColor="0xFFE4BB" size="26" name="nick"/>
+	<e:Label id="Account" text="JackZoe0504" x="856" y="243" textColor="0xFFE4BB" size="26" name="account"/>
+	<e:Label id="Level" text="务农" x="557" y="352" textColor="0xFFE4BB" size="26" name="level"/>
+	<e:Label id="Sex" text="保密" x="857" y="298" textColor="0xFFE4BB" size="26" name="sex"/>
+	<e:Label id="Order" text="普通玩家" x="553" y="408" textColor="0xFFE4BB" size="26" name="order"/>
+	<e:Label id="diam" text="0" x="553" y="463.45" size="26" textColor="0x4bd2ea" name="diam"/>
+	<e:Label id="Medel" text="0" x="553" y="518.12" size="26" textColor="0xff492e" name="medel"/>
+	<e:Label id="Take" text="0" x="552.33" y="572.79" size="26" textColor="0xffc600" name="take"/>
+	<e:Label id="Save" text="0" x="553" y="626.79" textColor="0xFFC600" size="26" name="save"/>
+	<e:Image width="194" height="196" x="162" y="180" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image id="Vip" width="33.33" height="26.67" x="556.48" y="408.18" source="benefit_diamond_type_6_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" visible="false"/>
+</e:Skin>

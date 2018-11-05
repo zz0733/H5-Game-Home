@@ -1,0 +1,45 @@
+/**
+ * 服务器管理
+ */
+namespace models{
+    export class ServerInfo{
+         /**
+         * 登录列表
+         */
+        private m_LogonList = [];
+
+        /**
+         * 登录代理
+         */
+        private m_AgentList = [];
+
+        /**
+         * 游戏列表
+         */
+        private m_GameList = [];
+
+        /**
+         * 网关列表 
+         */
+        private m_GateList = [];
+
+        /**
+         * 构造
+         */
+        constructor()
+        {
+
+        }
+
+        /**
+         * 重置
+         */
+        public resetServer()
+        {
+            this.m_LogonList = [];
+            this.m_AgentList = [];
+            this.m_GameList  = [];
+            this.m_GateList  = [];
+        }   
+    }
+}

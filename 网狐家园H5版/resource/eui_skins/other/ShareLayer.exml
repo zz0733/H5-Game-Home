@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.ShareLayer" width="998" height="565" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="Bg" width="970" height="565" x="0" y="0" source="share_background_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="true"/>
+	<e:Image id="Title" width="270" height="60" x="350" y="15" source="share_title_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button id="Wechat" label="" x="295" y="240" anchorOffsetX="94" anchorOffsetY="104" name="bt_wechat">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_shareWechat_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Session" label="" x="685" y="240" anchorOffsetX="94" anchorOffsetY="104" name="bt_circle">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_shareSession_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="Tips" width="640" height="90" x="165" y="441" source="share_tip_content_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button id="Close" label="" x="949" y="45" anchorOffsetX="49" anchorOffsetY="50.5" name="bt_close">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_shareClose_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

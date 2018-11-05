@@ -1,0 +1,70 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var controller;
+(function (controller) {
+    var ClientController = (function (_super) {
+        __extends(ClientController, _super);
+        /**
+         * 构造
+         */
+        function ClientController() {
+            var _this = _super.call(this) || this;
+            //视图名称
+            _this.name = "ClientController";
+            _this.createClientScene();
+            return _this;
+        }
+        ClientController.prototype.createClientScene = function () {
+            //背景
+            var sky = utils.createBitmapByName("background_png");
+            this.addChild(sky);
+            this.addChild(new client.ClientLayer());
+        };
+        /* controller生命周期
+         *  viewWillAppear
+         *  viewDidAppear
+         *  viewWillDisappear
+         *  viewDidDisappear
+         *  dealloc 资源回收
+         */
+        ClientController.prototype.viewWillAppear = function (animated) {
+        };
+        ClientController.prototype.viewDidAppear = function (animated) {
+        };
+        ClientController.prototype.viewWillDisappear = function (animated) {
+        };
+        ClientController.prototype.viewDidDisappear = function (animated) {
+        };
+        ClientController.prototype.dealloc = function () {
+        };
+        /**
+        * 切换页面
+        * @target 目标view
+        * @mode   切换模式
+        */
+        ClientController.prototype.onChangeView = function (target, mode) {
+        };
+        /**进入前台
+         * applicationDidBecomeActive
+         */
+        ClientController.prototype.applicationDidBecomeActive = function (event) {
+        };
+        /**进入后台
+        * applicationDidBecomeActive
+        */
+        ClientController.prototype.applicationWillEnterForeground = function (event) {
+        };
+        return ClientController;
+    }(egret.DisplayObjectContainer));
+    controller.ClientController = ClientController;
+    __reflect(ClientController.prototype, "controller.ClientController", ["df.IController"]);
+})(controller || (controller = {}));
+//# sourceMappingURL=ClientController.js.map

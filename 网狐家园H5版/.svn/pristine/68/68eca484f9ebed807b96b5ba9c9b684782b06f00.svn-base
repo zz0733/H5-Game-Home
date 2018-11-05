@@ -1,0 +1,141 @@
+/**
+ * 触摸阻断
+ */
+namespace models
+{
+
+    export class PopWait extends eui.UILayer implements df.IPopWait
+    {
+
+        /**
+         *  超时回调
+         */
+        private m_TimeOutCallFunc:any = null;
+
+        /**
+         * 延时句柄
+         */
+        private m_DelayHandler: number = 0;
+
+        /**
+         * 构造
+         */
+        protected createChildren(): void {
+             super.createChildren();
+             this.name = "PopWait";
+
+             this.once(egret.Event.ADDED_TO_STAGE,this.onInitLayer,this);
+             this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+         }
+
+         //初始化
+         private onInitLayer():void
+         {
+            let mask = utils.createBitmapByName("common_mask_png");
+            this.addChild(mask);
+            mask.width = this.width;
+            mask.height = this.height;
+            utils.setAnchorCenter(mask);
+            mask.x = this.width/2;
+            mask.y = this.height/2;
+
+            let fox = utils.createBitmapByName("wait_ani_frame_png");
+            utils.setAnchorCenter(fox);
+            this.addChild(fox);
+            fox.x = this.width/2;
+            fox.y = this.height/2
+
+            let circle = utils.createBitmapByName("wait_ani_round_png");
+            utils.setAnchorCenter(circle);
+            circle.name = "circle"
+            this.addChild(circle);
+            circle.x = this.width/2;
+            circle.y = this.height/2
+
+            //定时器
+            managers.TimerControl.getInstance().createTimer(this,1000/60,0,this.popWaitAnimation,"PopWait")
+
+            //延时回调
+            this.m_DelayHandler = setTimeout(()=> {
+                this.onTimeOut();
+            }, 20000);
+
+         }
+
+         //移除舞台
+         private onExit():void
+         {
+            //取消延时
+            if ( this.m_DelayHandler != 0)
+            {
+                clearTimeout(this.m_DelayHandler);
+            }
+
+            //移除定时
+            managers.TimerControl.getInstance().killTimer(this,"PopWait");
+
+            //引用置空
+            this.m_TimeOutCallFunc = null
+         }
+
+         //超时处理
+         onTimeOut():void
+         { 
+            //移除定时
+             managers.FrameManager.getInstance().dismissPopWait()
+             managers.TimerControl.getInstance().killTimer(this,"PopWait");
+
+             //句柄置空
+             this.m_DelayHandler = 0;
+
+             //超时操作
+             if (null != this.m_TimeOutCallFunc)
+             {
+                 this.m_TimeOutCallFunc();
+             }
+         }
+
+         //提示内容
+         setContent(content:string):void
+         {
+            if (null == content || content.length == 0)
+                return;
+
+            let label:eui.Label = new eui.Label();
+            label.text = content;
+
+            //设置颜色等文本属性
+            label.textColor = 0XFFFFFF;
+            label.size = 24;
+            label.lineSpacing = 24;
+            label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            this.addChild(label);
+            utils.setAnchorCenter(label);
+            label.x = 667;
+            label.y = 500;
+         }
+
+         private popWaitAnimation(e:egret.Event):void
+         {
+            var circle = this.getChildByName("circle");
+            circle.rotation += 6;
+            if(circle.rotation > 360)
+            {
+                circle.rotation -= 360;
+            }
+         }
+
+         //设置超时回调
+         public setTimeOutCallfunc(fun:any):void
+         {
+             if (null != this.m_TimeOutCallFunc)
+             {
+                 this.m_TimeOutCallFunc = null;
+             }
+
+             this.m_TimeOutCallFunc = fun
+         }
+
+ 
+    }
+}

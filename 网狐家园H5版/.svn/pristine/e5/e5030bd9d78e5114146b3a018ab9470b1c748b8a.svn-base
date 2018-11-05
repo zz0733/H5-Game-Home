@@ -1,0 +1,127 @@
+namespace game {
+    export namespace landlord {
+
+        export class GameClient extends eui.UILayer implements df.IGameMessage, df.IUserService {
+
+            protected createChildren(): void {
+                super.createChildren();
+
+                this.name = "GameClient";
+
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                //this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+            }
+
+            private onInitLayer(): void {
+
+                //测试代码
+
+                egret.BitmapData
+                let componet = new eui.Component();
+                this.addChild(componet);
+
+                componet.skinName = "resource/eui_skins/landlord.exml";
+
+                let backbtn = componet.getChildByName("bt_back");
+                backbtn.addEventListener(egret.TouchEvent.TOUCH_END, (e: egret.Event) => {
+                    managers.FrameManager.getInstance().replaceScene(new controller.ClientController(), true);
+                }, this);
+
+
+                /* let backGround = utils.createBitmapByName("game_back_1_png");
+                 this.addChild(backGround);*/
+
+                let logo = utils.createBitmapByName("game_logo_share_png");
+                utils.setAnchorCenter(logo);
+                this.addChild(logo);
+                logo.x = 667;
+                logo.y = 275;
+
+                //动画测试
+
+                let count: number = 0;
+                let bFinish = false;
+                let cardsArray: Array<egret.Sprite> = [];
+                let func = () => {
+
+                    let cardSprite = new egret.Sprite();
+                    this.addChild(cardSprite);
+                    cardSprite.width = 151;
+                    cardSprite.height = 201;
+                    cardSprite.anchorOffsetX = 151 / 2;
+                    cardSprite.anchorOffsetY = 201 / 2;
+                    cardSprite.x = 667;
+                    cardSprite.y = 100;
+                    cardsArray.push(cardSprite);
+
+                    let cardBack = utils.createBitmapByName("game_card_handcard_png", new egret.Rectangle(2 * 151, 4 * 201, 151, 201));
+                    cardSprite.addChild(cardBack);
+                    cardBack.name = "back";
+                    cardBack.anchorOffsetX = 151 / 2;
+                    cardBack.anchorOffsetY = 201 / 2;
+                    cardBack.x = 151 / 2;
+                    cardBack.y = 201 / 2;
+
+
+                    let tw = egret.Tween.get(cardSprite)
+                        .to({ x: 667, y: 650 }, 50)
+                        .call(() => {
+                            count++;
+                            if (count <= 50) {
+                                func();
+                            } else {
+                                cardsArray.forEach((cardSprite, index) => {
+                                    let tw = egret.Tween.get(cardSprite)
+                                        .to({ x: 80 + index * 53.1 }, 500)
+                                        .call(() => {
+
+                                            let cardBack = cardSprite.getChildByName("back");
+                                            cardSprite.removeChild(cardBack);
+                                            let card = utils.createBitmapByName("game_card_handcard_png", new egret.Rectangle(0 * 151, 0 * 201, 151, 201));
+                                            cardSprite.addChild(card);
+                                            card.name = "card";
+                                            card.anchorOffsetX = 151 / 2;
+                                            card.anchorOffsetY = 201 / 2;
+                                            card.x = 151 / 2;
+                                            card.y = 201 / 2;
+                                        })
+                                });
+                            }
+                        })
+
+                }
+
+                func();
+            }
+
+            onUserEnter(object: any): void {
+
+            }
+
+            onUserStatus(object: any): void {
+
+            }
+
+            onUserChat(object: any): void {
+
+            }
+
+            onUserScore(object: any): void {
+
+            }
+
+            onGameScene(object: any): void {
+
+            }
+
+            onGameMessage(object: any): void {
+
+            }
+
+            onGameSystemMessage(object: any): void {
+
+            }
+        }
+    }
+
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="Gold" width="260" height="215" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image width="260" height="215" x="0" y="0" source="shop_frame_exchange_png" fillMode="clip"/>
+	<e:Image id="Icon" width="207" height="126" x="26.5" y="9" source="shop_icon_gold_1_png" fillMode="clip"/>
+	<e:Button label="" x="131.5" y="161" anchorOffsetX="105" anchorOffsetY="29">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_buy_gold_0_png" source.down="bt_buy_gold_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="42" height="42" x="179" y="134" source="icon_ingot_png" fillMode="clip"/>
+</e:Skin>

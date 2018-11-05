@@ -1,0 +1,19 @@
+/**
+ * 用户出牌
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class DropCard {
+            constructor(scene) {
+
+            }
+
+            /**设置出牌 */
+            public setOutCard(viewId: number, cbCardsData?: number) {
+                if (viewId == df.INVALID_ITEM) {
+                    return;
+                }
+            }
+        }
+    }
+}

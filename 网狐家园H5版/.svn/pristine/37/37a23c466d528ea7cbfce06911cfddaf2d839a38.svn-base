@@ -1,0 +1,148 @@
+/** 
+ * 网络服务
+**/
+
+namespace managers{
+
+    /** @param MAX_UNIT
+     * 每次处理消息包
+     * 每一帧压力不宜过大
+     */
+    const MAX_UNIT: number = 100;
+
+    export class ServiceManager
+    {
+        /**
+        *单例实例 
+        */
+        private static m_sInstance: ServiceManager;
+
+        /**
+         * 消息队列
+         */
+        _MsgQueue: network.Message[] = [];
+
+        /**
+         * 当前服务
+         */
+        private m_pTcpService: any;
+
+        /**
+         * 服务类型 
+         */
+        private m_eServiceMode: number = df.eServiceKind.LogonService;
+
+        /**
+         * 业务代理
+         */
+        private _viewFrame: any;
+
+        /**
+        *获取当前实例
+        */
+        public static getInstance(): ServiceManager
+        {
+            if(this.m_sInstance == null)
+            {
+                this.m_sInstance = new ServiceManager();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+         }
+
+
+        public init():void
+        {
+            //TCP服务
+            this.m_pTcpService = null;
+
+            //服务类型
+            this.m_eServiceMode = df.eServiceKind.LogonService;
+        }
+
+        /**
+         * 设置服务类型 
+         */
+        public setServiceMode(mode: number)
+        {
+            this.m_eServiceMode = mode;
+        }
+
+        /**
+         * 消息代理
+         */
+        public setViewFrame(view: any)
+        {
+            this._viewFrame = null;
+
+            if (null == view)
+                return;
+
+            this._viewFrame = view;
+        }
+
+        public getViewFrame()
+        {
+            return this._viewFrame ? this._viewFrame : null;
+        }
+
+        /**
+         * 获取TCP服务
+         */
+        public getTcpService()
+        {
+            return this.m_pTcpService ? this.m_pTcpService : null;
+        }
+
+        //创建服务
+        public createSocketService(host: string,port: number,serviceMode: number = df.eServiceKind.LogonService)
+        {
+            var tcpService = new service.TcpSocketService();
+            tcpService.createConnect(host,port);
+
+            this.m_pTcpService = tcpService;
+            this.m_eServiceMode = serviceMode;
+        }
+
+         /**
+          * 刷新服务
+          */
+         onUpdate():void
+         {
+             //服务刷新
+            if (this.m_pTcpService && this.m_pTcpService.onUpdate)
+            {
+                this.m_pTcpService.onUpdate();
+            }
+            
+            if (this._MsgQueue.length == 0)   return;
+
+            if (null == this._viewFrame)
+            {
+                 console.log("_viewFrame is null"); 
+                 return;
+            }
+           
+            //处理队列
+            if (null != this._viewFrame.onMessage)
+            {   
+                //变量定义
+                var dispatch: network.Message[] = [];
+                var length = this._MsgQueue.length;
+                length = (length<MAX_UNIT) ? length:MAX_UNIT;
+
+                //分帧处理
+                dispatch = this._MsgQueue.slice(0,length);
+                this._MsgQueue.splice(0,length);
+
+                //消息分发
+                while(dispatch.length)
+                {
+                    var msg = dispatch[0];
+                    this._viewFrame.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH,false,false,msg));
+                    dispatch.shift();
+                }
+            }
+         }
+    }
+}    

@@ -1,0 +1,327 @@
+/**
+ * TCP服务
+ */
+namespace service {
+    /**
+    * 心跳维护时间
+    */
+    const HeartTime: number = 5000;
+    const CONNECT_SUCCESS = true;
+    const CONNECT_FAILURE = false;
+
+    export class TcpSocketService {
+        /**
+        * 加密实例
+        */
+        private m_Crypt: network.Crypt;
+
+        /**
+         * 接收长度
+         */
+        private m_wRecvSize: number = 0;
+
+
+        /**
+         * SOCKET实例
+         */
+        private m_Socket: network.TcpSocket;
+
+
+        /**
+        * 事件实例
+        */
+        private m_EventDispatcher: egret.EventDispatcher;
+
+
+        /**
+         * 当前时间
+         */
+        private m_CurTime: number = 0;
+
+        /**
+         * 缓冲队列
+         */
+        private m_RecvQueue: utils.ByteArray[] = [];
+
+        /**
+         * 服务模块
+         */
+        private m_ServiceModule: any;
+
+        /**
+         * 构造
+         */
+        constructor(module: any) {
+            //服务模块
+            this.m_ServiceModule = module;
+
+            //websocket
+            this.m_Socket = new network.TcpSocket();
+            this.m_Socket.setServiceModule(this);
+
+            //事件实例
+            this.m_EventDispatcher = new egret.EventDispatcher();
+
+            //加密实例
+            this.m_Crypt = new network.Crypt();
+
+            //接收大小
+            this.m_wRecvSize = 0;
+
+            //缓冲队列
+            this.m_RecvQueue = [];
+        }
+
+        /**
+         * 创建连接
+         */
+        public createConnect(host: string, port: number): void {
+            if (null == this.m_Socket) {
+                //websocket
+                this.m_Socket = new network.TcpSocket();
+                this.m_Socket.setServiceModule(this);
+            }
+
+            this.m_Socket.connect(host, port);
+        }
+
+        //缓冲队列
+        public pushRecvBuffer(buffer): void {
+            this.m_RecvQueue.push(buffer);
+        }
+
+        /**
+         * 解密数据
+         */
+        public setSocketBuffer(buffer: utils.ByteArray) {
+            //重置变量
+            this.m_CurTime = egret.getTimer();
+
+            return new Promise((resolve, reject) => {
+
+                let offset = 0;       //记录偏移
+
+                try {
+                    //网络长度
+                    this.m_wRecvSize = buffer.getLength();
+
+                    //解密映射
+                    while (this.m_wRecvSize >= df.Len_Tcp_Head) {
+                        //设置偏移
+                        buffer.position(offset);
+
+                        //数据类型
+                        var cbDataKind = utils.MathUtils.getUnsignedByte(buffer.Pop_Byte());
+                        //校验字段
+                        var cbCheckCode = utils.MathUtils.getUnsignedByte(buffer.Pop_Byte());
+                        //缓冲长度
+                        var wPacketSize = buffer.Pop_WORD();
+
+                        //长度校验
+                        egret.assert((wPacketSize >= df.Len_Tcp_Info) && (wPacketSize <= df.SOCKET_TCP_BUFFER))
+                        if ((wPacketSize < df.Len_Tcp_Info) || (wPacketSize > df.SOCKET_TCP_BUFFER)) {
+                            throw new Error("消息包错误");
+                        }
+
+                        //完整判断
+                        if (this.m_wRecvSize < wPacketSize) {
+                            throw new Error("消息包接收不完整");
+                        }
+
+                        //解密数据
+                        if (this.m_Crypt.CrevasseBuffer(buffer, wPacketSize, offset) == false) {
+                            egret.assert(false);
+                            throw new Error("解密失败");
+                        }
+
+                        //读取命令码
+                        buffer.position(df.Len_Tcp_Info);
+                        var wMainCmd = buffer.Pop_WORD();
+                        var wSubCmd = buffer.Pop_WORD();
+
+                        console.log(`主命令: ${wMainCmd},子命令: ${wSubCmd}`);
+
+                        if (wMainCmd == df.MDM_KN_COMMAND) {
+                            //内核命令
+                            if (wSubCmd == df.SUB_KN_DETECT_SOCKET) {
+                                //回复心跳
+                                network.sendPing(this);
+                            } else if (wSubCmd == df.SUB_KN_SHUT_DOWN_SOCKET) {
+                                //关闭连接
+                                this.closeService();
+                            }
+                        } else {
+                            //消息队列
+                            var msg = new network.Message(wMainCmd, wSubCmd, wPacketSize - df.Len_Tcp_Head, buffer);
+                            this.m_ServiceModule._MsgQueue.push(msg);
+                        }
+
+                        //处理长度
+                        this.m_wRecvSize -= wPacketSize;
+                        egret.assert(this.m_wRecvSize >= 0);
+
+                        //记录偏移
+                        offset += wPacketSize;
+
+                        //判断完成
+                        if (this.m_wRecvSize < df.Len_Tcp_Head) {
+                            resolve();
+                            buffer = null;
+                        }
+
+                        console.log(`已处理长度: ${wPacketSize},剩余长度: ${this.m_wRecvSize}`);
+                    }
+
+                } catch (e) {
+
+                    //处理长度
+                    this.m_wRecvSize -= wPacketSize;
+
+                    //记录偏移
+                    offset += wPacketSize;
+
+                    //释放引用
+                    if (this.m_wRecvSize < df.Len_Tcp_Head) {
+                        buffer = null;
+                    }
+
+                    reject("数据解析异常");
+                }
+            })
+        }
+
+        /**
+         * 发送数据
+         */
+        public SendSocketData(wMainCmd: number, wSubCmd: number, data: utils.ByteArray, wSize: number): boolean {
+            //加密消息包
+            this.initSocketData(wMainCmd, wSubCmd, data, wSize);
+
+            //发送数据
+            if (this.m_Socket) {
+                //偏移前置
+                data.position(0);
+
+                //写字节流
+                this.m_Socket.writeBytes(data.getByteArray());
+
+                //引用释放
+                data.clear();
+                data = null;
+            }
+            return true;
+        }
+
+        /***
+         * 数据加密
+         */
+        public initSocketData(wMainCmd: number, wSubCmd: number, data: utils.ByteArray, wSize: number): void {
+            //定义变量
+            var mapResult = [];
+
+            //加密数据
+            if (((this.m_Crypt.getDataFlag() & network.DK_MAPPED) != 0)) {
+                //设置偏移
+                data.position(df.Len_Tcp_Info);
+
+                //设置命令码
+                data.Append_WORD(wMainCmd);
+                data.Append_WORD(wSubCmd);
+
+                //映射数据
+                mapResult = this.m_Crypt.EncryptBuffer(data, wSize);
+            }
+
+            //偏移前置
+            data.position(0);
+
+            //填充包头
+            data.Append_Byte(mapResult[0])
+            data.Append_Byte(mapResult[1])
+            data.Append_WORD(mapResult[2]);
+        }
+
+        //连接成功
+        public socketConnectSuccess(): void {
+            //连接状态
+            this.m_Socket.setConnectStatus(df.eSocketStatus.soc_connected);
+
+            //记录时间
+            this.m_CurTime = egret.getTimer();
+
+            //连接通知
+            const delegate = this.m_ServiceModule.getDelegate()
+            if (null != delegate) {
+                delegate.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE));
+            }
+        }
+
+        /**
+         * 重连
+         */
+        public onReconnect(): void {
+            this.m_ServiceModule.onReconnect();
+        }
+
+        /**
+         * 关闭服务
+         */
+        public closeService(): void {
+            //关闭socket
+            if (null != this.m_Socket) {
+                if (this.m_Socket.isConnected()) {
+                    this.m_Socket.close();
+                }
+                this.m_Socket = null;
+            }
+
+            //释放引用
+            if (null != this.m_Crypt) {
+                this.m_Crypt = null;
+            }
+            console.log("TcpService服务关闭");
+        }
+
+
+        /**
+         * 刷新
+         */
+        public onUpdate(): void {
+            //时间差
+            let curTime: number = egret.getTimer();
+            let delay = curTime - this.m_CurTime;
+
+            // console.log(`spend ${delay}毫秒`)
+
+            if (null == this.m_Socket) {
+                return;
+            }
+
+            //发送心跳
+            if (delay >= HeartTime && (true == this.m_Socket.isConnected())) {
+                do {
+                    network.sendPing(this);
+                    this.m_CurTime = egret.getTimer();
+                    console.log("发送心跳");
+                } while (false)
+            }
+
+            //处理队列
+            if (this.m_RecvQueue.length > 0) {
+                var encryptBuffer = this.m_RecvQueue[0];
+
+                this.setSocketBuffer(encryptBuffer).then(() => {
+                    this.m_RecvQueue.shift();
+                }).catch((err) => {
+                    console.error(err);
+                    //移除错误包,继续解析 
+                    this.m_RecvQueue.shift();
+                });
+            }
+        }
+
+        public getServiceModule() {
+            return this.m_ServiceModule ? this.m_ServiceModule : null;
+        }
+    }
+}

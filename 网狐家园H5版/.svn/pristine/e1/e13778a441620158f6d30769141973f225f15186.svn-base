@@ -1,0 +1,66 @@
+/**
+ * 桌面扑克
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class TableCard {
+            private _scene: any;
+            private _cbCardsData: number[][] = []; //玩家桌面扑克数据
+            private _cardsPanel: eui.Panel[] = []; //扑克根节点
+            private _cards: CardSprite[][] = [];   //扑克精灵数组
+            constructor(scene) {
+                this.onInit();
+            }
+
+            /**初始数据 */
+            onInit() {
+
+            }
+
+            /**重置数据 */
+            onRest() {
+
+            }
+
+            /**
+             * 搜索提供牌
+             * @param wProvideUserIndex 提供者视图索引
+             * @param cbProvideData     扑克数据
+             */
+            public searchProvideCard(wProvideUserIndex: number,cbProvideData: number) {
+
+            }
+
+            /**
+             * 删除提供者牌
+             */
+            public deleteProvideCard() {
+
+            }
+
+            /**
+             * 显示最近一次出牌标识
+             * 默认显示
+             */
+            public showNearOutIcon(isShow: boolean = true) {
+
+            }
+
+            /**创建桌面牌 */
+            public createTableCard(viewId: number,cbCardsData: number[]) {
+
+            }
+
+            //调整位置
+            public sortCardsPos(nIndex: number) {
+
+            }
+
+            /**内存回收 */
+            public dealloc() {
+
+            }
+
+        }
+    }
+}

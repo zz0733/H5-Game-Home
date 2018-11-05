@@ -1,0 +1,128 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var service;
+(function (service) {
+    /**
+     * 处理登录服务
+     */
+    var LogonService = (function () {
+        /**
+         * 构造
+         */
+        function LogonService() {
+            /**
+             * 服务ID
+             */
+            this.m_ClientID = 0;
+            this.m_ClientConnect = new network.ClientConnect(this);
+        }
+        /**
+         * 创建连接实例
+         */
+        LogonService.prototype.createVitualItem = function (ServerKind) {
+            this.m_ClientID++;
+            var socketItem = new network.SocketItem(this.m_ClientID, ServerKind);
+            return socketItem;
+        };
+        /**
+         * 设置当前活动连接
+         */
+        LogonService.prototype.setActiveConnect = function (serverConfig) {
+            egret.assert(serverConfig.ClientID != df.INVALID_BYTE);
+            egret.assert(serverConfig.ServerKind != df.INVALID_DWORD);
+            egret.assert(serverConfig.ServerID != df.INVALID_DWORD);
+            this.m_ActiveConnectItem = null;
+            this.m_ActiveConnectItem = new network.SocketItem(serverConfig.ClientID, serverConfig.ServerKind, serverConfig.ServerID);
+            ;
+            //本地存储策略 记录最新活动连接
+        };
+        /**
+         * 获取最近一次活动连接
+         */
+        LogonService.prototype.getActiveConnect = function () {
+            //读取本地记录
+            if (this.m_ActiveConnectItem == null) {
+                //本地读取失败容错处理 取默认值
+                this.m_ActiveConnectItem = new network.SocketItem(df.ServerConfig.RemoteID, df.ServerConfig.ServerKind, df.ServerConfig.ServerIndex, df.ServerConfig.Host, df.ServerConfig.Port);
+            }
+            return this.m_ActiveConnectItem;
+        };
+        /**
+         * 接口实现
+         */
+        /**
+         * 连接操作 两种模式
+    
+         * 1.0 通过地址端口走直连模式
+         * 2.0 通过本地策略走虚拟模式
+         */
+        //模式1
+        LogonService.prototype.connectServer = function (ServerAddr, wServerPort, cbServiceKind, wServiceIndex) {
+            this.m_ClientConnect.connectServer(1 /* LogonService */, ServerAddr, wServerPort, cbServiceKind, wServiceIndex);
+        };
+        //模式2
+        LogonService.prototype.connectServerKind = function (dwClientIndex, cbServiceKind, wServiceIndex) {
+            this.m_ClientConnect.connectServerKind(1 /* LogonService */, dwClientIndex, cbServiceKind, wServiceIndex);
+        };
+        /**
+         * 连接成功
+         */
+        LogonService.prototype.connectSuccess = function () {
+            //发送登录 or 注册服务
+            var serviceInstance = managers.ServiceManager.getInstance();
+            if (serviceInstance.getDelegate() && serviceInstance.getDelegate().networkConnect) {
+                serviceInstance.getDelegate().networkConnect();
+            }
+        };
+        /**
+         * 连接失败
+         */
+        LogonService.prototype.connectFailure = function () {
+        };
+        /**
+         * 关闭当前连接
+         */
+        LogonService.prototype.closeConnect = function () {
+        };
+        /**
+         * Socket绑定成功
+         */
+        LogonService.prototype.socketBindSuccess = function () {
+            console.log("Logonservice socket绑定成功");
+        };
+        /**
+        * Socket绑定失败
+        */
+        LogonService.prototype.socketBindFailure = function () {
+            //容错处理 http服务请求最新配置
+        };
+        /**
+         * 虚拟服务中断 需关闭真实连接
+         */
+        LogonService.prototype.virtualConnectShut = function () {
+            egret.assert(null != this.getTcpService());
+            if (null == this.getTcpService()) {
+                console.log("TCP服务为空");
+                return;
+            }
+            //关闭真实连接
+            var tcpService = this.getTcpService();
+            tcpService.closeService();
+            tcpService = null;
+        };
+        /***
+         * 获取TCP服务实例
+         */
+        LogonService.prototype.getTcpService = function () {
+            if (null != this.m_ClientConnect) {
+                return this.m_ClientConnect.getTcpService();
+            }
+            return null;
+        };
+        return LogonService;
+    }());
+    service.LogonService = LogonService;
+    __reflect(LogonService.prototype, "service.LogonService", ["df.IConnectService", "df.IBindSocket", "df.IVirtualShut"]);
+})(service || (service = {}));
+//# sourceMappingURL=LogonService.js.map

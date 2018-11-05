@@ -1,0 +1,170 @@
+/** 网络服务
+*直连模式
+*虚拟模式
+**/
+
+namespace managers{
+
+    /** @param MAX_MSG
+     * 每次刷新最大处理个数
+     * 每一帧压力不宜过大
+     */
+    const MAX_MSG: number = 100;
+
+    export class ServiceManager
+    {
+        /**
+        *单例实例 
+        */
+        private static m_sInstance: ServiceManager;
+
+        /**
+         * 消息队列
+         */
+        MsgQueue: utils.Message[] = [];
+
+        /**
+         * 当前服务
+         */
+        private m_pTcpService: any;
+
+        /**
+         * 服务类型 
+         */
+        private m_eServiceMode: number = df.eServiceKind.LogonService;
+
+        /**
+         * 视图代理
+         */
+        private m_pControllerDelegate: any;
+
+        /**
+         * 业务代理
+         */
+        private _viewFrame: any;
+
+        /**
+        *获取当前实例
+        */
+        public static getInstance(): ServiceManager
+        {
+            if(this.m_sInstance == null)
+            {
+                this.m_sInstance = new ServiceManager();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+         }
+
+
+        public init():void
+        {
+            //TCP服务
+            this.m_pTcpService = null;
+
+            //服务类型
+            this.m_eServiceMode = df.eServiceKind.LogonService;
+        }
+
+
+        /**
+         * 设置服务类型 
+         */
+        public setServiceMode(mode: number)
+        {
+            this.m_eServiceMode = mode;
+        }
+
+        /**
+         * 设置委托
+         */
+        public setDelegate(delegate: any)
+        {   
+            this.m_pControllerDelegate = null;
+            this.m_pControllerDelegate = delegate;
+        }
+
+        public getDelegate()
+        {
+            return this.m_pControllerDelegate ? this.m_pControllerDelegate : null;
+        }
+        
+        /**
+         * 网络接收
+         */
+        public setViewFrame(view: any)
+        {
+            this._viewFrame = null;
+            this._viewFrame = view;
+        }
+
+        public getViewFrame()
+        {
+            return this._viewFrame ? this._viewFrame : null;
+        }
+
+        /**
+         * 获取TCP服务
+         */
+        public getTcpService()
+        {
+            return this.m_pTcpService ? this.m_pTcpService : null;
+        }
+
+        //创建服务
+        public createService(host: string,port: number,serviceMode: number = df.eServiceKind.LogonService)
+        {
+            var tcpService = new service.TcpSocketService();
+            tcpService.createConnect(host,port);
+
+            this.m_pTcpService = tcpService;
+            this.m_eServiceMode = serviceMode;
+
+        }
+
+         /**
+          * 刷新服务
+          */
+         onUpdate():void
+         {
+             //服务刷新
+            if (this.m_pTcpService && this.m_pTcpService.onUpdate)
+            {
+                this.m_pTcpService.onUpdate();
+            }
+
+            //处理队列
+            if (this.m_pControllerDelegate && this.m_pControllerDelegate.onMessage)
+            {   
+                if (this.MsgQueue.length == 0) 
+                    return;
+
+                //判断容器长度
+                var temp: utils.Message[];
+                if (this.MsgQueue.length > MAX_MSG)
+                {
+                    for (var i = 0;i < MAX_MSG;i++)
+                    {
+                        var element = this.MsgQueue[i];
+                        temp.push(element);
+                        this.MsgQueue.shift();
+                    }
+                }else
+                {
+                    this.MsgQueue.forEach(element => {
+                        temp.push(element);
+                    }); 
+
+                    this.MsgQueue = [];
+                }
+
+                do
+                {
+                    var msg = temp[0];
+                    this.m_pControllerDelegate.onMessage(msg);
+                    temp.shift();
+                }while(temp.length)
+            }
+         }
+    }
+}    

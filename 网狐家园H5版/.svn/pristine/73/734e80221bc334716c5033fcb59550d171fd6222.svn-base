@@ -1,0 +1,18 @@
+var df;
+(function (df) {
+    //////////////////////////////////////////////////////////////////////////////////
+    df.MDM_MB_LOGON = 100; //广场登录
+    df.SUB_MB_LOGON_ACCOUNTS = 2; //帐号登录
+    df.SUB_MB_REGISTER_ACCOUNTS = 3; //注册帐号
+    df.SUB_MB_LOGON_OTHERPLATFORM = 4; //其他登陆
+    df.SUB_MB_LOGON_GAMEID_LUA = 10; //I D 登录
+    df.SUB_MB_LOGON_ACCOUNTS_LUA = 11; //帐号登录
+    df.SUB_MB_LOGON_OTHERPLATFORM_LUA = 12; //其他登录
+    df.SUB_MB_REGISTER_ACCOUNTS_LUA = 13; //注册帐号
+    df.SUB_MB_LOGON_SUCCESS = 100; //登录成功
+    df.SUB_MB_LOGON_FAILURE = 101; //登录失败
+    df.SUB_MB_LOGON_FINISH = 102; //登录完成
+    df.SUB_MB_UPDATE_NOTIFY = 200; //升级提示
+    //////////////////////////////////////////////////////////////////////////////////
+})(df || (df = {}));
+//# sourceMappingURL=CMD_LogonServer.js.map

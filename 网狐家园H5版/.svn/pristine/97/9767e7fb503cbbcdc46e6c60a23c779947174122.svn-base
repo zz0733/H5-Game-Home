@@ -1,0 +1,170 @@
+/**网络数据包
+ * 消息包的发送
+ * 数据包的解析
+ */
+namespace network
+{
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  /*消息发送
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   /**
+    * 发送注册
+    */
+    export function sendRegister(service,args)
+    {
+        //构造数据
+        let CMD_MP_RegisterAccounts = new utils.__ByteArray();
+       
+        //设置偏移
+        CMD_MP_RegisterAccounts.position(df.Len_Tcp_Head); //8 
+
+        CMD_MP_RegisterAccounts.Append_WORD(args[0]);  //2
+        CMD_MP_RegisterAccounts.Append_WORD(args[1]);  //2
+        CMD_MP_RegisterAccounts.Append_Byte(args[2]); //1
+        CMD_MP_RegisterAccounts.Append_DWORD(args[3]); //4
+        CMD_MP_RegisterAccounts.Append_DWORD(args[4]); //4
+
+        CMD_MP_RegisterAccounts.Append_DWORD(args[5]);  //4
+
+        CMD_MP_RegisterAccounts.Append_UTF16(args[6],33); //66 83
+
+        CMD_MP_RegisterAccounts.Append_WORD(args[7]); //2
+        CMD_MP_RegisterAccounts.Append_Byte(args[8]); //1       86
+
+        
+        CMD_MP_RegisterAccounts.Append_UTF16(args[9],32); //64  150
+        CMD_MP_RegisterAccounts.Append_UTF16(args[10],32); //64 214
+        CMD_MP_RegisterAccounts.Append_UTF16(args[11],33); //66 280
+        CMD_MP_RegisterAccounts.Append_UTF16(args[12],16); //32 312
+        
+        service.SendSocketData(df.MDM_MB_LOGON,df.SUB_MB_REGISTER_ACCOUNTS_LUA,CMD_MP_RegisterAccounts,CMD_MP_RegisterAccounts.getLength());
+
+    }
+
+    /**
+     * 发送登录
+     */
+    export function sendLogon(service,args)
+    {
+       //帐号登录
+       let buffer = new utils.__ByteArray();
+
+       //设置偏移
+       buffer.position(df.Len_Tcp_Head);  
+
+       //缓冲内容
+       buffer.Append_WORD(args.wModuleID);
+       buffer.Append_WORD(args.wMarketID);
+       buffer.Append_Byte(args.cbDeviceType);
+       buffer.Append_DWORD(args.dwAppVersion);
+       buffer.Append_DWORD(args.dwPlazaVersion);
+       buffer.Append_DWORD(args.dwStationID);
+       buffer.Append_DWORD(args.dwMappedNum);
+       buffer.Append_UTF16(args.szPassword,df.LEN_MD5);
+       buffer.Append_UTF16(args.szAccounts,df.LEN_ACCOUNTS);
+       buffer.Append_UTF16(args.szMachineID,df.LEN_COMPUTER_ID);
+       buffer.Append_UTF16(args.szMobilePhone,df.LEN_MOBILE_PHONE);
+
+       service.SendSocketData(df.MDM_MB_LOGON,df.SUB_MB_LOGON_ACCOUNTS_LUA,buffer,buffer.getLength());
+    }
+
+   /**
+   * 发送心跳
+   */
+  export function sendPing(service):void
+  {
+      //构造数据
+      let Ping  = new utils.__ByteArray();
+
+      //设置偏移
+      Ping.position(df.Len_Tcp_Head);
+
+      //发送心跳
+      service.SendSocketData(df.MDM_KN_COMMAND,df.SUB_KN_DETECT_SOCKET,Ping,Ping.getLength());
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   /*消息解析*/
+   
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+   //登录成功
+   export function onSubLogonSuccess(buffer: utils.__ByteArray)
+   {
+
+        let orignalPos = buffer.getPosition();
+
+        let CMD_MP_LogonSuccess = 
+        {
+              wFaceID:0,							//头像标识
+              cbGender:0,						//用户性别
+              dwCustomID:0,							//自定头像
+              dwUserID:0,						//用户 I D
+              dwGameID:0,							//游戏 I D
+              dwStationID:0,						//站点标识
+              dwExperience:0,						//经验数值
+              dwLoveLiness:0,						//用户魅力
+              szNickName:"",			//用户昵称
+              szAccounts:"",			//登录帐号
+              szLogonPass:"",			//登录密码
+              szInsurePass:"",			//银行密码
+              
+              //财富信息
+              lUserIngot:0,							//用户钻石
+              lUserMedal:0,							//用户奖牌
+              lUserScore:0,						//用户游戏币	
+              lUserInsure:0,						//用户银行	
+
+              //会员资料
+              cbMemberOrder:0,						//会员等级
+              MemberOverDate:{},					//到期时间
+
+              //附加信息
+              wLockServerID:0						//锁定房间	
+        };
+        
+        CMD_MP_LogonSuccess.wFaceID = buffer.Pop_WORD();
+        CMD_MP_LogonSuccess.cbGender = buffer.Pop_Byte();
+        CMD_MP_LogonSuccess.dwCustomID = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwUserID = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwGameID = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwStationID = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwExperience = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwLoveLiness = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.szNickName = buffer.Pop_UTF16(32);
+        CMD_MP_LogonSuccess.szAccounts = buffer.Pop_UTF16(32);
+        CMD_MP_LogonSuccess.szLogonPass = buffer.Pop_UTF16(33);
+        CMD_MP_LogonSuccess.szInsurePass = buffer.Pop_UTF16(33);
+        CMD_MP_LogonSuccess.lUserIngot = buffer.Pop_LONGLONG();
+        CMD_MP_LogonSuccess.lUserMedal = buffer.Pop_LONGLONG();
+        CMD_MP_LogonSuccess.lUserScore = buffer.Pop_LONGLONG();
+        CMD_MP_LogonSuccess.lUserInsure = buffer.Pop_LONGLONG();
+        CMD_MP_LogonSuccess.cbMemberOrder = buffer.Pop_Byte();
+        CMD_MP_LogonSuccess.MemberOverDate = df.SYSTEMTIME(buffer);
+        CMD_MP_LogonSuccess.wLockServerID = buffer.Pop_WORD();
+
+        buffer.position(orignalPos);
+
+        return CMD_MP_LogonSuccess;
+   }
+
+   //登录失败
+   export function onSubLogonFailure(buffer: utils.__ByteArray)
+   {
+
+      let CMD_MP_LogonFailure =
+      {
+
+        dwErrorCode:0,         //错误码
+        szDescribeString:""    //错误描述
+      }
+
+      CMD_MP_LogonFailure.dwErrorCode = buffer.Pop_INT();
+      CMD_MP_LogonFailure.szDescribeString = buffer.Pop_UTF16(buffer.getByteArray().readAvailable/2);
+
+      return CMD_MP_LogonFailure
+   }
+
+}

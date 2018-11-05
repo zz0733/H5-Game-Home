@@ -1,0 +1,154 @@
+/**
+ * 协议定义
+ */
+namespace df
+{
+    //////////////////////////////////////////////////////////////////////////////////
+
+    export const MDM_MB_LOGON							= 100			//广场登录
+
+    export const SUB_MB_LOGON_ACCOUNTS				    = 2				//帐号登录
+    export const SUB_MB_REGISTER_ACCOUNTS 		     	= 3				//注册帐号
+    export const SUB_MB_LOGON_OTHERPLATFORM  			= 4             //其他登陆
+
+    export const SUB_MB_LOGON_GAMEID_LUA				= 10			//I D 登录
+    export const SUB_MB_LOGON_ACCOUNTS_LUA   			= 11			//帐号登录
+    export const SUB_MB_LOGON_OTHERPLATFORM_LUA 		= 12			//其他登录
+    export const SUB_MB_REGISTER_ACCOUNTS_LUA 		    = 13			//注册帐号
+
+    export const SUB_MB_LOGON_SUCCESS					= 100			//登录成功
+    export const SUB_MB_LOGON_FAILURE					= 101			//登录失败
+    export const SUB_MB_LOGON_FINISH					= 102			//登录完成
+    export const SUB_MB_UPDATE_NOTIFY					= 200			//升级提示
+
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+    //列表命令
+
+    export const MDM_MB_SERVER_LIST			=101								//列表信息
+
+    //获取命令
+    export const SUB_MB_GET_LIST			=1									//获取列表
+    export const SUB_MB_GET_SERVER			=2									//获取房间
+    export const SUB_MB_GET_OPTION			=3									//获取配置
+    export const SUB_MB_GET_OPTION_LUA		=4									//获取配置
+    export const SUB_MB_GET_SERVER_AGENT	=5									//房间代理
+
+    //列表信息
+    export const SUB_MB_LIST_KIND			=100								//种类列表
+    export const SUB_MB_LIST_SERVER			=101								//房间列表
+    export const SUB_MB_LIST_MATCH			=102								//比赛列表
+    export const SUB_MB_SERVER_AGENT		=107								//房间代理
+    export const SUB_MB_LIST_ACCESS			=108								//网关服务
+    export const SUB_MB_LIST_FINISH			=200								//列表完成
+    export const SUB_MB_SERVER_FINISH		=201								//房间完成
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //帐号登录
+    export function CMD_MB_LogonAccounts_WEB() 
+    {
+        var struct = 
+        {
+             //系统信息
+            wModuleID:0,						    //模块标识
+            wMarketID:0,							//渠道标识
+            cbDeviceType:0,                         //设备类型
+            dwAppVersion:0,						    //应用版本
+            dwPlazaVersion:0,						//广场版本		
+
+            //登录信息
+            dwStationID:0,						    //站点标识
+            dwMappedNum:0,						    //映射编号
+            szPassword:"",			            	//登录密码
+            szAccounts:"",			                //登录帐号
+
+            //连接信息
+            szMachineID:"",		                    //机器标识
+            szMobilePhone:""	                    //电话号码
+        }
+       return struct
+    };
+
+    /**
+     * 账号注册
+     */
+    export function CMD_MB_RegisterAccounts_WEB()
+    {
+        var struct =
+        {
+             //系统信息
+            wModuleID:0,							//模块标识
+            wMarketID:0,							//渠道标识
+            cbDeviceType:0,                         //设备类型
+            dwAppVersion:0,						    //应用版本
+            dwPlazaVersion:0,						//广场版本
+
+            //密码变量
+            dwStationID:0,					    	//站点标识
+            szLogonPass:"",			            	//登录密码
+
+            //注册信息
+            wFaceID:0,						    	//头像标识
+            cbGender:0,						    	//用户性别
+            szAccounts:"",		                	//登录帐号
+            szNickName:"",		                    //用户昵称
+
+            //连接信息
+            szMachineID:"",	                    	//机器标识
+            szMobilePhone:""	                    //电话号码
+        }
+
+        return struct;
+       
+    };
+
+
+    /***
+     * 登录成功
+     */
+    export function CMD_MB_LogonSuccess() 
+    {
+        var struct = 
+        {
+            wFaceID:0,							//头像标识
+            cbGender:0,						    //用户性别
+            dwCustomID:0,						//自定头像
+            dwUserID:0,						    //用户 I D
+            dwGameID:0,							//游戏 I D
+            dwStationID:0,						//站点标识
+            dwExperience:0,						//经验数值
+            dwLoveLiness:0,						//用户魅力
+            szNickName:"",			            //用户昵称
+            szAccounts:"",			            //登录帐号
+            szLogonPass:"",			            //登录密码
+            szInsurePass:"",			        //银行密码
+            
+            //财富信息
+            lUserIngot:0,						//用户钻石
+            lUserMedal:0,						//用户奖牌
+            lUserScore:0,						//用户游戏币	
+            lUserInsure:0,						//用户银行	
+
+            //会员资料
+            cbMemberOrder:0,					//会员等级
+            MemberOverDate:{},					//到期时间
+
+            //附加信息
+            wLockServerID:0						//锁定房间	
+
+        }
+        return struct;
+    };
+
+    export function CMD_MB_LogonFailure()
+    {
+        var struct = 
+        {
+            lResultCode:0,						//错误代码
+            szDescribeString:""				//描述消息
+        }
+        return struct;
+    };
+
+}
+

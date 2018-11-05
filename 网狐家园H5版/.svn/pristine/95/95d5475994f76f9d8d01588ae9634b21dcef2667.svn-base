@@ -1,0 +1,538 @@
+/**
+ * 游戏框架
+ */
+namespace frame {
+
+    const NORMAL = 0
+    const RETRY = 1
+    const BATTLE = 2
+    const DISTRIBUTE = 4
+    const MATCH = 5
+    const VIDEO = 6
+
+    const ACTION_TYPE_GAME = 1
+    const ACTION_TYPE_FRAME = 2
+
+    export class GameFrame {
+        private _delegate: any;                                              //代理对象
+        private _dispatcher: egret.EventDispatcher;                          //通知实例
+        private _dismissState: { [key: number]: number } = {};               //约战状态
+        private _wKindID = df.INVALID_WORD;                                  //游戏ID
+        private _dwKindVersion = utils.PROCESS_VERSION(1, 1, 0, 0)           //游戏版本
+        private _wTableCount = 0                                             //桌子数目
+        private _wChairCount = 0                                             //椅子数目
+        private _wServerType = 0                                             //游戏类型
+        private _dwServerRule = 0                                            //游戏规则    
+        private _cbSegmentGame = 0 ;                                         //游戏段位
+        private _dwGameBuglePrice = 0;                                       //喇叭价格
+        private _dwRoomBuglePrice = 0;                                       //喇叭价格
+        private _UserList: { [key: number]: models.UserItem} = {};        //用户列表
+        private _TableUserList: { [key: number]: models.UserItem[] } = {}    //玩家MAP
+        private _TableStatus: { [key: number]: number } = {}                 //桌子状态
+        private _BattleUserInfo = {}                                         //约战玩家信息
+
+        private _wTableID = df.INVALID_TABLE                                 //桌子ID
+        private _wChairID = df.INVALID_CHAIR                                 //椅子ID
+        private _wVideoChair = df.INVALID_CHAIR;
+        private _cbTableLock = 0
+        private _cbGameStatus = 0                                            //游戏状态
+        private _cbAllowLookon = 0                                           //允许旁观
+
+        private _PlayCountEx = 0;                                            //游戏人数
+        private _BattleParam: df.CMD_GF_TableParam;                          //约战信息
+        private _LogonType: number = NORMAL;                                 //连接类型
+
+        constructor(delegate?: any) {
+            this._delegate = delegate;
+            this._dispatcher = new egret.EventDispatcher();
+            this.addEventListener();
+        }
+        /**设置代理*/
+        public setDelegate(delegate: any) {
+            this._delegate = delegate;
+        }
+        /**设置版本 */
+        public setKindInfo(kindID: number, version: number) {
+            this._wKindID = kindID;
+            this._dwKindVersion = version;
+        }
+
+        /**通知实例 */
+        public getDispatcher() {
+            return this._dispatcher;
+        }
+
+        //观看模式
+        public isLookonMode() {
+
+        }
+        /**服务类型 */
+        public getServerType(): number {
+            return this._wServerType;
+        }
+        /**金币模式 */
+        public isGoldMode(): boolean {
+            return this._wServerType && ((this._wServerType & df.GAME_GENRE_GOLD) != 0);
+        }
+        /**积分模式 */
+        public isScoreMode(): boolean {
+            return this._wServerType && ((this._wServerType & df.GAME_GENRE_SCORE) != 0);
+        }
+        /**比赛模式 */
+        public isMatchMode(): boolean {
+            return this._wServerType && ((this._wServerType & df.GAME_GENRE_MATCH) != 0);
+        }
+        /**约战模式 */
+        public isBattleMode(): boolean {
+            if (this.isVedioMode()) {
+                return this._wServerType && ((this._wServerType & df.TABLE_GENRE_CREATE) != 0)
+            }
+            return this._LogonType == BATTLE;
+        }
+        /**视频模式 */
+        public isVedioMode(): boolean {
+            return this._LogonType == VIDEO;
+        }
+
+        /*获取游戏状态*/
+        public getGameStatus() {
+            return this._cbGameStatus
+        }
+
+        //设置游戏状态
+        public setGameStatus(cbGameStatus) {
+            this._cbGameStatus = cbGameStatus;
+        }
+
+        //椅子张数
+        public getChairCount() {
+            return this._wChairCount;
+        }
+
+        //桌子张数
+        public getTableCount() {
+            return this._wTableCount;
+        }
+
+        //获取桌子ID
+        public getTableID() {
+            return this._wTableID;
+        }
+
+        //获取椅子ID
+        public getChairID() {
+            if (this._LogonType == VIDEO)
+                return this._wVideoChair - 1;
+            return this._wChairID;
+        }
+
+        /**
+         * 添加监听
+         */
+        public addEventListener() {
+            //注册通知
+            this._dispatcher.addEventListener(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE, this.connectComplete, this);
+            this._dispatcher.addEventListener(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH, this.onMessage, this);
+        }
+
+        /**
+         * 移除监听
+         */
+        public removeEventListener() {
+            this._dispatcher.removeEventListener(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE, this.connectComplete, this);
+            this._dispatcher.removeEventListener(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH, this.onMessage, this);
+        }
+
+        /**连接成功*/
+        public connectComplete(): void {
+            if (this._delegate && this._delegate.connectComplete) {
+                this._delegate.connectComplete();
+            }
+
+            //过滤比赛
+            if (this._LogonType == MATCH)
+                return;
+
+            //登录房间   
+            let logonRoom = new df.CMD_GR_LogonByMobile();
+            logonRoom.wGameID = this._wKindID;
+            logonRoom.dwPlazaVersion = df.PLAZA_VERSION;
+            logonRoom.dwProcessVersion = this._dwKindVersion;
+            logonRoom.cbDeviceType = df.DEVICE_TYPE;
+            logonRoom.wBehaviorFlags = (this._LogonType == NORMAL) ? 0x1102 : 0x0102;
+            logonRoom.wPageTableCount = 1;
+            logonRoom.dwUserStationID = managers.FrameManager.getInstance().m_GlobalUserItem.dwStationID;
+            logonRoom.dwPlazaStationID = df.STATION_ID;
+            logonRoom.dwUserID = managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID;
+            logonRoom.szPasspublic = managers.FrameManager.getInstance().m_GlobalUserItem.szPassword;
+            logonRoom.szServerPasswdf = "";
+            logonRoom.szMachineID = managers.FrameManager.getInstance().m_GlobalUserItem.szMachine;
+            logonRoom.dGlobalPosLng = 0;
+            logonRoom.dGlobalPosLat = 0;
+            logonRoom.dwMatchID = 0;
+            logonRoom.lMatchNo = 0;
+
+            this.sendLogonRoom(logonRoom)
+        }
+
+        /** 网络消息*/
+        public onMessage(e: egret.Event): void {
+            let msg = e.data as network.Message;
+            const wMainCmd = msg.wMainCmd;
+            switch (wMainCmd) {
+                case df.MDM_GR_LOGON:
+                    {
+                        this.onSocketLogonEvent(msg);
+                    }
+                    break;
+                case df.MDM_GR_CONFIG:
+                    {
+                        this.onSocketConfigEvent(msg);
+                    }
+                    break;
+                case df.MDM_GR_USER:
+                    {
+                        this.onSocketUserEvent(msg);
+                    }
+                    break;
+                case df.MDM_GR_STATUS:
+                    {
+
+                    }
+                    break;
+                case df.MDM_GR_MATCH:
+                    {
+
+                    }
+                    break;
+                case df.MDM_GF_FRAME:
+                    {
+
+                    }
+                    break;
+                case df.MDM_GF_GAME:
+                    {
+
+                    }
+                    break;
+                case df.MDM_CM_SYSTEM:
+                    {
+
+                    }
+                    break;
+            }
+        }
+        /**登录协议 */
+        public onSocketLogonEvent(msg: network.Message) {
+            const wSubCmd = msg.wSubCmd;
+            switch (wSubCmd) {
+                case df.SUB_GR_LOGON_FINISH:
+                    {
+                        this.onSubLogonFinish(msg);
+                    }
+                    break;
+                case df.SUB_GR_LOGON_SUCCESS:
+                    {
+                        this.onSubLogonSuccess(msg);
+                    }  
+                    break;  
+                case df.SUB_GR_LOGON_FAILURE:
+                    {
+                        let failure = new df.CMD_GR_LogonFailure(msg);
+                        managers.TcpServiceCtrl.getInstance().getServerInfo().m_LockedServerID = failure.wLockServerID;
+                        managers.FrameManager.getInstance().showToast(failure.szDescribeString);
+                    }
+                    break;
+                case df.SUB_GR_UPDATE_NOTIFY:
+                    {
+                        let update = new df.CMD_GR_UpdateNotify(msg);
+                        managers.FrameManager.getInstance().showToast("版本不匹配");
+                    }
+                    break;
+            }
+        }
+
+        public onSubLogonSuccess(msg: network.Message) {
+            let success = new df.CMD_GR_LogonSuccess(msg);
+
+        }
+        public onSubLogonFinish(msg: network.Message) {
+            managers.TcpServiceCtrl.getInstance().getServerInfo().m_LockedServerID = df.INVALID_WORD;
+
+            //断线重连判断
+            if (this._wTableID != df.INVALID_TABLE ) {
+                this.onEnterTable()
+            } else {
+                this.onEnterRoom();
+            }
+        }
+
+
+        /**房间配置 */
+        public onSocketConfigEvent(msg: network.Message) {
+            const wSubCmd = msg.wSubCmd;
+            switch (wSubCmd) {
+                case df.SUB_GR_CONFIG_SERVER:
+                    {
+                        let config = new df.CMD_GR_ConfigServer(msg);
+                        this._wTableCount = config.wTableCount;
+                        this._wChairCount = config.wChairCount;
+                        
+                        this._wServerType = config.wServerType;
+                        this._dwServerRule = config.dwServerRule;
+                        this._cbSegmentGame = config.cbSegmentGame;
+                        this._dwGameBuglePrice = config.dwGameBuglePrice;
+                        this._dwRoomBuglePrice = config.dwRoomBuglePrice;
+                    }
+                    break;
+                case df.SUB_GR_CONFIG_FINISH:
+                    {
+
+                    }
+                    break;
+            }
+        }
+
+        /**用户信息 */
+        public onSocketUserEvent(msg: network.Message) {
+            const wSubCmd = msg.wSubCmd;
+            switch (wSubCmd) {
+                case df.SUB_GR_USER_ENTER:
+                    {
+                        this.onSocketUserEnter(msg);
+                    }
+                    break;
+                case df.SUB_GR_USER_STATUS:
+                    {
+
+                    }  
+                    break;
+            }
+        }
+
+        public onSocketUserEnter(msg: network.Message) {
+            let userItem = new models.UserItem()
+
+            userItem.dwGameID		= msg.cbBuffer.Pop_DWORD();
+            userItem.dwUserID		= msg.cbBuffer.Pop_DWORD();
+
+            //自己判断
+            let bMySelf = (userItem.dwUserID == managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID);
+
+            let userid = managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID;
+            if ( null == this._UserList[userid] ){
+
+            }else {
+                if (true == bMySelf) {
+                    //过滤自己信息
+                    return;
+                }
+            }
+            
+
+            //读取信息
+            userItem.wFaceID 		= msg.cbBuffer.Pop_WORD();		//用户头像
+            userItem.dwCustomID		= msg.cbBuffer.Pop_DWORD(); 	//自定义头像
+
+            userItem.cbGender		= msg.cbBuffer.Pop_Byte();		//用户性别
+            userItem.cbMemberOrder	= msg.cbBuffer.Pop_Byte();	    //会员等级
+
+            userItem.wTableID		= msg.cbBuffer.Pop_WORD();		//桌子位置
+            userItem.wChairID		= msg.cbBuffer.Pop_WORD();		//椅子位置
+            userItem.cbUserStatus 	= msg.cbBuffer.Pop_Byte();		//用户状态
+
+            if (userItem.cbUserStatus == df.US_LOOKON) {
+                if (bMySelf) {
+                    managers.FrameManager.getInstance().showToast("该房间不支持旁观模式");
+                    return;
+                }
+            }
+
+            userItem.lScore			= msg.cbBuffer.Pop_SCORE();
+            userItem.lGrade			= msg.cbBuffer.Pop_SCORE();
+
+            userItem.dwWinCount		= msg.cbBuffer.Pop_DWORD();
+            userItem.dwLostCount	= msg.cbBuffer.Pop_DWORD();
+            userItem.dwDrawCount	= msg.cbBuffer.Pop_DWORD();
+            userItem.dwFleeCount	= msg.cbBuffer.Pop_DWORD();
+            userItem.dwExperience	= msg.cbBuffer.Pop_DWORD();
+
+            //用户经纬度
+            userItem.dwGlobalPosLng  = msg.cbBuffer.Pop_SCORE();
+            userItem.dwGlobalPosLat  = msg.cbBuffer.Pop_SCORE();
+
+            let tmpSize: number = 0;
+		    let tmpCmd: number = 0;
+            while (msg.cbBuffer.getByteArray().bytesAvailable > 0) {
+                tmpSize = msg.cbBuffer.Pop_WORD();
+                tmpCmd = msg.cbBuffer.Pop_WORD();
+                if (tmpCmd == df.DTP_GR_USER_ACCOUNTS) {
+                    userItem.szNickName 	= msg.cbBuffer.Pop_UTF16(tmpSize/2)
+                }
+            }
+
+
+        }
+
+        /**登录比赛 */
+        public onLogonMatch(MatchGroupItem: any) {
+
+        }
+
+        /**登录普通房间 */
+        public onLogonRoom() {
+            console.log("普通房连接");
+
+            //获取当前房间信息
+            const roomItem = managers.TcpServiceCtrl.getInstance().getServerInfo().GetRoomInfo();
+            if (null == roomItem) {
+                console.log("未查到当前房间信息");
+                return;
+            }
+
+            //设置游戏信息
+            let gamelist = managers.TcpServiceCtrl.getInstance().getGameListInfo()._Info;
+            let version: number = 0;
+            for (let i = 0; i < gamelist.length; i++) {
+                if (Number(gamelist[i].id) == managers.TcpServiceCtrl.getInstance().getServerInfo().m_CurKindID) {
+                    version = Number(gamelist[i].version);
+                    break;
+                }
+            }
+            this.setKindInfo(managers.TcpServiceCtrl.getInstance().getServerInfo().m_CurKindID, version);
+
+            //判断类型
+            if ((roomItem.wServerType & df.TABLE_GENRE_DISTRIBUTE) != 0) {
+                this._LogonType = DISTRIBUTE;
+            } else if ((roomItem.wServerType & df.TABLE_GENRE_CREATE) != 0) {
+                this._LogonType = BATTLE;
+            } else {
+                this._LogonType = NORMAL;
+            }
+
+            //创建连接
+            managers.TcpServiceCtrl.getInstance().createSocketService(roomItem.szServerDomain, roomItem.wServerPort, df.eServerKind.SERVER);
+        }
+
+        /**登录约战房 */
+        public onLogonBattleRoom(mode: number) {
+
+        }
+
+        public onEnterTable() {
+
+        }
+
+        public onEnterRoom() {
+
+        }
+
+        /**刷新代理 */
+        private onFlushAgent() {
+
+        }
+
+        /**请求坐下 */
+        public sitDown(table, chair, password) {
+
+        }
+
+        /**用户查询 */
+        public queryUserInfoID(id, tableid) {
+
+        }
+
+        /**查询用户 */
+        public queryUserInfo(tableid, chair) {
+
+        }
+
+        /**请求换桌 */
+        public onChangeDesk() {
+
+        }
+
+        /**请求起立 */
+        public standUp(bForce) {
+
+        }
+
+        /**用户准备*/
+        public userReady() {
+
+        }
+
+        /**登录房间 */
+        public sendLogonRoom(data: df.CMD_GR_LogonByMobile) {
+
+            //构造数据
+            let logonRoom = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+            logonRoom.Append_WORD(data.wGameID);
+            logonRoom.Append_DWORD(data.dwPlazaVersion);
+            logonRoom.Append_DWORD(data.dwProcessVersion);
+            logonRoom.Append_Byte(data.cbDeviceType);
+            logonRoom.Append_WORD(data.wBehaviorFlags);
+            logonRoom.Append_WORD(data.wPageTableCount);
+            logonRoom.Append_DWORD(data.dwUserStationID);
+            logonRoom.Append_DWORD(data.dwPlazaStationID);
+            logonRoom.Append_DWORD(data.dwUserID);
+            logonRoom.Append_UTF16(data.szPasspublic, df.LEN_PASSWORD);
+            logonRoom.Append_UTF16(data.szServerPasswdf, df.LEN_PASSWORD);
+            logonRoom.Append_UTF16(data.szMachineID, df.LEN_MACHINE_SERIAL);
+            logonRoom.Append_DOUBLE(data.dGlobalPosLng);
+            logonRoom.Append_DOUBLE(data.dGlobalPosLat);
+            logonRoom.Append_DWORD(data.dwMatchID);
+            logonRoom.Append_SCORE(data.lMatchNo);
+
+            managers.TcpServiceCtrl.getInstance().getTcpService().SendSocketData(df.MDM_GR_LOGON, df.SUB_GR_LOGON_MOBILE, logonRoom, logonRoom.getLength());
+        }
+
+        /**请求场景 */
+        public sendGameOption() {
+
+        }
+
+        /**发送解散 */
+        public sendTableDismiss(wTableID) {
+
+        }
+
+        /**发起投票解散 */
+        public sendVoteDissmiss() {
+
+        }
+
+        /**投票解散 */
+        public sendBallotDismiss(bAgreeDismiss) {
+
+        }
+
+        /**游戏聊天 */
+        public sendGameChat(targetUserID, szChatString) {
+
+        }
+
+        /**
+        * 发送心跳
+        */
+        public sendPing(): void {
+            //构造数据
+            let Ping = new utils.ByteArray();
+
+            //设置偏移
+            Ping.position(df.Len_Tcp_Head);
+
+            let tcpService = managers.TcpServiceCtrl.getInstance().getTcpService();
+            //发送心跳
+            if (null == tcpService)
+                return
+
+            tcpService.SendSocketData(df.MDM_KN_COMMAND, df.SUB_KN_DETECT_SOCKET, Ping, Ping.getLength());
+        }
+
+        /**退出房间 */
+        public onExitRoom(message: string) {
+
+        }
+    }
+}

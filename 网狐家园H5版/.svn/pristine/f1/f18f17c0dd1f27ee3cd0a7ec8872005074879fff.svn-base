@@ -1,0 +1,70 @@
+/**
+ * 游戏视图控制器
+ */
+namespace controller {
+    export class GameController extends models.Controller implements df.IController {
+        //构造
+        private _gameModule: any;
+        constructor(gameModule: any) {
+            super();
+
+            //视图名称
+            this.name = "GameController"
+            this._gameModule = gameModule;
+
+            this.createGameClient(gameModule)
+        }
+
+        /* controller生命周期
+        *  viewWillAppear
+        *  viewDidAppear 
+        *  viewWillDisappear 
+        *  viewDidDisappear
+        *  dealloc 回收资源
+        */
+        viewWillAppear(animated: boolean): void {
+
+
+        }
+
+        viewDidAppear(animated: boolean): void {
+            this.addChild(new this._gameModule());
+            managers.TcpServiceCtrl.getInstance()._isAllowDisPatch = true;
+        }
+
+        viewWillDisappear(animated: boolean): void {
+
+
+        }
+
+        viewDidDisappear(animated: boolean): void {
+
+        }
+
+        dealloc(): void {
+
+        }
+
+        private createGameClient(module: any): void {
+
+        }
+
+
+        /**进入前台
+         * applicationDidBecomeActive
+         */
+        applicationDidBecomeActive(event: any): void {
+
+
+        }
+
+        /**进入后台
+        * applicationDidBecomeActive
+        */
+        applicationWillEnterForeground(event: any): void {
+
+
+        }
+    }
+
+}

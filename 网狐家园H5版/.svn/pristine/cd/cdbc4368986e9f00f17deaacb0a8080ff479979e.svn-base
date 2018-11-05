@@ -1,0 +1,38 @@
+/*单例
+*游戏定时器管理类
+*多定时器队列处理
+*定时器实例生命周期
+*/
+namespace managers
+{
+    export class TimerControl 
+    {   
+        /**
+        *单例实例 
+        */
+        private static m_sInstance: TimerControl;
+
+         /**
+        *获取实例 
+        */
+        public static getInstance():TimerControl
+        {
+            if(this.m_sInstance == null)
+            {
+                this.m_sInstance = new TimerControl();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+         }
+
+          /**
+          * 初始化
+          */
+          public init():void
+          {
+    
+          } 
+
+          
+    }
+}

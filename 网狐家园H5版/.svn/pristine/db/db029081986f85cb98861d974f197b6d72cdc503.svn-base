@@ -1,0 +1,10 @@
+/**
+ * 操作提示
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class OperateView extends egret.DisplayObjectContainer {
+            
+        }
+    }
+}

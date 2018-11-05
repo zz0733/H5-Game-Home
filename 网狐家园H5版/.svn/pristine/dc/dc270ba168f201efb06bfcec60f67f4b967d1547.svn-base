@@ -1,0 +1,61 @@
+/**
+ * 组合扑克
+ */
+
+namespace game {
+    const WEAVE_WIDTH: number = 0; //组合牌宽度
+    const MAX_WEAVE_COUNT: number = 3; //最大组合数
+    export namespace sparrowsclm {
+        export class WeaveCard {
+            private _nWeaveCount: number = 0;
+            private _actionDatas: any;
+            private _weaveInfo: any;
+            private _nWeaveIndex: any;
+            constructor(scene) {
+               this.onInit();
+            }
+
+            //初始数据
+            onInit() {
+                this._actionDatas = utils.allocArray<Number>(MAX_WEAVE_COUNT,Number);
+                this._nWeaveIndex = utils.allocArray<Number>(MAX_WEAVE_COUNT,Number);
+                this._weaveInfo = utils.alloc2Array<cmd.sparrowsclm.tagWeaveItem>(cmd.sparrowsclm.PLAYER_COUNT,MAX_WEAVE_COUNT,cmd.sparrowsclm.tagWeaveItem);
+            }
+
+            //组合数目
+            public getWeaveItemCount() {
+                return this._nWeaveCount;
+            }
+
+            //组合数据
+            public getWeaveItem(viewId: number,nIndex: number) {
+                if (null != this._weaveInfo[viewId][nIndex]) {
+                    return this._weaveInfo[viewId][nIndex] as cmd.sparrowsclm.tagWeaveItem;
+                }
+            }
+
+            //组合数据
+            public setWeaveItem(viewId: number,weaveitem: cmd.sparrowsclm.tagWeaveItem) {
+                egret.assert(weaveitem.cbCardData[0] > 0);
+                if (weaveitem.cbCardData[0] == 0) return;
+
+                if (null != this._weaveInfo[viewId][this._nWeaveIndex] && this._weaveInfo[viewId][this._nWeaveIndex].cbCardData[0] == 0) {
+                    this._weaveInfo[viewId][this._nWeaveIndex] = weaveitem;
+                    this._nWeaveIndex ++;
+                }
+                
+            }
+
+            //显示组合 碰 OR 杠
+            public showWeaveItem(cbActionCard: number,cbActionMask: number,cbProvidUser?: number) {
+                if (0 != (cbActionMask & cmd.sparrowsclm.WIK_GANG)) {
+                    //判断明暗杠,放杠,若是放杠,删除提供者牌
+
+                } else if (0 != (cbActionMask & cmd.sparrowsclm.WIK_PENG))　{
+                    //碰,删除提供者牌
+                }
+
+            }
+        }
+    }
+}

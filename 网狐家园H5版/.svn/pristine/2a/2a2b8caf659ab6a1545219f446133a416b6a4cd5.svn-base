@@ -1,0 +1,184 @@
+namespace service
+{
+    /**
+     * 处理登录服务
+     */
+    export class LogonService implements df.IConnectService,df.IBindSocket,df.IVirtualShut
+    {   
+        /**
+         * 连接实例
+         */
+        private m_ClientConnect: network.ClientConnect;
+
+        /**
+         * 活动连接
+         */
+        private m_ActiveConnectItem: network.SocketItem;
+
+        /**
+         * 服务ID
+         */
+        private m_ClientID: number = 0;
+        
+        /**
+         * 构造
+         */
+        constructor()
+        {
+           this.m_ClientConnect = new network.ClientConnect(this);
+        }
+
+        /**
+         * 创建连接实例
+         */
+        public createVitualItem(ServerKind: number): network.SocketItem
+        {
+            this.m_ClientID++ ;
+
+            let socketItem = new network.SocketItem(this.m_ClientID,ServerKind);
+            return socketItem;
+
+        }
+
+        /**
+         * 设置当前活动连接
+         */
+
+        public setActiveConnect(serverConfig)
+        {
+            egret.assert(serverConfig.ClientID != df.INVALID_BYTE)
+            egret.assert(serverConfig.ServerKind != df.INVALID_DWORD)
+            egret.assert(serverConfig.ServerID != df.INVALID_DWORD);
+
+            this.m_ActiveConnectItem = null;
+            this.m_ActiveConnectItem = new network.SocketItem(serverConfig.ClientID,serverConfig.ServerKind,serverConfig.ServerID);;
+
+            //本地存储策略 记录最新活动连接
+
+        }
+
+        /**
+         * 获取最近一次活动连接
+         */
+        public getActiveConnect(): network.SocketItem
+        {
+            //读取本地记录
+
+
+            if (this.m_ActiveConnectItem == null)
+            {
+                //本地读取失败容错处理 取默认值
+                  this.m_ActiveConnectItem = new network.SocketItem(
+                                                                        df.ServerConfig.RemoteID,
+                                                                        df.ServerConfig.ServerKind,
+                                                                        df.ServerConfig.ServerIndex,
+                                                                        df.ServerConfig.Host,
+                                                                        df.ServerConfig.Port
+                                                                    );
+
+            }
+
+            return this.m_ActiveConnectItem;
+
+        }
+
+        /**
+         * 接口实现
+         */
+
+        /**
+         * 连接操作 两种模式
+    
+         * 1.0 通过地址端口走直连模式
+         * 2.0 通过本地策略走虚拟模式
+         */
+
+        //模式1
+         connectServer(ServerAddr: string,wServerPort: number,cbServiceKind?: number, wServiceIndex?:number)
+         {
+             this.m_ClientConnect.connectServer(df.eServiceKind.LogonService,ServerAddr,wServerPort,cbServiceKind,wServiceIndex)
+         }
+        
+        //模式2
+         connectServerKind(dwClientIndex: number, cbServiceKind: number, wServiceIndex:number)
+         {
+              this.m_ClientConnect.connectServerKind(df.eServiceKind.LogonService,dwClientIndex,cbServiceKind,wServiceIndex);
+         }
+
+        /**
+         * 连接成功
+         */
+         connectSuccess()
+         {
+             //发送登录 or 注册服务
+             let serviceInstance = managers.ServiceManager.getInstance();
+             if (serviceInstance.getDelegate() && serviceInstance.getDelegate().networkConnect)
+             {
+                 serviceInstance.getDelegate().networkConnect();
+             }
+         }
+         /**
+          * 连接失败
+          */
+         connectFailure()
+         {
+
+
+         }
+
+         /**
+          * 关闭当前连接
+          */
+         closeConnect()
+         {
+
+         }
+
+         /** 
+          * Socket绑定成功
+          */
+          socketBindSuccess()
+          {
+              console.log("Logonservice socket绑定成功");
+          }
+
+          /** 
+          * Socket绑定失败
+          */
+          socketBindFailure()
+          {
+              //容错处理 http服务请求最新配置
+          }
+
+          /**
+           * 虚拟服务中断 需关闭真实连接
+           */
+          virtualConnectShut()
+          {
+              egret.assert(null != this.getTcpService())
+              if (null == this.getTcpService())
+              { 
+                  console.log("TCP服务为空");
+                  return;
+              }
+
+              //关闭真实连接
+              let tcpService = this.getTcpService();
+              tcpService.closeService();
+
+              tcpService = null;
+          }
+
+          /***
+           * 获取TCP服务实例
+           */
+          public getTcpService():any
+          {
+              if (null != this.m_ClientConnect)
+              {
+                  return this.m_ClientConnect.getTcpService()
+              }
+              return null
+          }
+    }
+}

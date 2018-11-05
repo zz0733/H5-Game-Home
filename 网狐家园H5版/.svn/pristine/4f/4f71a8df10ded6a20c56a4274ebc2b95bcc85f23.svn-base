@@ -1,0 +1,26 @@
+/**
+ * 自定义富文本
+ */
+namespace utils {
+    export class RichText extends egret.Sprite {
+        //富文本内容
+        private m_CurRichElementText: any[] = [];
+        //记录边界
+        private m_curWidth: number = 0;
+        constructor(widthMax: number,height: number) {
+            super();
+            this.width  = widthMax;
+            this.height = height;
+        }
+
+        public $removeElement(element: any){
+
+        }
+
+        private $pushElement(element) {
+
+        }
+
+
+    }
+}

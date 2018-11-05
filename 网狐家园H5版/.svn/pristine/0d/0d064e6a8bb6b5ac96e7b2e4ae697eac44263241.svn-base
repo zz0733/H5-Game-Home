@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.sparrowsclm.GameLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="BG" width="1334" height="750" x="0" y="0" source="game_back_0_png" fillMode="clip"/>
+	<e:Image id="Logo" width="304" height="66" x="667" y="191" source="game_back_logo_png" fillMode="clip" anchorOffsetX="152" anchorOffsetY="33"/>
+	<e:Image id="MenuBg" width="1050" height="100" x="665" y="0" source="bg_top_menu_png" fillMode="clip" anchorOffsetX="525" anchorOffsetY="0" locked="true"/>
+	<e:Image id="TableNum" width="88" height="40" x="481" y="100" source="word_yz_desk_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image id="CellNum" width="88" height="40" x="731" y="100" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="game_flag_cellscore_png"/>
+	<e:Image id="LastCards" width="52" height="60" x="0" y="6" source="game_last_card_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button id="Chat" label="" x="520" y="38" anchorOffsetX="30" anchorOffsetY="30">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_talk_0_png" source.down="game_menu_talk_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Auto" label="" x="620" y="38" anchorOffsetX="30" anchorOffsetY="30">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_auto_0_png" source.down="game_menu_auto_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Option" label="" x="720" y="38" anchorOffsetX="30" anchorOffsetY="30">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_menu_0_png" source.down="game_menu_menu_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Back" label="" x="820" y="38" anchorOffsetX="30" anchorOffsetY="30">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="game_menu_back_0_png" source.down="game_menu_back_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Ready" label="" x="494" y="389" anchorOffsetX="150" anchorOffsetY="63">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_startgame_0_png" source.down="bt_startgame_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="ChangeDesk" label="" x="840" y="389" anchorOffsetX="150" anchorOffsetY="63">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_changedesk_3_png" source.down="bt_changedesk_4_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="Tips" width="422" height="74" x="456" y="452" source="game_ready_text_wait_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" name="tips" visible="false"/>
+	<e:Image width="114" height="168" x="1058" y="173" source="flag_downuser_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="114" height="168" x="52" y="173" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="flag_upuser_png"/>
+	<e:Image width="236" height="236" x="677" y="601" fillMode="clip" anchorOffsetX="118" anchorOffsetY="124" source="flag_face_normal_png" scaleY="0.5" scaleX="0.5"/>
+</e:Skin>

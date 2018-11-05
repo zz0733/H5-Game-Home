@@ -1,0 +1,127 @@
+/**
+ * 游戏逻辑
+ */
+namespace game {
+    export namespace sparrowsclm {
+        const CardsData: number[] = [
+            0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,						//索子
+            0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,						//索子
+            0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,						//索子
+            0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,						//索子
+            0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,						//同子
+            0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,						//同子
+            0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,						//同子
+            0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,                       //同子
+        ]
+
+        /////////////////////////////////////////////////////////////////////////
+
+        //逻辑掩码
+
+        export const MASK_COLOR = 0xF0								//花色掩码
+        export const MASK_VALUE = 0x0F								//数值掩码
+
+        export const MAX_INDEX  = 27                                //最大索引
+
+        //////////////////////////////////////////////////////////////////////////
+        //动作定义
+
+        //动作标志
+        export const WIK_NULL = 0x00								//没有类型
+        export const WIK_LEFT = 0x01								//左吃类型
+        export const WIK_PENG = 0x02								//碰牌类型
+        export const WIK_GANG = 0x04								//杠牌类型
+        export const WIK_JIA_GANG = 0x08                                //杠牌类型
+        export const WIK_BAO_HU = 0x10								//报胡类型
+        export const WIK_QING_HU = 0x20                                //请胡类型 
+        export const WIK_CHI_HU = 0x40                                //吃胡类型
+
+        //扩展动作
+        export const WIK_EX_CHI_BAO_HU = 0x0001                              //抓胡类型  
+        export const WIK_EX_CHI_QING_HU = 0x0002                              //抓胡类型  
+        export const WIK_EX_TIAN_HU = 0x0100                              //天胡类型  
+        export const WIK_EX_DI_HU = 0x0200                              //地胡类型
+        export const WIK_EX_FANG_PAO = 0x0400                              //放炮动作
+        export const WIK_EX_CHI_HU = 0x0800                              //吃胡动作                
+        export const WIK_EX_ZIMO = 0x1000                              //自摸动作
+        export const WIK_EX_GANG_PAO = 0x2000                              //杠上炮
+        export const WIK_EX_GANG_KAI = 0x4000                              //杠上花
+        export const WIK_EX_QING_HU = 0x8000                              //请胡类型 
+
+        //听牌类型
+        export const TING_KIND_NONE = 0x00								//听牌类型
+        export const TING_KIND_NORMAL = 0x01								//听牌类型
+        export const TING_KIND_WUDUI = 0x02								//听牌类型
+
+        //////////////////////////////////////////////////////////////////////////
+        //胡牌定义
+
+        //胡牌牌型
+        export const CHR_PING_HU = 0x00000001						//平胡
+        export const CHR_DUI_DUI_HU = 0x00000002						//对对胡
+        export const CHR_QING_DUI = 0x00000004                        //清对对
+        export const CHR_JIANG_DUI = 0x00000008                        //将对对
+        export const CHR_QING_YI_SE = 0x00000010						//清一色
+        export const CHR_WU_DUI = 0x00000020						//五小对
+        export const CHR_QING_WU_DUI = 0x00000040						//清五对
+        export const CHR_LONG_WU_DUI = 0x00000100						//龙五对
+        export const CHR_QLONG_WU_DUI = 0x00000200						//清龙五对
+        export const CHR_TAKE_YI_JIU = 0x00001000						//带幺九
+        export const CHR_DUI_TAKE_YI_JIU = 0x00002000						//对对胡带幺九
+        export const CHR_QING_TAKE_YI_JIU = 0x00008000						//清幺九
+        export const CHR_TIAN_HU = 0x00010000                        //天胡
+        export const CHR_DI_HU = 0x00020000                        //地胡 
+
+        //加倍项
+        export const CHR_BREAK_YI_JIU = 0x00100000						 //断幺九 
+        export const CHR_GANG_KAI = 0x00200000                         //杠上花
+        export const CHR_GANG_PAO = 0x00400000                         //杠上炮
+        export const CHR_QIANG_GANG = 0x00800000                         //抢杠 
+        export const CHR_HAI_DI_LAO = 0x01000000                         //海底捞
+        export const CHR_HAI_DI_PAO = 0x02000000                         //海底炮
+        export const CHR_BAO_JIAO = 0x04000000                         //报叫
+        //////////////////////////////////////////////////////////////////////////
+        export class GameLogic {
+
+            public GetCardValue(cbCardData: number): number {
+                let cbValue = 0;
+                return cbValue = (cbCardData & MASK_VALUE);
+            }
+
+            public GetCardColor(cbCardData: number) :number {
+                let cbColor = 0;
+                return cbColor = (cbCardData & MASK_COLOR) >> 4;
+            }
+
+            //校验数据
+            public IsValidCard(cbCardData): boolean {
+                const cbValue= (cbCardData & MASK_VALUE);
+                const cbColor= (cbCardData & MASK_COLOR) >> 4;
+                return (((cbValue >= 1) && (cbValue <= 9) && (cbColor <= 2)) || ((cbValue >= 1) && (cbValue <= 0x0f) && (cbColor == 3)));
+            }
+
+            //删除扑克
+            public RemoveCard(cbCardData: number[], cbCardCount:number, cbRemoveCard: number[], cbRemoveCount: number) {
+                
+            }
+
+            //扑克转换
+            public SwitchToCardData(cbCardIndex: number)
+            {
+                egret.assert(cbCardIndex < MAX_INDEX);
+                if( cbCardIndex < 27 )
+                    return ((cbCardIndex/9)<<4)|(cbCardIndex%9+1);
+                else return (0x30|(cbCardIndex-27+1));
+            }
+
+            //扑克转换
+            public SwitchToCardIndex(cbCardData: number)
+            {
+                let cbCardIndex: number = 0;
+                return cbCardIndex = ((cbCardData&MASK_COLOR)>>4)*9+(cbCardData&MASK_VALUE)-1;
+            }
+
+
+        }
+    }
+}

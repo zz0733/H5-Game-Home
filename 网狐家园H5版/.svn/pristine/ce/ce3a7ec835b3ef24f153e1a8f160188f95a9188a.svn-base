@@ -1,0 +1,268 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var client;
+(function (client) {
+    var LoginLayer = (function (_super) {
+        __extends(LoginLayer, _super);
+        function LoginLayer() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            //数组
+            _this.Name = [
+                "accountBtn",
+                "wechatBtn",
+                "registBtn",
+                "ploatformIcon",
+                "rule"
+            ];
+            _this.Container = [];
+            _this.Container1 = [];
+            //元组
+            _this.Tupe = ["test", 1];
+            //字典
+            _this.Map = {
+                "accountBtn": 0,
+                "wechatBtn": 1,
+            };
+            return _this;
+        }
+        LoginLayer.prototype.createChildren = function () {
+            _super.prototype.createChildren.call(this);
+            this.name = "LoginLayer";
+            this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+            this.once(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE, this.connectComplete, this);
+            this.addEventListener(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH, this.onSubMessage, this);
+        };
+        LoginLayer.prototype.onInitLayer = function () {
+            //人物
+            var rule = utils.createBitmapByName("bt_lora_png");
+            utils.setAnchorLeftBottom(rule);
+            this.addChild(rule);
+            rule.name = this.Name[4];
+            rule.x = -400;
+            rule.y = 810;
+            //平台标识
+            var ploatformIcon = utils.createBitmapByName("general_logo_png");
+            utils.setAnchorRightBottom(ploatformIcon);
+            this.addChild(ploatformIcon);
+            ploatformIcon.name = this.Name[3];
+            ploatformIcon.scaleX = 0.5;
+            ploatformIcon.scaleY = 0.5;
+            ploatformIcon.x = 1330;
+            ploatformIcon.y = 950;
+            //微信登录
+            var wechatBtn = new eui.Button();
+            wechatBtn.skinName = "resource/eui_skins/ButtonSkin.exml";
+            this.addChild(wechatBtn);
+            wechatBtn.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+            wechatBtn.name = this.Name[1];
+            utils.setAnchorCenter(wechatBtn);
+            wechatBtn.x = 1400;
+            wechatBtn.y = 215;
+            //账号登录
+            var accountBtn = new eui.Button();
+            accountBtn.skinName = "resource/eui_skins/ButtonAccount.exml";
+            this.addChild(accountBtn);
+            accountBtn.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+            accountBtn.name = this.Name[0];
+            utils.setAnchorCenter(accountBtn);
+            accountBtn.x = 1400;
+            accountBtn.y = 375;
+            //注册账号
+            var registBtn = new eui.Button();
+            registBtn.skinName = "resource/eui_skins/ButtonRegist.exml";
+            this.addChild(registBtn);
+            registBtn.name = this.Name[2];
+            utils.setAnchorCenter(registBtn);
+            registBtn.x = 1400;
+            registBtn.y = 535;
+            registBtn.addEventListener(egret.TouchEvent.TOUCH_END, this.onButtonClick, this);
+            //系统公告
+            var noticeSprit = new egret.Sprite();
+            noticeSprit.width = this.width;
+            noticeSprit.height = 200;
+            utils.setAnchorMidTop(noticeSprit);
+            this.addChild(noticeSprit);
+            noticeSprit.x = 667;
+            noticeSprit.y = 0;
+            //公告背景
+            var systemNotice = utils.createBitmapByName("notice_bg_png");
+            utils.setAnchorCenter(systemNotice);
+            noticeSprit.addChild(systemNotice);
+            systemNotice.x = 667;
+            systemNotice.y = noticeSprit.height / 2;
+            //公告icon
+            var icon = utils.createBitmapByName("notice_icon_png");
+            utils.setAnchorCenter(icon);
+            noticeSprit.addChild(icon);
+            icon.x = 360;
+            icon.y = noticeSprit.height / 2;
+            //显示区域
+            var group = new eui.Group();
+            utils.setAnchorLeftTop(group);
+            noticeSprit.addChild(group);
+            group.width = systemNotice.width - 50;
+            group.height = systemNotice.height;
+            group.x = 3;
+            group.y = 10;
+            //显示内容
+            var label = new eui.Label();
+            label.text = "欢迎您进入网狐游戏家园,祝您游戏愉快!";
+            //设置颜色等文本属性
+            label.textColor = 0XFFFFFF;
+            label.size = 18;
+            label.lineSpacing = 24;
+            label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            group.addChild(label);
+            utils.setAnchorLeftTop(label);
+            label.x = 650;
+            label.y = 10;
+            var scroll = new eui.Scroller;
+            scroll.width = systemNotice.width - 50;
+            scroll.height = systemNotice.height;
+            noticeSprit.addChild(scroll);
+            scroll.viewport = group;
+            utils.setAnchorCenter(scroll);
+            scroll.x = 700;
+            scroll.y = noticeSprit.height / 2;
+            var tw = egret.Tween.get(label, { loop: true })
+                .to({ x: -400, y: 10 }, 8000)
+                .call(function () {
+                label.x = 650;
+                label.y = 10;
+            });
+            //动画切入
+            this.ruleAction(0 /* MOVEIN */);
+            //设置触摸
+            // this.$setTouchEnabled(true);
+            //注册触摸
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+        };
+        //连接成功
+        LoginLayer.prototype.connectComplete = function () {
+            var instance = managers.ServiceManager.getInstance();
+            var tcpService = instance.getTcpService();
+        };
+        LoginLayer.prototype.onSubMessage = function (e) {
+            var msg = e.data;
+        };
+        /**
+         * 网络消息
+         */
+        LoginLayer.prototype.onSubLogonSuccess = function (msg) {
+            var LogonSuccess = network.onSubLogonSuccess(msg.cbBuffer);
+            console.log(LogonSuccess.szNickName);
+        };
+        LoginLayer.prototype.onSubLogonFailure = function (msg) {
+            var LogonFailure = network.onSubLogonFailure(msg.cbBuffer);
+            managers.GameManager.getInstance().showToast(LogonFailure.szDescribeString);
+        };
+        /**
+       * 点击按钮
+       * Click the button
+       */
+        LoginLayer.prototype.onButtonClick = function (e) {
+            var target = e.$target;
+            var nTag = (target.$name == this.Name[0]) ? 0 : ((target.$name == this.Name[1]) ? 1 : 2);
+            switch (nTag) {
+                case 0:
+                    {
+                        managers.GameManager.getInstance().showPopWait("正在加载中...", function () {
+                            var CientController = new controller.ClientController();
+                            managers.GameManager.getInstance().replaceScene(CientController, true);
+                        });
+                        break;
+                    }
+                case 1:
+                    {
+                        managers.ServiceManager.getInstance().createService("172.16.10.50", 9000);
+                        managers.ServiceManager.getInstance().setViewFrame(this);
+                        //managers.GameManager.getInstance().showToast("未找到微信应用程序,请检查是否安装");
+                        break;
+                    }
+                default:
+                    {
+                        /*let regist = new client.Regist();
+                         this.addChild(regist);
+                         regist.x = -1334;
+                         regist.y = 0;
+                         regist.alpha = 0.0;
+             
+                         let callfunc = function()
+                         {
+                             regist.alpha = 1.0;
+                             let tw = egret.Tween.get(regist)
+                             .to({x:0, y:0}, 200,egret.Ease.cubicIn);
+                         }
+                          //动画切入
+                        this.ruleAction(LOGON.MOVEOUT,callfunc);*/
+                    }
+            }
+        };
+        /** 触摸事件
+         * onTouchBegan
+         * onTouchMove
+         * onTouchEnd
+        */
+        LoginLayer.prototype.onTouchBegan = function (event) {
+            console.log("onTouch Began");
+        };
+        LoginLayer.prototype.onTouchMove = function (event) {
+            console.log("onTouch move");
+        };
+        LoginLayer.prototype.onTouchEnd = function (event) {
+            console.log("onTouch end");
+        };
+        //登录层退出
+        LoginLayer.prototype.onExit = function () {
+            this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            this.removeEventListener(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE, this.connectComplete, this);
+        };
+        //切入切出动画
+        LoginLayer.prototype.ruleAction = function (action, func) {
+            //动画
+            var wechatBtn = this.getChildByName("wechatBtn");
+            var accountBtn = this.getChildByName("accountBtn");
+            var registBtn = this.getChildByName("registBtn");
+            var ploatformIcon = this.getChildByName("ploatformIcon");
+            var rule = this.getChildByName("rule");
+            var tw1 = egret.Tween.get(rule)
+                .wait(300)
+                .to({ x: 10, y: 810 }, 100, egret.Ease.cubicIn);
+            var tw = egret.Tween.get(wechatBtn)
+                .wait(200)
+                .to({ x: (action == 0) ? 665 : 1600, y: 215 }, 100, egret.Ease.cubicIn)
+                .call(function () {
+                tw = egret.Tween.get(accountBtn)
+                    .to({ x: (action == 0) ? 665 : 1600, y: 375 }, 100, egret.Ease.cubicIn)
+                    .call(function () {
+                    tw = egret.Tween.get(registBtn)
+                        .to({ x: (action == 0) ? 665 : 1600, y: 535 }, 100, egret.Ease.cubicIn)
+                        .call(function () {
+                        tw = egret.Tween.get(ploatformIcon)
+                            .to({ x: 1330, y: (action == 0) ? 750 : 950 }, 100, egret.Ease.cubicIn)
+                            .call(function () { if (null != func) {
+                            func();
+                        } });
+                    });
+                });
+            });
+        };
+        return LoginLayer;
+    }(eui.UILayer));
+    client.LoginLayer = LoginLayer;
+    __reflect(LoginLayer.prototype, "client.LoginLayer");
+})(client || (client = {}));
+//# sourceMappingURL=LoginLayer.js.map

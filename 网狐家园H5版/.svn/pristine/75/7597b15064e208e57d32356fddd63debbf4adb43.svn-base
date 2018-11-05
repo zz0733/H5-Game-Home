@@ -1,0 +1,62 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var models;
+(function (models) {
+    var Dialog = (function (_super) {
+        __extends(Dialog, _super);
+        function Dialog() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.m_eMode = 0 /* OK */;
+            _this.m_OkFunc = null;
+            _this.m_CancellFunc = null;
+            _this.m_Content = "";
+            return _this;
+        }
+        Dialog.prototype.createChildren = function () {
+            _super.prototype.createChildren.call(this);
+            this.name = "Dialog";
+            this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+        };
+        Dialog.prototype.onInitLayer = function () {
+            //背景
+            var backGround = utils.createBitmapByName("query_bg_def_png");
+            utils.setAnchorCenter(backGround);
+            this.addChild(backGround);
+            backGround.x = 667;
+            backGround.y = 375;
+        };
+        Dialog.prototype.initDialog = function (style, content, okFunc, canCellFunc) {
+            this.m_eMode = 0 /* OK */;
+            this.m_OkFunc = okFunc ? okFunc : null;
+            this.m_CancellFunc = canCellFunc ? canCellFunc : null;
+            this.m_Content = content;
+        };
+        /**
+        *IDialog
+        */
+        Dialog.prototype.onSure = function () {
+        };
+        /**
+        *IDialog
+        */
+        Dialog.prototype.onCancell = function () {
+        };
+        Dialog.prototype.onButtonClick = function (e) {
+        };
+        Dialog.prototype.onExit = function (e) {
+        };
+        return Dialog;
+    }(eui.UILayer));
+    models.Dialog = Dialog;
+    __reflect(Dialog.prototype, "models.Dialog", ["df.IDialog"]);
+})(models || (models = {}));
+//# sourceMappingURL=Dialog.js.map

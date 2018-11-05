@@ -1,0 +1,79 @@
+namespace client {
+    export class BattleListLayer extends eui.UILayer {
+        private _scene: any;
+        constructor(scene: any) {
+            super();
+            this._scene = scene;
+        }
+        createChildren() {
+            super.createChildren();
+            this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+            this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+        }
+
+        public onInitLayer() {
+            //加载皮肤 
+            let componet = new eui.Component();
+            this.addChild(componet);
+            componet.skinName = skins.BattleListLayer;
+
+            //按钮
+            let bt = componet.getChildByName("bt_close");
+            bt.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClick, this);
+
+            //创建约战
+            bt = componet.getChildByName("createBattle");
+            bt.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClick, this);
+
+            //约战记录
+            bt = componet.getChildByName("battleRecord");
+            bt.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClick, this);
+
+            //商城
+            bt = componet.getChildByName("diamond");
+            bt.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClick, this);
+
+            bt = componet.getChildByName("shop");
+            bt.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClick, this);
+        }
+
+        private onButtonClick(e: egret.Event) {
+            let button = <eui.Button>e.target;
+            let name = button.name;
+
+            egret.Tween.get(button)
+                .to({ scaleX: 1.1, scaleY: 1.1 }, 100)
+                .to({ scaleX: 1.0, scaleY: 1.0 }, 100);
+
+            switch (name) {
+                case "bt_close":
+                    {
+                        this._scene.onChangeView();
+                    }
+                    break;
+                case "createBattle":
+                    {
+                        this._scene.onChangeView(df.MODE_BATTLE_CREATE);
+                    }   
+                    break;
+                case "battleRecord":
+                    {
+                        this._scene.onChangeView(df.MODE_BATTLE_RECORD);
+                    }   
+                    break;
+                case "diamond":
+                case "shop":
+                {
+                    this._scene._shopIndex = (button.name == "shop") ? df.eShopType.Gold : df.eShopType.Ingot;
+                    this._scene.onChangeView(df.MODE_SHOP);
+                }   
+                break;   
+            }
+        }
+
+
+        public onExit() {
+
+        }
+    }
+}

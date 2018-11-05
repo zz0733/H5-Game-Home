@@ -1,0 +1,216 @@
+/**
+ * 跑马灯 公告
+ */
+namespace models{
+    export class RollNotice extends egret.Sprite
+    {
+        /**
+         * 内容队列
+         */
+        private _noticeQueue: string[] = [];
+
+        /**
+         * 播放当前索引
+         */
+        private _noticeIndex: number = 0;
+
+        /**
+         * 循环播放
+         */
+        private _bLoop: boolean = false;
+
+        /**
+         * 每条播放时间 默认8秒
+         */
+        private m_OnePerformTime = 8000;
+
+        /**
+         * 显示标签 
+         */
+        public _label :eui.Label;
+
+        /**
+         * 构造
+         */
+        constructor()
+        {
+            super();
+
+            this.once(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+        }
+
+        /**
+         * 静态方法
+         */
+        public static createNotice(backGroundRes: string,width: number,height: number,msg:any[],isLoop: boolean,rollMode: df.eRollMode,icon?: string): RollNotice
+        {
+            var ret = new RollNotice();
+            if (ret && ret.initNotice(backGroundRes,width,height,msg,isLoop,rollMode,icon))
+            {
+                return ret;
+            }
+            return null;
+        }
+
+        /**
+         * 初始化
+         */
+        public initNotice(backGroundRes: string,width: number,height: number,msg:any[],isLoop: boolean,rollMode: df.eRollMode,icon?: string):boolean
+        {
+            if (width==0 && height==0)
+                return false
+
+            this.width = width;
+            this.height = height;
+
+            this._noticeQueue = msg;
+            this._bLoop = isLoop;
+
+            //公告背景
+            let backGround = utils.createBitmapByName(backGroundRes);
+            utils.setAnchorCenter(backGround);
+            this.addChild(backGround);
+            backGround.x = this.width/2 ;
+            backGround.y = this.height/2;
+            backGround.touchEnabled = true;
+      
+             //显示区域
+            let group = new eui.Group();
+            utils.setAnchorLeftTop(group);
+            this.addChild(group);
+            group.width = this.width-50;
+            group.height = this.height;
+            group.x = 50;
+            group.y = 0;
+
+            //滑动组件
+            let scroll = new eui.Scroller;
+            scroll.enabled = false;
+            scroll.width = this.width-50;
+            scroll.height = this.height;
+            this.addChild(scroll);
+            scroll.viewport = group;
+            utils.setAnchorLeftMid(scroll);
+            scroll.x = 50;
+            scroll.y = this.height/2
+
+            //显示标签
+            this._label =  new eui.Label();
+            this._label.text = "欢迎您进入游戏家园,祝您游戏愉快!";
+            //设置颜色等文本属性
+            this._label.textColor = 0xFFCD6D;
+            this._label.size = 18;
+            this._label.lineSpacing = 24;
+            this._label.textAlign = egret.HorizontalAlign.JUSTIFY;
+            group.addChild(this._label);
+            utils.setAnchorLeftMid(this._label);
+            if (rollMode == df.eRollMode.HORIZONTAL)
+            {
+                this._label.x = this.width;
+                this._label.y = this.height/2;
+
+            }else
+            {
+                 this._label.x = 0;
+                 this._label.y = -this.height;
+            }
+            
+            //设置ICON
+            if (null != icon)
+              this.setNoticeIcon(icon);
+
+            //启动播放
+            this._noticeIndex = 0;
+            this.performNotice(rollMode);
+
+            return true;
+        }
+
+        /**
+         * 设置ICON
+         */
+        public setNoticeIcon(texture: string)
+        {
+            let icon = utils.createBitmapByName(texture);
+            utils.setAnchorRightMid(icon);
+            this.addChild(icon);
+            icon.x = 50;
+            icon.y = this.height/2;
+        }
+
+        //设置触摸回调
+        public setTouchHandler(handler: any)
+        {
+            this.touchEnabled = true;
+            if (null != handler)
+            {
+                this.addEventListener(egret.TouchEvent.TOUCH_END,handler,this);
+            }
+        }
+        /**
+         * 播放公告
+         */
+        public performNotice(rollMode: df.eRollMode)
+        {
+            if (null == this._label) return;
+
+            var msg = this._noticeQueue[this._noticeIndex];
+         
+            this._label.text = msg;
+
+            var beganPosX = (rollMode == df.eRollMode.HORIZONTAL) ? this.width : 0;
+            var beganPosY = (rollMode == df.eRollMode.HORIZONTAL) ? this.height/2 : -this.height;
+
+            this._label.x = beganPosX;
+            this._label.y = beganPosY;
+
+            //移动动画
+            var endPosX = (rollMode == df.eRollMode.HORIZONTAL) ? -this._label.width : 0;
+            var endPosY = (rollMode == df.eRollMode.HORIZONTAL) ? this.height/2 :  this.height;
+            var duration = (rollMode == df.eRollMode.HORIZONTAL) ? this.m_OnePerformTime : 3000;
+            var tw = egret.Tween.get(this._label)
+            .to({x:endPosX,y:endPosY},duration)
+            .call(()=>{
+                this._noticeIndex++;
+                if (this._noticeIndex == this._noticeQueue.length)
+                {
+                    if (!this._bLoop) return;
+                    this._noticeIndex = 0;
+                }
+                //递归调用
+                this.performNotice(rollMode);
+             });        
+        }
+
+        /**
+         * 插入公告
+         */
+        public insertNotice(notice: string)
+        {
+            this._noticeQueue.push(notice);
+        }
+
+        /**
+         * 设置索引
+         */
+        public setNoitceIndex(index: number)
+        {
+            this._noticeIndex = (index<this._noticeQueue.length) ? index :this._noticeIndex;
+        }
+
+        /**
+         * 移除视图
+         */
+        public onExit()
+        {
+            egret.Tween.removeTweens(this._label);
+
+            this._noticeQueue.forEach(element => {
+                element = null;
+            });
+
+            this._noticeQueue = null;
+            this._label = null;
+        }
+    }
+}

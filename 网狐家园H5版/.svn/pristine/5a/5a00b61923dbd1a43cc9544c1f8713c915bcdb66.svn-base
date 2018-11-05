@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.Plaza" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:client="client.*" xmlns:w="http://ns.egret.com/wing" xmlns:tween="egret.tween.*">
+	<w:Declarations>
+	</w:Declarations>
+	<e:Button id="Rank" x="37" y="260" name="bt_rank" anchorOffsetX="37" anchorOffsetY="100">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="rank_btn_0_png" source.down="rank_btn_0_png" source.disabled="rank_btn_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="BattleManage" x="0" y="391.79" name="bt_private">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_bt_list_0_png" source.down="gamelist_bt_list_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Image width="380" height="632" x="468" y="118" fillMode="clip" anchorOffsetY="0" anchorOffsetX="0" source="general_bt_lora_png"/>
+	<e:Image width="1334" height="109" x="0" y="641" fillMode="clip" source="gamelist_menu_back_png"/>
+	<e:Button id="Purchase" x="135" y="681" name="bt_shop" anchorOffsetX="98.5" anchorOffsetY="58">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_bt_shop_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="EnterRoom" x="92.86" y="150">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_battle_enter_0_png" source.down="gamelist_battle_enter_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+
+	<e:Button id="Option" x="1303" y="62" name="bt_option" anchorOffsetX="36" anchorOffsetY="47">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_menu_option_png" source.down="general_menu_option_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="Share" x="1137" y="62" name="bt_share" anchorOffsetX="36" anchorOffsetY="47">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_menu_share_png" source.down="general_menu_share_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="Share0" x="1224.5" y="62" name="bt_service" anchorOffsetX="36" anchorOffsetY="47">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_menu_service_png" source.down="general_menu_service_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+
+
+	<e:Button id="CreateRoom" x="92.86" y="391.79">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_battle_create_0_png" source.down="gamelist_battle_create_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="Exchange" x="340" y="681" name="bt_exchange" anchorOffsetX="98.5" anchorOffsetY="58">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_bt_exchange_png" source.down="gamelist_bt_exchange_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="Activity" x="540" y="681" name="bt_activity" anchorOffsetX="98.5" anchorOffsetY="58">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_bt_active_png" source.down="gamelist_bt_active_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="Archive" x="743" y="681" anchorOffsetX="98.5" anchorOffsetY="58" name="bt_archive">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_bt_battle_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="TeaHouse" x="971.5" y="682.67" width="197" height="116" anchorOffsetX="98.5" anchorOffsetY="58" name="bt_tea">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_bt_teahouse_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Button id="Match" x="1140" y="681" anchorOffsetX="60.5" anchorOffsetY="45" name="bt_match" touchEnabled="true">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="gamelist_bt_match_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" locked="true"/>
+			</e:Skin>
+		</e:skinName>
+
+	</e:Button>
+	<e:Image width="71" height="36" x="1159" y="685" fillMode="clip" touchEnabled="false" source="gamelist_btmatch_word_png"/>
+	<e:Image width="46" height="37" x="579.5" y="659.53" fillMode="clip" anchorOffsetX="23" anchorOffsetY="18.5" name="active_icon" touchEnabled="false" source="gamelist_active_ico_png"/>
+	<e:Image width="27" height="27" x="1145.5" y="725.5" fillMode="clip" anchorOffsetX="13.5" anchorOffsetY="13.5" name="star1" alpha="1" touchEnabled="false" source="gamelist_btmatch_star_png"/>
+	<e:Image width="27" height="27" x="1106.03" y="646.03" fillMode="clip" anchorOffsetX="13.5" anchorOffsetY="13.5" name="star3" alpha="1" touchEnabled="false" source="gamelist_btmatch_star_png"/>
+	<e:Image width="27" height="27" x="1181" y="646.03" fillMode="clip" anchorOffsetX="13.5" anchorOffsetY="13.5" name="star4" alpha="1" touchEnabled="false" source="gamelist_btmatch_star_png"/>
+	<e:Image width="27" height="27" x="1096.04" y="671.5" fillMode="clip" anchorOffsetX="13.5" anchorOffsetY="13.5" name="star2" alpha="1" touchEnabled="false" source="gamelist_btmatch_star_png"/>
+	<e:Image width="27" height="27" x="1180" y="678.03" fillMode="clip" anchorOffsetX="13.5" anchorOffsetY="13.5" name="star5" alpha="1" touchEnabled="false" source="gamelist_btmatch_star_png"/>
+	<e:Image width="134" height="38" x="359.86" y="535" fillMode="clip" name="Invite_image" anchorOffsetX="67" anchorOffsetY="19" alpha="1" source="gamelist_ani_createroom_png"/>
+	<e:Scroller id="ScrollMatch" width="112.01" height="89.66" x="1087.33" y="637.67" anchorOffsetY="0" anchorOffsetX="0" name="lightScroll" touchEnabled="false">
+		<e:Group name="lightGroup" anchorOffsetY="0" height="85.33" x="0" y="9.33" anchorOffsetX="0" width="104.01" touchEnabled="false">
+			<e:Image width="140" height="132" x="-15" y="-87" fillMode="clip" name="light" touchEnabled="false" source="gamelist_btmatch_light_png"/>
+
+		</e:Group>
+	</e:Scroller>
+	<e:Image id="Head" width="122" height="120" x="0" y="0" source="general_head_frame_0_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" name="head_frame"/>
+	<e:Image width="338" height="54" x="683" y="4" source="general_player_frame_gold_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="298" height="54" x="359.86" y="4" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" source="general_player_frame_ingot_png"/>
+	<e:Image width="234" height="50" x="122" y="8" source="general_player_frame_idornick_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="234" height="50" x="122" y="61" source="general_player_frame_idornick_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button label="" x="600.5" y="11" name="bt_shop">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_player_shop_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button label="" x="961.78" y="12" name="bt_shop">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_player_shop_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Label text="Label" x="135" y="17" size="24" textColor="0xf1ca8e" name="nick"/>
+	<e:Label text="Label" x="135" y="71" size="24" name="gameid" textColor="0x93cc15"/>
+	<e:Image width="30" height="32.67" x="1136.5" y="11" source="general_general_tip_plaza_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false"/>
+	<e:Scroller width="506.82" height="460" x="816.18" y="138" anchorOffsetX="0" anchorOffsetY="0" name="GameListScorll" touchEnabled="true">
+		<e:Group id="Group" anchorOffsetX="0" width="505.3" anchorOffsetY="0" height="456" name="Group" touchEnabled="true" x="-19.7" y="0"/>
+	</e:Scroller>
+	<e:Image id="PageUp" width="62" height="36" x="1075" y="102" source="gamelist_arrow_up_png" fillMode="clip" anchorOffsetX="31" anchorOffsetY="18" name="PageUp"/>
+	<e:Image id="PageDown" width="62" height="36" x="1075" y="632.64" fillMode="clip" anchorOffsetX="31" anchorOffsetY="18" source="gamelist_arrow_down_png" name="PageDown"/>
+
+
+</e:Skin>

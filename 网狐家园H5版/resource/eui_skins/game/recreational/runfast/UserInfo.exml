@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="UserInfo" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="runfast_head_back_1_png"/>
+	<e:Label id="Nick" text="Anthony" textAlign="center" horizontalCenter="0" top="8" size="20" name="Nick"/>
+	<e:Label id="ID" text="ID:20603040" size="18" horizontalCenter="0" top="32" textColor="0x8cffc8" name="ID"/>
+	<e:Label id="Score" text="654000" horizontalCenter="0" bottom="9" size="24" name="Score" textColor="0xf0f000" visible="false"/>
+	<e:BitmapLabel width="20" height="20" horizontalCenter="0" bottom="5" visible="false"/>
+	<e:Image id="Head" width="100" height="100" y="60" horizontalCenter="0" name="Head" visible="false"/>
+	<e:Component y="166" horizontalCenter="0" name="BitScore"/>
+</e:Skin>

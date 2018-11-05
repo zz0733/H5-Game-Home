@@ -1,0 +1,49 @@
+/**
+ * customEvent 自定义事件
+ */
+
+namespace customEvent
+{
+    export class CustomEvent extends egret.Event
+    {
+         /**
+         * 进入后台
+         */
+         public static EVENT_ENTER_BACKGROUND :string = "enterBackGround";
+
+         /**
+         * 进入前台
+         */
+          public static EVENT_BECOME_ACTIVE :string = "becomeActive";
+
+         /**
+          * 验证成功
+          */
+          public static EVENT_VALIDATE_SUCCESS: string = "validateSuccess";
+
+          /**
+           * 连接完成
+           */
+          public static EVENT_CONNECT_COMPLETE: string = "connectComplete";
+
+          /**
+           * 消息分发
+           */
+          public static EVENT_MESSAGE_DISPATCH: string = "messageDispatch";
+
+
+          /**
+           * 注册账号
+           */
+          public static EVENT_REGIST_ACCOUNT: string = "registDispatch";
+
+         /**
+          * 构造方法
+          */
+         public constructor(type:string, bubbles?:boolean, cancelable?:boolean, data?: any)
+         {
+            super(type,bubbles,cancelable,data);
+         }
+
+    }
+}

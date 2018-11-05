@@ -1,0 +1,40 @@
+{"mc":{
+	"clockanim":{
+		"frameRate":2,
+		"labels":[
+			{"name":"anim","frame":1,"end":4}
+			
+			],
+		"events":[
+			
+			],
+		"frames":[
+			
+			{
+			"res":"game_time_1_back",
+			"x":12,
+			"y":0
+			},
+			{
+			"res":"game_time_2_back",
+			"x":12,
+			"y":0
+			},
+			{
+			"res":"game_time_3_back",
+			"x":12,
+			"y":0
+			},
+			{
+			"res":"game_time_4_back",
+			"x":12,
+			"y":0
+			}
+			]
+}},
+	"res":{
+		"game_time_3_back":{"x":0,"y":141,"w":142,"h":47},
+		"game_time_2_back":{"x":0,"y":47,"w":142,"h":47},
+		"game_time_4_back":{"x":0,"y":0,"w":142,"h":47},
+		"game_time_1_back":{"x":0,"y":94,"w":142,"h":47}
+	}}

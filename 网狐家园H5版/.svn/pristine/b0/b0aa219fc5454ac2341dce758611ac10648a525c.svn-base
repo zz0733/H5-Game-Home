@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.BattleFindLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image width="1334" height="750" x="0" y="0" source="general_background3_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="398" height="174" x="468" y="0" source="battle_frame_2_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="268" height="78" x="533" y="23" source="battle_title_battle_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Label text="加入房间" x="615" y="117" size="26" textColor="0xffeb8b"/>
+	<e:Button id="Return" label="" x="50.5" y="56.5" anchorOffsetX="50.5" anchorOffsetY="50.5" name="bt_close">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="650" height="128" x="342" y="157" source="battle_num_frame_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="402" height="706" x="0" y="43" source="general_bt_lora_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" touchEnabled="false" locked="true"/>
+	<e:Button id="keyBord0" label="" x="450" y="340" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord0">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord3" label="" x="450" y="450" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord3">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord6" label="" x="450" y="560" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord6">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord7" label="" x="667" y="560" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord7">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord8" label="" x="881" y="560" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord8">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord9" label="" x="450" y="670" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord9">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_delete_0_png" source.down="battle_bt_delete_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord10" label="" x="667" y="670" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord10">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord11" label="" x="881" y="670" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord11">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_confirm_0_png" source.down="battle_bt_confirm_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord4" label="" x="667" y="450" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord4">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord5" label="" x="881" y="450" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord5">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord1" label="" x="667" y="340" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord1">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="keybord2" label="" x="881" y="340" anchorOffsetX="100" anchorOffsetY="54.5" name="keybord2">
+		<e:skinName>
+		<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_keyboard_0_png" source.down="battle_bt_keyboard_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+		</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

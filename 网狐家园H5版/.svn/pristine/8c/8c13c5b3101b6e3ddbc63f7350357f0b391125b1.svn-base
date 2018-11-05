@@ -1,0 +1,122 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+/**连接服务
+*直接连接
+*虚拟连接
+*/
+var network;
+(function (network) {
+    var ClientConnect = (function () {
+        /**
+         * 构造
+         */
+        function ClientConnect(serviceModule) {
+            /**
+             * 连接模式
+             */
+            this.m_ConnectKind = df.SERVICE_MODE_LINK;
+            /**
+             * 连接信息
+             */
+            this.m_ConfigServer = {};
+            if (null != this.m_ServiceModule) {
+                this.m_ServiceModule = null;
+            }
+            this.m_ServiceModule = serviceModule;
+        }
+        //连接服务器
+        ClientConnect.prototype.connectServer = function (serviceMode, ServerAddr, wServerPort, cbServiceKind, wServiceIndex) {
+            //连接模式
+            this.m_ConnectKind = df.SERVICE_MODE_LINK;
+            //socket实例
+            var tcpSocket = new network.TcpSocket();
+            //socket服务
+            this.m_TcpService = new service.TcpSocketService(tcpSocket);
+            //设置当前连接模块
+            this.m_TcpService.setConnectModule(this);
+            tcpSocket.setServiceModule(this.m_TcpService);
+            //连接服务器
+            tcpSocket.connect(ServerAddr, wServerPort);
+            //启动服务
+            managers.ServiceManager.getInstance().LoadService(this.m_TcpService, this.m_ServiceModule, serviceMode);
+        };
+        //连接服务器 虚拟连接
+        ClientConnect.prototype.connectServerKind = function (serviceMode, dwClientIndex, cbServiceKind, wServiceIndex) {
+            if (this.m_TcpService) {
+                this.m_TcpService.closeService();
+                this.m_TcpService = null;
+            }
+            //连接模式
+            this.m_ConnectKind = df.SERVICE_MODE_GATE;
+            //socket实例
+            var tcpSocket = new network.TcpSocket();
+            //socket服务
+            this.m_TcpService = new service.TcpSocketService(tcpSocket);
+            //设置当前连接模块
+            this.m_TcpService.setConnectModule(this);
+            tcpSocket.setServiceModule(this.m_TcpService);
+            //绑定socket
+            var config = this.m_ServiceModule.getActiveConnect();
+            tcpSocket.connect(config.getHost(), config.getPort());
+            //保存连接
+            this.m_ConfigServer["ClientID"] = dwClientIndex;
+            this.m_ConfigServer["ServiceKind"] = cbServiceKind;
+            this.m_ConfigServer["ServiceIndex"] = wServiceIndex;
+            //启动服务
+            managers.ServiceManager.getInstance().LoadService(this.m_TcpService, this.m_ServiceModule, serviceMode);
+        };
+        //socket连接失败
+        ClientConnect.prototype.socketBindFailure = function () {
+            //绑定通知
+            if (null != this.m_ServiceModule) {
+                this.m_ServiceModule.socketBindFailure();
+            }
+            //失败处理
+            if (null != this.m_TcpService) {
+                this.m_TcpService.closeService();
+                this.m_TcpService = null;
+            }
+        };
+        //socket连接成功
+        ClientConnect.prototype.socketBindSuccess = function () {
+            //绑定通知
+            if (null != this.m_ServiceModule) {
+                this.m_ServiceModule.socketBindSuccess();
+            }
+            //直连启动
+            if (this.m_ConnectKind == df.SERVICE_MODE_LINK) {
+                //请求虚拟节点
+                if (this.m_TcpService) {
+                    this.m_TcpService.sendVitualMode();
+                }
+            }
+            else if (this.m_ConnectKind == df.SERVICE_MODE_GATE) {
+                //请求以虚拟方式连接
+                var ClientID = this.m_ConfigServer["ClientID"];
+                var ServerKind = this.m_ConfigServer["ServiceKind"];
+                var ServerIndex = this.m_ConfigServer["ServiceIndex"];
+                if (false == this.m_TcpService.VirtualConnect(ClientID, ServerKind, ServerIndex)) {
+                    if (null != this.m_ServiceModule) {
+                        //连接通知
+                        this.m_ServiceModule.connectFailure();
+                    }
+                }
+            }
+        };
+        //获取服务模块
+        ClientConnect.prototype.getServiceModule = function () {
+            return this.m_ServiceModule;
+        };
+        /**
+         * 返回当前TCP服务
+         */
+        ClientConnect.prototype.getTcpService = function () {
+            return this.m_TcpService ? this.m_TcpService : null;
+        };
+        return ClientConnect;
+    }());
+    network.ClientConnect = ClientConnect;
+    __reflect(ClientConnect.prototype, "network.ClientConnect");
+})(network || (network = {}));
+//# sourceMappingURL=ClientConnect.js.map

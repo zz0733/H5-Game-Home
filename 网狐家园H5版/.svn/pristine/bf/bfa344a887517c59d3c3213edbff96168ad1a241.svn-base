@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="RegistView" width="1334" height="750" xmlns:e="http://ns.egret.com/eui">
+	<e:Button label="" x="71" y="50.5" anchorOffsetX="50.5" anchorOffsetY="50.5" name="bt_return">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png" source.disabled="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="133" height="59" x="316" y="218" source="text_regist_account_png" fillMode="clip"/>
+	<e:Image width="126" height="59" x="316" y="347.5" fillMode="clip" source="text_regist_password_png"/>
+	<e:TextInput width="536" height="126" x="469" y="184.5" skinName="skins.TextInputRegist" anchorOffsetX="0" enabled="true" name="input_account"/>
+	<e:TextInput width="536" height="126" x="469" y="314" skinName="skins.TextInputRegist" anchorOffsetX="0" name="input_password" displayAsPassword="true"/>
+	<e:Image width="87" height="87" x="448" y="472" source="general_choose_bg_png" fillMode="clip"/>
+	<e:CheckBox label="" x="448" y="472" name="agree_checkbox">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_choose_bg_png" source.down="general_choose_pass_png" source.disabled="general_choose_bg_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:Label text="我已同意,并接受" x="544" y="501.5" size="28" fontFamily="Arial" textColor="0x070707"/>
+	<e:Button label="" x="763" y="476" name="bt_service" height="80">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_regist_agree_png" source.down="bt_regist_agree_png" source.disabled="bt_regist_agree_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button label="" x="727" y="645" name="bt_confirm" anchorOffsetX="274.5" anchorOffsetY="78">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_regist_confirm_png" source.down="bt_regist_confirm_png" source.disabled="bt_regist_confirm_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

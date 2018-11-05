@@ -1,0 +1,8 @@
+namespace frame {
+    export class GameFrame {
+        private _viewFrame: any;
+        constructor(viewFrame) {
+            this._viewFrame = viewFrame;
+        }
+    }
+}

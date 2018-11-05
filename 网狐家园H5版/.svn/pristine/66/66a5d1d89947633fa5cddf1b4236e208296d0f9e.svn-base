@@ -1,0 +1,73 @@
+/**
+ * 房间参数
+ */
+namespace models
+{
+    export class GameServerItem
+    {
+        /**
+         * 类型
+         */
+        private m_wKindID: number			= 0	;
+        /**
+         * 排序
+         */					
+        private m_wSortID: number			= 0;
+        /**
+         *标识
+         */		
+        private m_wServerID: number 		= 0;
+        /**
+         *端口
+         */ 					            					
+        private m_wServerPort: number		= 0;
+        /**
+         *类型
+         */ 	   
+        private m_wServerType: number		= 0;
+
+        /**
+         * 最大人数
+         */
+        private m_dwMaxPlayer: number		= 0;
+        /**
+         * 在线人数
+         */
+        private m_dwOnLineCount: number      = 0;    
+        /**
+         * 地址
+         */
+        private m_dwServerAddrDX: number     = 0;    
+        /**
+         * 名称
+         */
+        private m_szServerName: string 		 = "";
+        /**
+         * 域名
+         */
+        private m_szServerDomain: string	 = "";
+        /**
+         *单元积分 
+         */
+        private m_lCellScore: number		 = 0 ;
+        /**
+         * 最小进入
+         */   
+        private m_lMinEnterScore: number     = 0 ;
+        /**
+         * 最大进入
+         */     
+        private m_lMaxEnterScore: number     = 0 ;   
+
+
+        public isYueZhan():boolean
+        {
+            var result = this.m_wServerType & df.TABLE_GENRE_CREATE 
+            return  (result != 0) ? true : false;
+        }
+
+
+
+    }
+
+}

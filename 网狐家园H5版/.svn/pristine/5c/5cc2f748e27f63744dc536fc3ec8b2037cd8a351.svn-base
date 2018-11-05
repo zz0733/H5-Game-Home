@@ -1,0 +1,52 @@
+var df;
+(function (df) {
+    /**
+     * df  常量定义
+     */
+    df.szValidate = "E8CC72D714FA9ADCED7E7CC39D313F0D";
+    df.INVALID_BYTE = 0xFF;
+    df.INVALID_WORD = 0xFFFF;
+    df.INVALID_DWORD = 0xFFFFFFFF;
+    df.Len_Tcp_Head = 8; //包头固定长度
+    df.Len_Tcp_Info = 4; //数据信息长度
+    df.Len_Virtual_Info = 10; //虚拟信息长度
+    df.SOCKET_TCP_BUFFER = 16384; //网络缓冲
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //内核命令
+    df.MDM_KN_COMMAND = 0; //内核命令
+    //内核命令
+    df.SUB_KN_DETECT_SOCKET = 1; //检测命令
+    df.SUB_KN_VALIDATE_SOCKET = 2; //验证命令
+    df.SUB_KN_SHUT_DOWN_SOCKET = 3; //关闭网络
+    //网关命令
+    df.SUB_KN_VIRTUAL_VOID = 100; //无效命令
+    df.SUB_KN_SERVICE_LINK = 101; //连接命令
+    df.SUB_KN_VIRTUAL_LINK = 102; //连接命令
+    df.SUB_KN_VIRTUAL_SHUT = 103; //中断命令
+    df.SUB_KN_VIRTUAL_DATA = 104; //数据命令
+    //网关结果
+    df.SUB_KN_VIRTUAL_SUCCESS = 200; //连接成功
+    df.SUB_KN_VIRTUAL_FAILURE = 201; //连接失败
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //连接错误
+    df.CONNECT_SUCCESS = 0; //连接成功
+    df.CONNECT_FAILURE = 1; //连接失败
+    //服务模式
+    df.SERVICE_MODE_NULL = 0; //未知模式
+    df.SERVICE_MODE_LINK = 1; //直连模式
+    df.SERVICE_MODE_GATE = 2; //网关模式
+    //错误代码
+    df.CODE_VIRTUAL_LINK_FAIL = 1; //连接失败
+    df.CODE_VIRTUAL_LINK_FULL = 2; //连接满额
+    df.CODE_VIRTUAL_LINK_NONE = 3; //连接满额
+    //默认配置
+    df.ServerConfig = {
+        Host: "s201.webfox.com",
+        Port: 10000,
+        RemoteID: 1,
+        ServerKind: 1,
+        ServerIndex: 65535
+    };
+    ;
+})(df || (df = {}));
+//# sourceMappingURL=Define.js.map

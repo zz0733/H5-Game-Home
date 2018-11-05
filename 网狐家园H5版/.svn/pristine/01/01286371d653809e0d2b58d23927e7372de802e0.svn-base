@@ -1,0 +1,752 @@
+namespace client {
+
+    export class GameListInfo {
+        public _Info: any[] = [];
+        public _Favourite: any[] = [];
+        public _FavouriteTimes: number = 10;
+
+        constructor() {
+
+            this._Info =
+                [
+                    {
+                        id: "1",
+                        cn: "五张牌",
+                        name: "showhand",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "7",
+                        cn: "庄十三张",
+                        name: "thirteen",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "8",
+                        cn: "比十三张",
+                        name: "thirteenbi",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "15",
+                        cn: "掼蛋",
+                        name: "guandan",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "20",
+                        cn: "小包子麻将",
+                        name: "sparrowsy",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "28",
+                        cn: "拼十",
+                        name: "ox",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "40",
+                        cn: "德州扑克",
+                        name: "dzshowhand",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        disableNormal: true,
+                        disableBattle: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "46",
+                        cn: "五张牌",
+                        name: "showhandex",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "52",
+                        cn: "转蛋",
+                        name: "zhuandan",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "57",
+                        cn: "断勾卡血战麻将",
+                        name: "sparrowsclm",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        video: true,
+                        videoname: "GameClientEngineVideo",
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "60",
+                        cn: "丁二红",
+                        name: "chexuan",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "65",
+                        cn: "广安麻将",
+                        name: "sparrowga",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "67",
+                        cn: "衡阳麻将",
+                        name: "sparrowhy",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "68",
+                        cn: "衡阳鬼麻将",
+                        name: "sparrowhyg",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "82",
+                        cn: "血战麻将",
+                        name: "sparrowxz",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "86",
+                        cn: "癞子斗地主",
+                        name: "landlord",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "87",
+                        cn: "绍兴麻将",
+                        name: "sparrowsx",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "88",
+                        cn: "红中宝",
+                        name: "sparrowhzb",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "89",
+                        cn: "血流麻将",
+                        name: "sparrowxl",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "91",
+                        cn: "梅州红中宝",
+                        name: "sparrowhzb_mz",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "90",
+                        cn: "晃晃麻将",
+                        name: "sparrowhh",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "92",
+                        cn: "一痞二癞麻将",
+                        name: "sparroweslz",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "94",
+                        cn: "四人断勾卡",
+                        name: "sparrowdgk",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "55",
+                        cn: "四川斗地主",
+                        name: "landsc",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "71",
+                        cn: "泗阳麻将",
+                        name: "sparrowsiyang",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "95",
+                        cn: "斗十四",
+                        name: "platedss",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "75",
+                        cn: "兰州麻将",
+                        name: "sparrowlz",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "93",
+                        cn: "划水麻将",
+                        name: "sparrowhs",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "96",
+                        cn: "捉鸟麻将",
+                        name: "sparrowzn",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "72",
+                        cn: "挖坑",
+                        name: "wakeng",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "73",
+                        cn: "宿迁麻将",
+                        name: "sparrowsq",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "76",
+                        cn: "跑得快",
+                        name: "runfast",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "78",
+                        cn: "双扣",
+                        name: "shuangkou",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "81",
+                        cn: "昏地主",
+                        name: "landsch",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "98",
+                        cn: "打旋",
+                        name: "daxuan",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        disableNormal: true,
+                        disableBattle: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "79",
+                        cn: "牌九",
+                        name: "paigow",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "99",
+                        cn: "广东麻将",
+                        name: "sparrowgd",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "74",
+                        cn: "泗洪麻将",
+                        name: "sparrowsihong",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "97",
+                        cn: "泸州鬼麻将",
+                        name: "sparrowlzg",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: true,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "77",
+                        cn: "泸州大贰",
+                        name: "platedr",
+                        path: "recreational",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    },
+                    {
+                        id: "100",
+                        cn: "二人麻将",
+                        name: "sparrower",
+                        path: "chess",
+                        logic: "0",
+                        res: "0",
+                        step: false,
+                        md5: false,
+                        show: false,
+                        sort: 0,
+                        disableNormal: true,
+                        disableBattle: false,
+                        model: true,
+                        video: false,
+                        version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                    }
+                ];
+
+            if (df.SPECIAL_ID) {
+                if (df.SPECIAL_ID == 1029) {
+                    this._Info =
+                        [
+                            {
+                                id: "28",
+                                cn: "拼十",
+                                name: "ox",
+                                path: "recreational",
+                                logic: "0",
+                                res: "0",
+                                step: false,
+                                md5: false,
+                                show: false,
+                                sort: 0,
+                                model: true,
+                                version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                            },
+                            {
+                                id: "92",
+                                cn: "一痞二癞麻将",
+                                name: "sparroweslz",
+                                path: "chess",
+                                logic: "0",
+                                res: "0",
+                                step: false,
+                                md5: false,
+                                show: false,
+                                sort: 0,
+                                model: true,
+                                video: true,
+                                version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                            }
+                        ]
+
+                } else if (df.SPECIAL_ID == 2011) {
+                    //湖湘
+                    this._Info =
+                        [
+                            {
+                                id: "67",
+                                cn: "衡阳麻将",
+                                name: "sparrowhy",
+                                path: "chess",
+                                logic: "0",
+                                res: "0",
+                                step: false,
+                                md5: false,
+                                show: false,
+                                sort: 0,
+                                model: true,
+                                version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                            },
+                            {
+                                id: "68",
+                                cn: "衡阳鬼麻将",
+                                name: "sparrowhyg",
+                                path: "chess",
+                                logic: "0",
+                                res: "0",
+                                step: false,
+                                md5: false,
+                                show: false,
+                                sort: 0,
+                                model: true,
+                                version: utils.PROCESS_VERSION(1, 1, 0, 1)
+                            }
+                        ]
+                }
+            }
+
+
+
+
+        }
+
+        /**
+         * 本地加载游戏喜好
+         */
+        public loadGameFavourite(): void {
+
+        }
+
+        /**
+         * 获取游戏喜好
+         */
+        public getGameFavourite(kind: number): number {
+            return 0;
+        }
+
+        /**
+         * 设置游戏喜好
+         */
+        public setGameFavourite(kind: number, value: number): void {
+
+
+        }
+
+        /**
+         * 是否支持
+         */
+        public isGameSupport(kind: number, show?: boolean) {
+            let info = this._Info;
+            let list = {
+                id: "0",
+                cn: "未知",
+                name: "",
+                path: "",
+                logic: "0",
+                res: "0",
+                step: false,
+                md5: false,
+                show: false,
+                sort: 0,
+                model: true,
+                version: 0
+            };
+
+            info.forEach(element => {
+                if (element.id == kind && (element.show || show)) {
+                    return list = element;
+                }
+            });
+            return list;
+        }
+
+        public isVideoSupport(kind: number) {
+
+        }
+    }
+}

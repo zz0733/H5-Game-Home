@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.RankLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image width="1322" height="118" x="0" y="45" source="benefit_frame_up_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image width="366" height="136" x="667" y="79" source="benefit_frame_top_png" fillMode="clip" anchorOffsetX="183" anchorOffsetY="68"/>
+	<e:Image width="220" height="54" x="556" y="46" source="rank_title_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:CheckBox id="TotalRank" label="" x="114" y="154" selected="true">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="rank_total_cbt_0_png" source.down="rank_total_cbt_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:CheckBox>
+	<e:Image id="RankBg" width="898" height="602" x="246" y="144" source="rank_frame_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Image id="Text" width="602" height="32" x="667" y="200" source="rank_text_png" fillMode="clip" anchorOffsetX="301" anchorOffsetY="16"/>
+	<e:Panel id="PanelTotal" width="834" height="448" x="282" y="216" anchorOffsetX="0" anchorOffsetY="0" name="RankTotal"/>
+	<e:Panel id="Rank" width="834" height="448" x="282" y="216" anchorOffsetX="0" anchorOffsetY="0" locked="true"/>
+	<e:Label id="Tips" text="记录前10名,排名每天0点刷新" x="801.52" y="689.09" textColor="0xc14d00" size="24"/>
+	<e:Button id="Return" label="" x="52" y="50" anchorOffsetX="50.5" anchorOffsetY="50.5" name="bt_close">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_return_png" source.down="general_bt_return_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

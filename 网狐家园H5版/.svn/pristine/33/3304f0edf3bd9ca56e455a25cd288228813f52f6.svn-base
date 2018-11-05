@@ -1,0 +1,33 @@
+namespace client {
+    export class NumInput extends eui.Component {
+        private _scene: any;
+        private _config: any;
+        private _showData: any;
+        constructor(scene, showData, config) {
+            super();
+            this._scene = scene;
+            this._showData = showData
+            this._config = config;
+            this.skinName = skins.BattleNumInput;
+
+            this.onInitInput();
+        }
+        private onInitInput() {
+            let btn = this.getChildByName("bt_min");
+            btn.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClick, this);
+
+            btn = this.getChildByName("bt_plus");
+            btn.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onButtonClick, this);
+        }
+
+        private onButtonClick(e: egret.Event) {
+            let button = <eui.Button>e.target;
+            let name = button.name;
+
+            egret.Tween.get(button)
+                .to({ scaleX: 1.1, scaleY: 1.1 }, 100)
+                .to({ scaleX: 1.0, scaleY: 1.0 }, 100);
+
+        }
+    }
+}

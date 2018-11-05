@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.BattleDetailLayer" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="Mask" width="1334" height="750" x="0" y="0" source="general_back_frame_0_png" fillMode="clip"/>
+	<e:Image id="Bg" width="796" height="559" x="667" y="375" source="general_back_frame_1_png" fillMode="clip" anchorOffsetX="398" anchorOffsetY="279.5"/>
+	<e:Image id="Title" width="142.73" height="38.18" x="595.64" y="112.42" source="battle_title_detail_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button id="Close" label="" x="1001" y="100.51" name="bt_close">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="general_bt_close_png" source.down="general_bt_close_png" source.disabled="general_bt_close_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image width="424" height="48" x="667" y="204.18" source="battle_number_frame_png" fillMode="clip" anchorOffsetY="24" anchorOffsetX="212"/>
+	<e:Image width="100.3" height="38.19" x="470.34" y="183.09" source="battle_text_detail_0_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Button label="" x="796" y="185" name="dissmiss" anchorOffsetX="68.5" anchorOffsetY="0">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_dismiss_0_png" source.down="battle_bt_dismiss_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Label id="Kind" text="游戏类型 :" x="354" y="245" size="22" textColor="0x000000"/>
+	<e:Label id="Settle" text="结算类型 :" x="354" y="280" size="22" textColor="0x000000"/>
+	<e:Label id="Create" text="创建 :" x="705.5" y="280" size="22" textColor="0x000000"/>
+	<e:Label id="Time" text="2018/09/19  23:59:59" x="770" y="280" size="22" textColor="0x000000" name="Time"/>
+	<e:Label id="SettleKind" text="----" x="460" y="280" size="22" textColor="0x000000" name="SettleKind"/>
+	<e:Label id="Cell" text="底分 :" x="705.5" y="245" size="22" textColor="0x000000"/>
+	<e:Label id="CellNum" text="1分" x="770" y="245" size="22" textColor="0x000000" name="CellScore"/>
+	<e:Label id="KindName" text="断钩卡麻将" x="460" y="245" size="22" textColor="0x000000" name="KindName"/>
+	<e:Image id="InfoBG" width="639" height="193" x="667" y="308" source="battle_detail_frame_1_png" fillMode="clip" anchorOffsetX="319.5"/>
+	<e:Label id="Tips" text="游戏尚未开始，暂无用户信息" y="404.5" width="500" anchorOffsetX="250" anchorOffsetY="15" horizontalCenter="0" textAlign="center" size="24" textColor="0xb67747" name="Tips"/>
+	<e:Button id="Start" label="" x="547" y="560" anchorOffsetX="103" anchorOffsetY="42" name="start">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_startgame_0_png" source.down="battle_bt_startgame_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button label="" x="787" y="560" anchorOffsetX="103" anchorOffsetY="42" name="share">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="battle_bt_share_0_png" source.down="battle_bt_share_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Label text="140504" x="581" y="194" size="24" textColor="0xffd482" name="roomNumber"/>
+</e:Skin>

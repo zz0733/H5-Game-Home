@@ -1,0 +1,47 @@
+/**
+ * 玩家信息
+ */
+namespace models{
+    export class UserItem
+    {
+        /**
+         * 玩家数据
+         */
+        private dwGameID		= 0;
+        private dwUserID		= 0;
+
+        private wFaceID 		= 0;
+        private dwCustomID		= 0;
+
+        private cbGender		= df.GENDER_MANKIND;
+        private cbMemberOrder	= 0;
+
+        private wTableID		= df.INVALID_TABLE;
+        private wChairID		= df.INVALID_CHAIR;
+        private cbUserStatus 	= 0;
+
+        private lScore 		    = 0;
+
+        private dwWinCount		= 0;
+        private dwLostCount	    = 0;
+        private dwDrawCount 	= 0;
+        private dwFleeCount	    = 0;
+        private dwExperience	= 0;
+
+        private szNickName      = "";
+
+        /**
+         * 用户经纬度
+         */
+	    private dwGlobalPosLng  = 0;
+	    private dwGlobalPosLat  = 0;
+
+        /**
+         * 设置数据
+         */
+        public setUserItem(buffer: utils.ByteArray)
+        {
+
+        }
+    }
+}

@@ -1,0 +1,875 @@
+/**
+ * 游戏定义 
+ */
+namespace cmd {
+    export namespace sparrowsclm {
+        export const GAME_PLAYER = 4  				//玩家人数
+        export const PLAYER_COUNT = 3  				//游戏人数
+        export const MY_VIEW = 0                    //自己视图
+
+        export const MAX_WEAVE = 3	 				//最大组合
+        export const MAX_RIGHT_COUNT = 2
+        export const MAX_INDEX = 27				    //最大索引
+        export const MAX_COUNT = 11				    //最大数目
+        export const MAX_REPERTORY = 72				//最大库存
+
+        export const GAME_SCENE_FREE = 0 			//空闲状态
+        export const GS_PLAYING = 102				//游戏状态
+
+        export const GAME_ACTION_NULL = 0x00		//无定义
+        export const GAME_ACTION_WIND = 0x01		//刮风
+        export const GAME_ACTION_RAIN = 0x02		//下雨
+        export const GAME_ACTION_CHI_HU = 0x04  	//胡牌
+
+        export const OUT_CARD_JIA_GANG = 1			//加杠标识
+        export const OUT_CARD_QING_HU = 2			//请胡标识
+
+
+        export const SUB_S_GAME_START = 100			//游戏开始
+        export const SUB_S_OUT_CARD = 101			//用户出牌
+        export const SUB_S_SEND_CARD = 102			//发送扑克
+        export const SUB_S_NOGANG_INFO = 103		//禁杠扑克
+        export const SUB_S_OPERATE_NOTIFY = 104		//操作提示
+        export const SUB_S_OPERATE_RESULT = 105		//操作结果
+        export const SUB_S_CHIHU_RESULT = 107		//吃胡命令 
+        export const SUB_S_GAME_END = 108			//游戏结束
+        export const SUB_S_TRUSTEE = 109			//用户托管
+        export const SUB_S_VOICEPHRASE = 110		//语言短语
+        export const SUB_S_GAME_ACTION_NOTIFY = 112	//动作提醒
+        export const SUB_S_GAME_RULE_SETTING = 113	//规则设置
+        export const SUB_S_GAME_RULE_NOTIFY = 114	//规则提醒
+        export const SUB_S_BAO_HU_NOTIFY = 115		//报胡提醒
+        export const SUB_S_TRANSFER_NOTIFY = 116	//呼叫转移 
+
+        export const SUB_C_OUT_CARD = 1				//出牌命令
+        export const SUB_C_OPERATE_CARD = 2			//操作扑克
+        export const SUB_C_TRUSTEE = 3				//用户托管
+        export const SUB_C_SEND_CARD = 4			//发送扑克  
+        export const SUB_C_VOICEPHRASE = 5			//语音短语
+        export const SUB_C_GAME_RULE_SETTING = 7	//规则设置
+        export const SUB_C_USER_BAO_HU = 8			//报胡命令
+
+
+        export const WIK_NULL = 0x00				//没有类型
+        export const WIK_LEFT = 0x01				//左吃类型
+        export const WIK_PENG = 0x02				//碰牌类型
+        export const WIK_GANG = 0x04				//杠牌类型100
+        export const WIK_JIA_GANG = 0x08			//杠牌类型
+        export const WIK_BAO_HU = 0x10				//报胡类型
+        export const WIK_QING_HU = 0x20				//请胡类型100000
+        export const WIK_CHI_HU = 0x40				//吃胡类型1000000
+        export const WIK_DIAN_PAO = 0x80			//点炮
+
+        //扩展动作
+        export const WIK_EX_TIAN_HU = 0x0100		//天胡类型  
+        export const WIK_EX_DI_HU = 0x0200			//地胡类型
+        export const WIK_EX_FANG_PAO = 0x0400		//放炮动作
+        export const WIK_EX_CHI_HU = 0x0800			//吃胡动作                
+        export const WIK_EX_ZIMO = 0x1000			//自摸动作
+        export const WIK_EX_GANG_PAO = 0x2000		//杠上炮
+        export const WIK_EX_GANG_KAI = 0x4000		//杠上花
+        export const WIK_EX_QING_HU = 0x8000		//请胡类型
+        export const WIK_EX_LIU_JU = 0x0110			//流局
+        export const WIK_EX_CHI_BAO_HU = 0x0001     //抓胡类型  
+        export const WIK_EX_CHI_QING_HU = 0x0002    //抓胡类型  
+
+        //胡牌牌型
+        export const CHR_PING_HU = 0x00000001		//平胡1	
+        export const CHR_DUI_DUI_HU = 0x00000002	//对对胡2
+        export const CHR_QING_DUI = 0x00000004		//清对对3
+        export const CHR_JIANG_DUI = 0x00000008		//将对对4
+        export const CHR_QING_YI_SE = 0x00000010	//清一色5
+        export const CHR_WU_DUI = 0x00000020		//五小对6
+        export const CHR_QING_WU_DUI = 0x00000040	//清五对7
+        export const CHR_JIANG_WU_DUI = 0x00000080	//将五对8
+        export const CHR_LONG_WU_DUI = 0x00000100	//龙五对9
+        export const CHR_QLONG_WU_DUI = 0x00000200	//清龙五对10
+        export const CHR_JLONG_WU_DUI = 0x00000400	//将龙五对11
+        export const CHR_QJLONG_WU_DUI = 0x00000800	//清将龙五对12
+        export const CHR_TAKE_YI_JIU = 0x00001000	//带幺九13
+        export const CHR_QING_TAKE_YI_JIU = 0x00008000//清幺九 16
+        export const CHR_DUI_TAKE_YI_JIU = 0x00002000//对对胡带幺九 14
+        export const CHR_LDUI_TAKE_YI_JIU = 0x00004000//龙五对带幺九 15
+        export const CHR_TIAN_HU = 0x00010000		 //天胡17
+        export const CHR_DI_HU = 0x00020000		     //地胡 18
+
+        //加倍项
+        export const CHR_BREAK_YI_JIU = 0x00100000	//断幺九 21
+        export const CHR_GANG_KAI = 0x00200000		//杠上花 22
+        export const CHR_GANG_PAO = 0x00400000		//杠上炮 23
+        export const CHR_QIANG_GANG = 0x00800000	//抢杠 24
+        export const CHR_HAI_DI_LAO = 0x01000000	//海底捞25
+        export const CHR_HAI_DI_PAO = 0x02000000	//海底炮26
+        export const CHR_BAO_JIAO = 0x04000000		//报叫27
+        export const MASK_CHI_HU_RIGHT = 0x0fffffff
+
+
+        export const MASK_COLOR = 0XF0 				//花色掩码
+        export const MASK_VALUE = 0X0F 				//牌值掩码
+
+        export const IDI_GAME_START		= 1
+        export const IDI_OPERATE_CARD  	= 2
+        export const IDI_BAO_JIAO      	= 3
+        export const IDI_DLEAY_MATCH    = 4
+
+        export const TIME_GAME_START   	= 20
+        export const TIME_OPERATE_CARD 	= 15
+        export const TIME_BAO_JIAO     	= 10
+
+        export const MS_NAME = {
+            1: "[出牌命令]",
+            2: "[操作扑克]",
+            3: "[用户托管]",
+            4: "[发送扑克]",
+            5: "[语音短语]",
+            7: "[规则设置]",
+            8: "[报胡命令]",
+            100: "[游戏开始]",
+            101: "[用户出牌]",
+            102: "[发送扑克]",
+            104: "[操作提示]",
+            105: "[操作结果]",
+            107: "[吃胡命令]",
+            108: "[游戏结束]",
+            109: "[用户托管]",
+            110: "[语言短语]",
+            112: "[动作提醒]",
+            113: "[规则设置]",
+            114: "[规则提醒]",
+            115: "[报胡提醒]",
+            116: "[呼叫转移]"
+        }
+
+        //结构定义
+        export class tagCustomOption {
+            public cbPlayerCount;				//游戏人数
+            public cbMaxFanCount;				//最大番数
+        };
+
+        //组合子项
+        export class tagWeaveItem {
+            public cbWeaveKind;						    //组合类型
+            public cbCenterCard;						//中心扑克
+            public cbPublicCard;						//公开标志
+            public wProvideUser;						//供应用户
+            public cbCardData = utils.allocArray<Number>(4,Number);	//扑克值
+            public cbCardCount: number[] = [0, 0, 0, 0];  //扑克数,用于特殊杠牌，其它未定义
+
+            constructor() {
+                this.cbWeaveKind = 0;						//组合类型
+                this.cbCenterCard = 0;						//中心扑克
+                this.cbPublicCard = -1;						//公开标志
+                this.wProvideUser = 0;						//供应用户
+                this.cbCardData = [0, 0, 0, 0];	            //扑克值
+                this.cbCardCount = [0, 0, 0, 0];            //扑克数,用于特殊
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.cbWeaveKind = buffer.Pop_Byte();
+                this.cbCenterCard = buffer.Pop_Byte();
+                this.cbPublicCard = buffer.Pop_Byte();
+                this.wProvideUser = buffer.Pop_WORD();
+
+                for (let i = 0; i < 4; i++) {
+                    this.cbCardData[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < 4; i++) {
+                    this.cbCardCount[i] = buffer.Pop_Byte();
+                }
+            }
+        };
+
+        //游戏动作
+        export class tagGameAction {
+            public cbActionType;                       //动作类型
+            public cbActionCode;                       //动作代码
+            public wOperaterUser;                      //操作玩家
+            public wProvideUser;                       //供应玩家
+
+            constructor() {
+                this.cbActionType = 0;
+                this.cbActionCode = 0;
+                this.wOperaterUser = 0;
+                this.wProvideUser = 0;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.cbActionType = buffer.Pop_Byte();
+                this.cbActionCode = buffer.Pop_Byte();
+                this.wOperaterUser = buffer.Pop_WORD();
+                this.wProvideUser = buffer.Pop_WORD();
+            }
+        };
+
+        //游戏规则
+        export class tagGameRuleParams {
+            public cbGamePlayer;                       //游戏人数
+            public cbAllowJoin;                        //玩家加入
+            public lBaseScore;                         //基础分数
+            constructor() {
+                this.cbGamePlayer = 0;
+                this.cbAllowJoin = 0;
+                this.lBaseScore = 0;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.cbGamePlayer = buffer.Pop_Byte();
+                this.cbAllowJoin = buffer.Pop_Byte();
+                this.lBaseScore = buffer.Pop_SCORE();
+            }
+        };
+
+        //动作信息
+        export class tagActionInfo {
+            public cbOperateCode;                     //操作代码
+            public wRecodeParam;				         //记录参数
+            constructor() {
+                this.cbOperateCode = 0;
+                this.wRecodeParam = 0;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.cbOperateCode = buffer.Pop_Byte();
+                this.wRecodeParam = buffer.Pop_WORD();
+            }
+        };
+
+        //结算信息
+        export class tagSettlementInfo {
+            public nWindFanShu: number[] = [0, 0];        //刮风番数
+            public nRainFanShu: number[] = [0, 0];        //下雨番数
+            public nChiHuFanShu: number[] = [0, 0, 0, 0];   //吃胡番数
+            public lTransferScore;					    //转移分数	 
+
+            constructor() {
+                this.lTransferScore = 0;
+            }
+            readBuffer(buffer: utils.ByteArray) {
+                for (let i = 0; i < 2; i++) {
+                    this.nWindFanShu[i] = buffer.Pop_INT();
+                }
+
+                for (let i = 0; i < 2; i++) {
+                    this.nRainFanShu[i] = buffer.Pop_INT();
+                }
+
+                for (let i = 0; i < 4; i++) {
+                    this.nChiHuFanShu[i] = buffer.Pop_INT();
+                }
+
+                this.lTransferScore = buffer.Pop_SCORE();
+            }
+
+        };
+
+        //呼叫转移
+        export class tagTransferInfo {
+            public cbTransferValid;                     //转移有效 
+            public cbGameActionIndex;                   //动作索引
+            public cbTransferCount;                     //转移次数
+            public lTransferScore: number[] = [0, 0, 0, 0];//转移分数 
+
+            constructor() {
+                this.cbTransferValid = 0;
+                this.cbGameActionIndex = 0;
+                this.cbTransferCount = 0;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+
+            }
+        };
+
+        //转移子项
+        export class tagTransferItem extends tagTransferInfo {
+            public bUserTransfer: number[] = [0, 0, 0, 0];	   //转移标识
+        };
+
+        //空闲状态
+        export class CMD_S_StatusFree {
+            //游戏变量	
+            public wBankerUser: number;						        //庄家用户
+            public bTrustee: boolean[] = [false, false, false, false]; //是否托管
+            public lCellScore: number;						        //基础金币
+            public bAllowJoin: boolean;                             //允许加入
+            public bIsRuleSetting: boolean;                         //规则设置
+
+            //历史积分
+            public lTurnScore: number[] = [0, 0, 0, 0];			    //积分信息
+            public lCollectScore: number[] = [0, 0, 0, 0];			    //积分信息
+
+            constructor(buffer: utils.ByteArray) {
+                this.wBankerUser = buffer.Pop_WORD();
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.bTrustee[i] = buffer.Pop_BOOL();
+                }
+
+                this.lCellScore = buffer.Pop_SCORE();
+                this.bAllowJoin = buffer.Pop_BOOL();
+                this.bIsRuleSetting = buffer.Pop_BOOL();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.lTurnScore[i] = buffer.Pop_SCORE();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.lTurnScore[i] = buffer.Pop_SCORE();
+                }
+            }
+        }
+
+        //游戏状态
+        export class CMD_S_StatusPlay {
+            //游戏变量
+            public wBankerUser;								    //庄家用户
+            public wCurrentUser;								//当前用户
+            public wCurrBaoUser;                                //报叫用户
+            public lCellScore;									//单元积分	
+            public lSiceCount;                                  //色子数值
+
+            //禁止信息
+            public cbNoGangCard: number[] = [0, 0, 0];          //禁杠数据 
+
+            //状态变量
+            public cbUserStatusnumber: number[] = [0, 0, 0, 0];  //用户状态
+            public cbActionCard;								 //动作扑克
+            public cbActionMask;								 //动作掩码
+            public cbLeftCardCount;							     //剩余数目
+            public bSelfTrustee;                                 //是否托管
+            public bAllowJoin;								     //允许加入
+
+            //出牌信息
+            public wOutCardUser;								//出牌用户
+            public cbOutCardData;								//出牌扑克
+            public cbDiscardCount: number[] = [0, 0, 0, 0];	    //丢弃数目
+            public cbDiscardCard = utils.alloc2Array<Number>(GAME_PLAYER, 60, Number);//丢弃记录                          
+
+            //扑克数据
+            public cbCardCount: number[] = [0, 0, 0, 0];					//扑克数目
+            public cbCardData = utils.alloc2Array<Number>(GAME_PLAYER, MAX_COUNT, Number);//扑克列表
+            public cbSendCardData;								        //发送扑克
+            public cbChiHuCardData: number[] = [0, 0, 0, 0];               //胡牌扑克 
+
+            //组合扑克
+            public cbWeaveCount: number[] = [0, 0, 0, 0];					//组合数目
+            public WeaveItemArray = utils.alloc2Array<tagWeaveItem>(GAME_PLAYER, MAX_WEAVE, tagWeaveItem);//组合扑克
+
+            //堆立信息
+            public wHeapHand;									//堆立头部
+            public wHeapTail;									//堆立尾部
+            public cbHeapCardInfo = utils.alloc2Array<Number>(GAME_PLAYER, 2, Number);//堆牌信息
+
+            //历史积分
+            public lTurnScore: number[] = [0, 0, 0, 0];					//积分信息
+            public lCollectScore: number[] = [0, 0, 0, 0];				//积分信息
+
+            //标志变量
+            public bUserBaoFlag: number[] = [0, 0, 0, 0];					//报叫标志
+            public wUserHuKind: number[] = [0, 0, 0, 0];				    //胡牌类型 
+
+            //游戏动作
+            public cbGameActionCount;						    //动作数目
+            public nGameActionFanShu = utils.alloc2Array<Number>(GAME_PLAYER * 5, GAME_PLAYER, Number);    //番数信息
+            public GameActionArray = utils.allocArray<tagGameAction>(GAME_PLAYER * 5, tagGameAction);      //动作数组 
+            public TransferInfoArray = utils.allocArray<tagTransferInfo>(GAME_PLAYER - 1, tagTransferInfo);//转移数组
+
+            constructor() {
+
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.wBankerUser = buffer.Pop_WORD();
+                this.wCurrentUser = buffer.Pop_WORD();
+                this.wCurrBaoUser = buffer.Pop_WORD();
+                this.lCellScore = buffer.Pop_SCORE();
+                this.lSiceCount = buffer.Pop_LONG();
+
+                for (let i = 0; i < 3; i++) {
+                    this.cbNoGangCard[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbUserStatusnumber[i] = buffer.Pop_Byte();
+                }
+
+                this.cbActionCard = buffer.Pop_Byte();
+                this.cbActionMask = buffer.Pop_Byte();
+                this.cbLeftCardCount = buffer.Pop_Byte();
+                this.bSelfTrustee = buffer.Pop_BOOL();
+                this.bAllowJoin = buffer.Pop_BOOL();
+                this.wOutCardUser = buffer.Pop_WORD();
+                this.cbOutCardData = buffer.Pop_Byte();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbDiscardCount[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < 60; j++) {
+                        this.cbDiscardCard[i][j] = buffer.Pop_Byte();
+                    }
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbCardCount[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < MAX_COUNT; j++) {
+                        this.cbCardData[i][j] = buffer.Pop_Byte();
+                    }
+                }
+
+                this.cbSendCardData = buffer.Pop_Byte();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbChiHuCardData[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbWeaveCount[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < MAX_WEAVE; j++) {
+                        let weaveItem: tagWeaveItem = this.WeaveItemArray[i][j];
+                        weaveItem.readBuffer(buffer);
+                    }
+                }
+
+                this.wHeapHand = buffer.Pop_WORD();
+                this.wHeapTail = buffer.Pop_WORD();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < 2; j++) {
+                        this.cbHeapCardInfo[i][j] = buffer.Pop_Byte();
+                    }
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.lTurnScore[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.lCollectScore[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.bUserBaoFlag[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.wUserHuKind[i] = buffer.Pop_WORD();
+                }
+
+                this.cbGameActionCount = buffer.Pop_Byte();
+
+                for (let i = 0; i < GAME_PLAYER * 5; i++) {
+                    for (let j = 0; j < GAME_PLAYER; j++) {
+                        this.nGameActionFanShu[i][j] = buffer.Pop_INT();
+                    }
+                }
+
+                for (let i = 0; i < GAME_PLAYER * 5; i++) {
+                    let action: tagGameAction = this.GameActionArray[i];
+                    action.readBuffer(buffer);
+                }
+
+                for (let i = 0; i < GAME_PLAYER - 1; i++) {
+                    let transinfo: tagTransferInfo = this.TransferInfoArray[i];
+                    transinfo.readBuffer(buffer);
+                }
+            }
+        };
+
+        //游戏开始
+        export class CMD_S_GameStart {
+            public lSiceCount;									//骰子点数
+            public wBankerUser;								    //庄家用户
+            public wCurrentUser;								//当前用户
+            public wCurrBaoUser;                                //报胡用户 
+            public cbUserAction;								//用户动作
+            public cbCardData = utils.allocArray<Number>(MAX_COUNT, Number);//扑克列表
+            public wHeapHead;									//堆立牌头
+            public wHeapTail;									//堆立牌尾
+            public cbHeapCardInfo = utils.alloc2Array<Number>(GAME_PLAYER, 2, Number);//堆立信息
+
+            constructor() {
+
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.lSiceCount = buffer.Pop_LONG();
+                this.wBankerUser = buffer.Pop_WORD();
+                this.wCurrentUser = buffer.Pop_WORD();
+                this.wCurrBaoUser = buffer.Pop_WORD();
+                this.cbUserAction = buffer.Pop_Byte();
+
+                for (let i = 0; i < MAX_COUNT; i++) {
+                    this.cbCardData[i] = buffer.Pop_Byte();
+                }
+
+                this.wHeapHead = buffer.Pop_WORD();
+                this.wHeapTail = buffer.Pop_WORD();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < 2; j++) {
+                        this.cbHeapCardInfo[i][j] = buffer.Pop_Byte();
+                    }
+                }
+            }
+        };
+
+        //动作提醒
+        export class CMD_S_GAME_ACTION_NOTIFY {
+            public GameAction: tagGameAction;                                 //游戏动作
+            public nPerUserFanCount = utils.allocArray<Number>(GAME_PLAYER, Number); //玩家番数
+
+            constructor() {
+                this.GameAction = new tagGameAction();
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.GameAction.readBuffer(buffer);
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.nPerUserFanCount[i] = buffer.Pop_INT();
+                }
+            }
+        };
+
+        //呼叫转移
+        export class CMD_S_TRANSFER_NOTIFY {
+            public cbGameActionIndex;							//动作索引
+            public cbTransferCount;							    //转移次数
+            public lTransferScore = utils.allocArray<Number>(GAME_PLAYER, Number);//转移分数 
+
+            constructor() {
+                this.cbGameActionIndex = 0;
+                this.cbTransferCount = 0;
+            }
+            readBuffer(buffer: utils.ByteArray) {
+                this.cbGameActionIndex = buffer.Pop_Byte();
+                this.cbTransferCount = buffer.Pop_Byte();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.lTransferScore[i] = buffer.Pop_SCORE();
+                }
+            }
+        };
+
+        //出牌命令
+        export class CMD_S_OutCard {
+            public bTrusteeOut;								//自动出牌
+            public wOutCardUser;								//出牌用户
+            public cbOutCardData;								//出牌扑克
+
+            constructor() {
+                this.bTrusteeOut = false;
+                this.wOutCardUser = df.INVALID_ITEM;
+                this.cbOutCardData = df.INVALID_BYTE;
+            }
+            readBuffer(buffer: utils.ByteArray) {
+                this.bTrusteeOut = buffer.Pop_BOOL();
+                this.wOutCardUser = buffer.Pop_WORD();
+                this.cbOutCardData = buffer.Pop_Byte();
+
+            }
+        };
+
+        //发送禁杠
+        export class CMD_S_NOGANG {
+            public cbNoGangCard: number[] = [0, 0, 0];         //禁杠数据
+            readBuffer(buffer: utils.ByteArray) {
+                for (let i = 0; i < 3; i++) {
+                    this.cbNoGangCard[i] = buffer.Pop_Byte();
+                }
+            }
+        };
+
+        //发送扑克
+        export class CMD_S_SendCard {
+            public cbCardData;							//扑克数据
+            public cbActionMask;						//动作掩码
+            public wCurrentUser;						//当前用户
+            public bTail;								//末尾发牌
+
+            constructor() {
+                this.cbCardData = 0;
+                this.cbActionMask = 0;
+                this.wCurrentUser = df.INVALID_CHAIR;
+                this.bTail = false;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.cbCardData = buffer.Pop_Byte();
+                this.cbActionMask = buffer.Pop_Byte();
+                this.wCurrentUser = buffer.Pop_WORD();
+                this.bTail = buffer.Pop_BOOL();
+            }
+        };
+
+        //操作提示
+        export class CMD_S_OperateNotify {
+            public wResumeUser;						    //还原用户
+            public cbActionMask;						//动作掩码
+            public cbActionCard;						//动作扑克
+
+            constructor() {
+                this.wResumeUser = df.INVALID_CHAIR;
+                this.cbActionMask = 0;
+                this.cbActionCard = 0;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.wResumeUser = buffer.Pop_WORD();
+                this.cbActionMask = buffer.Pop_Byte();
+                this.cbActionCard = buffer.Pop_Byte();
+            }
+        };
+
+        //操作命令
+        export class CMD_S_OperateResult {
+            public wOperateUser;						//操作用户
+            public wProvideUser;						//供应用户
+            public cbOperateCode;						//操作代码
+            public cbOperateCard: number[] = [0, 0, 0];	//操作扑克
+            public cbUserAction;                       //玩家动作 
+            public cbExcludeCard;                      //排除扑克 
+
+            constructor() {
+                this.wOperateUser = df.INVALID_CHAIR;
+                this.wProvideUser = df.INVALID_CHAIR;
+                this.cbOperateCode = 0;
+                this.cbUserAction = 0;
+                this.cbExcludeCard = 0;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.wOperateUser = buffer.Pop_WORD();
+                this.wProvideUser = buffer.Pop_WORD();
+                this.cbOperateCode = buffer.Pop_Byte();
+
+                for (let i = 0; i < 3; i++) {
+                    this.cbOperateCard[i] = buffer.Pop_Byte();
+                }
+
+                this.cbUserAction = buffer.Pop_Byte();
+                this.cbExcludeCard = buffer.Pop_Byte();
+            }
+        };
+
+        //胡牌命令
+        export class CMD_S_ChiHuResult {
+            public wOperateUser;                        //操作玩家
+            public wProvideUser;                        //供应玩家
+            public wUserHuKind;                         //胡牌类型
+            public cbOperateCard;                       //操作扑克
+            public bMultplePao;                         //一炮多响 
+            public bQingHuFlag;                         //请胡标志
+            public cbCardCount;                         //扑克数目
+            public cbCardData = utils.allocArray<Number>(MAX_COUNT, Number);  //玩家扑克
+
+            constructor() {
+                this.wOperateUser = df.INVALID_CHAIR;
+                this.wProvideUser = df.INVALID_CHAIR;
+                this.wUserHuKind = 0;
+                this.cbOperateCard = 0;
+                this.bMultplePao = false;
+                this.bQingHuFlag = false;
+                this.cbCardCount = 0;
+            }
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.wOperateUser = buffer.Pop_WORD();
+                this.wProvideUser = buffer.Pop_WORD();
+                this.wUserHuKind = buffer.Pop_WORD();
+                this.cbOperateCard = buffer.Pop_Byte();
+                this.bMultplePao = buffer.Pop_BOOL();
+                this.bQingHuFlag = buffer.Pop_BOOL();;
+                this.cbCardCount = buffer.Pop_Byte();
+
+                for (let i = 0; i < MAX_COUNT; i++) {
+                    this.cbCardData[i] = buffer.Pop_Byte();
+                }
+            }
+        };
+
+        //游戏结束(181)
+        export class CMD_S_GameEnd {
+            public lCellScore;                                                   //单元积分
+
+            //结束信息
+            public wProvideUser = utils.allocArray<Number>(GAME_PLAYER, Number);		//供应用户
+            public wEscapeUser;						//玩家逃跑
+            public cbEscapeFanShu;                     //逃跑番数
+            public cbGengCount = utils.allocArray<Number>(GAME_PLAYER, Number);          //根牌数目	
+            public dwChiHuKind = utils.allocArray<Number>(GAME_PLAYER, Number);			//胡牌类型
+            public dwChiHuRight = utils.alloc2Array<Number>(GAME_PLAYER, MAX_RIGHT_COUNT, Number);		//胡牌类型	
+
+            //积分信息
+            public lGameScore = utils.allocArray<Number>(GAME_PLAYER, Number);			//游戏积分
+            public lZiMoAddScore = utils.alloc2Array<Number>(GAME_PLAYER, GAME_PLAYER, Number);//自摸加分	
+
+            //扑克信息
+            public cbCardCount = utils.allocArray<Number>(GAME_PLAYER, Number);			//扑克数目
+            public cbCardData = utils.alloc2Array<Number>(GAME_PLAYER, MAX_COUNT, Number);	//扑克数据
+
+            //牌型信息
+            public cbUserCardType = utils.allocArray<Number>(GAME_PLAYER, Number);        //用户牌型(0 为花猪 1为未下叫 2为下叫 3为胡牌) 
+            public cbUserGengCount = utils.allocArray<Number>(GAME_PLAYER, Number);       //玩家根数目
+            public cbUserQiaCount = utils.allocArray<Number>(GAME_PLAYER, Number);        //玩家掐数目
+            public cbCheckJiaoBeiShu = utils.allocArray<Number>(GAME_PLAYER, Number);     //查叫倍数  
+
+            //游戏详情
+            public UserSettlementInfo = utils.allocArray<tagSettlementInfo>(GAME_PLAYER, tagSettlementInfo);    //结算信息   
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.lCellScore = buffer.Pop_SCORE();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.wProvideUser[i] = buffer.Pop_WORD();
+                }
+
+                this.wEscapeUser = buffer.Pop_WORD();
+                this.cbEscapeFanShu = buffer.Pop_Byte();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbGengCount[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.dwChiHuKind[i] = buffer.Pop_DWORD();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < MAX_RIGHT_COUNT; i++) {
+                        this.dwChiHuRight[i][j] = buffer.Pop_DWORD();
+                    }
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.lGameScore[i] = buffer.Pop_SCORE();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < GAME_PLAYER; i++) {
+                        this.lZiMoAddScore[i][j] = buffer.Pop_SCORE();
+                    }
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbCardCount[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    for (let j = 0; j < MAX_COUNT; i++) {
+                        this.cbCardData[i][j] = buffer.Pop_Byte();
+                    }
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbUserCardType[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbUserGengCount[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbUserQiaCount[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.cbCheckJiaoBeiShu[i] = buffer.Pop_Byte();
+                }
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    let info: tagSettlementInfo = this.UserSettlementInfo[i];
+                    info.readBuffer(buffer);
+                }
+            }
+        };
+
+        //用户托管
+        export class CMD_S_Trustee {
+            public bTrustee;							//是否托管
+            public wChairID;							//托管用户
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.bTrustee = buffer.Pop_BOOL();
+                this.wChairID = buffer.Pop_WORD();
+            }
+        };
+
+        //用户听牌
+        export class CMD_S_Listen {
+            public wChairId;							//听牌用户
+            public cbTingCardCount;					//听牌数
+            public cbTingCard = utils.allocArray<Number>(MAX_COUNT, Number);//听牌
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.wChairId = buffer.Pop_WORD();
+                this.cbTingCardCount = buffer.Pop_Byte();
+
+                for (let i = 0; i < MAX_COUNT; i++) {
+                    this.cbTingCard[i] = buffer.Pop_Byte();
+                }
+            }
+
+        };
+
+        //定张结束
+        export class CMD_S_DING_ZHANG_END {
+            public wBankerUser;						//庄家用户
+            public bUserDingCardColor = utils.allocArray<Number>(GAME_PLAYER, Number);    //定张花色
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.wBankerUser = buffer.Pop_WORD();
+
+                for (let i = 0; i < GAME_PLAYER; i++) {
+                    this.bUserDingCardColor[i] = buffer.Pop_Byte();
+                }
+            }
+        };
+
+        //规则选择
+        export class CMD_S_GAME_RULE_NOTIFY {
+            public bForceExit;                         //强制退出
+            public bPromptNotice;                      //提示信息
+            public cbGamePlayer;                       //游戏人数
+            public lBaseScore;		                  //基础分数
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.bForceExit = buffer.Pop_BOOL();
+                this.bPromptNotice = buffer.Pop_BOOL();
+                this.cbGamePlayer = buffer.Pop_Byte();
+                this.lBaseScore = buffer.Pop_SCORE();
+            }
+        };
+
+        //规则设置
+        export class CMD_S_GAME_RULE_SETTING {
+            public lCellScore;							//单元积分
+            readBuffer(buffer: utils.ByteArray) {
+                this.lCellScore = buffer.Pop_SCORE();
+            }
+        };
+
+        //报胡提醒
+        export class CMD_S_BAO_HU_NOTIFY {
+            public wCurrentUser;                       //当前玩家
+            public wLastUser;                          //上一玩家
+            public bBaoHuFlag;                         //报胡标志
+            public cbCardData;                         //报叫扑克
+
+            readBuffer(buffer: utils.ByteArray) {
+                this.wCurrentUser = buffer.Pop_WORD();
+                this.wLastUser = buffer.Pop_WORD();
+                this.bBaoHuFlag = buffer.Pop_BOOL();
+                this.cbCardData = buffer.Pop_Byte();
+            }
+        };
+    }
+}

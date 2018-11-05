@@ -1,0 +1,225 @@
+/*
+*欢迎界面
+*预加载大厅资源
+*进入登录层
+*/
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var controller;
+(function (controller) {
+    var WelComeController = (function (_super) {
+        __extends(WelComeController, _super);
+        //构造
+        function WelComeController() {
+            var _this = _super.call(this) || this;
+            //视图名称
+            _this.name = "WelComeController";
+            _this.createWelComeView();
+            //注册触摸
+            _this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.onTouchBegan, _this);
+            _this.addEventListener(egret.TouchEvent.TOUCH_MOVE, _this.onTouchMove, _this);
+            _this.addEventListener(egret.TouchEvent.TOUCH_END, _this.onTouchEnd, _this);
+            return _this;
+        }
+        /* controller生命周期
+        *  viewWillAppear
+        *  viewDidAppear
+        *  viewWillDisappear
+        *  viewDidDisappear
+        *  dealloc 回收资源
+        */
+        WelComeController.prototype.viewWillAppear = function (animated) {
+        };
+        WelComeController.prototype.viewDidAppear = function (animated) {
+        };
+        WelComeController.prototype.viewWillDisappear = function (animated) {
+        };
+        WelComeController.prototype.viewDidDisappear = function (animated) {
+        };
+        WelComeController.prototype.dealloc = function () {
+            this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+        };
+        /**
+        * 切换页面
+        * @target 目标view
+        * @mode   切换模式
+        */
+        WelComeController.prototype.onChangeView = function (target, mode) {
+        };
+        /**进入前台
+        * applicationDidBecomeActive
+        */
+        WelComeController.prototype.applicationDidBecomeActive = function (event) {
+        };
+        /**进入后台
+        * applicationDidBecomeActive
+        */
+        WelComeController.prototype.applicationWillEnterForeground = function (event) {
+        };
+        WelComeController.prototype.onMessage = function (msg) {
+        };
+        /**
+        * 网络接入
+        */
+        WelComeController.prototype.networkConnect = function () {
+        };
+        WelComeController.prototype.createWelComeView = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var _this = this;
+                var rootLayout, sky, logo, copyright, colorLabel, loadingbar, loadingCallFunc;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            rootLayout = new eui.Component();
+                            this.addChild(rootLayout);
+                            sky = utils.createBitmapByName("background_png");
+                            this.addChild(sky);
+                            logo = utils.createBitmapByName("logo_name_00_png");
+                            this.addChild(logo);
+                            utils.setAnchorCenter(logo);
+                            logo.x = 667;
+                            logo.y = 330;
+                            egret.Tween.get(logo, { loop: true })
+                                .to({ "alpha": 0.2 }, 2000)
+                                .to({ "alpha": 1.0 }, 2000);
+                            copyright = utils.createBitmapByName("copyright_png");
+                            this.addChild(copyright);
+                            utils.setAnchorMidBottom(copyright);
+                            copyright.x = 667;
+                            copyright.y = 700;
+                            colorLabel = new egret.TextField();
+                            colorLabel.textColor = 0xffffff;
+                            colorLabel.textAlign = "center";
+                            colorLabel.text = "资源加载中,请稍后...";
+                            colorLabel.size = 24;
+                            utils.setAnchorCenter(colorLabel);
+                            colorLabel.x = 667;
+                            colorLabel.y = 540;
+                            this.addChild(colorLabel);
+                            //加载大厅资源
+                            return [4 /*yield*/, this.loadPlazaResource()
+                                //loadingbar
+                            ];
+                        case 1:
+                            //加载大厅资源
+                            _a.sent();
+                            loadingbar = new eui.ProgressBar();
+                            loadingbar.direction = eui.Direction.LTR;
+                            loadingbar.skinName = "resource/eui_skins/ProgressBarSkin_1.exml";
+                            loadingbar.maximum = 100;
+                            loadingbar.minimum = 0;
+                            loadingbar.slideDuration = 5000;
+                            loadingbar.$setValue(10);
+                            loadingbar.labelDisplay.text = loadingbar.value + "/" + loadingbar.maximum;
+                            loadingbar.labelDisplay.textColor = 0xffffff;
+                            loadingbar.labelDisplay.size = 24;
+                            utils.setAnchorCenter(loadingbar);
+                            loadingbar.x = 667;
+                            loadingbar.y = 580;
+                            this.addChild(loadingbar);
+                            utils.StringUtils.numberToFormat(100000);
+                            loadingCallFunc = function (e) {
+                                loadingbar.value += 1;
+                                if (loadingbar.value == 100) {
+                                    _this.removeEventListener(egret.Event.ENTER_FRAME, loadingCallFunc, _this);
+                                    //切换场景
+                                    managers.GameManager.getInstance().replaceScene(new controller.LoginController(), true);
+                                }
+                            };
+                            this.addEventListener(egret.Event.ENTER_FRAME, loadingCallFunc, this);
+                            //设置当前视图
+                            managers.GameManager.getInstance().setRunningController(this);
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        //加载资源
+        WelComeController.prototype.loadPlazaResource = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var e_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 3, , 4]);
+                            return [4 /*yield*/, RES.loadGroup("client", 0)];
+                        case 1:
+                            _a.sent();
+                            return [4 /*yield*/, RES.loadGroup("game", 0)];
+                        case 2:
+                            _a.sent();
+                            return [3 /*break*/, 4];
+                        case 3:
+                            e_1 = _a.sent();
+                            console.error(e_1);
+                            return [3 /*break*/, 4];
+                        case 4: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        /** 触摸事件
+        * onTouchBegan
+        * onTouchMove
+        * onTouchEnd
+       */
+        WelComeController.prototype.onTouchBegan = function (event) {
+            console.log("onTouch Began");
+        };
+        WelComeController.prototype.onTouchMove = function (event) {
+            console.log("onTouch move");
+        };
+        WelComeController.prototype.onTouchEnd = function (event) {
+            console.log("onTouch end");
+        };
+        return WelComeController;
+    }(egret.DisplayObjectContainer));
+    controller.WelComeController = WelComeController;
+    __reflect(WelComeController.prototype, "controller.WelComeController", ["df.IController"]);
+})(controller || (controller = {}));
+//# sourceMappingURL=WelcomeController.js.map

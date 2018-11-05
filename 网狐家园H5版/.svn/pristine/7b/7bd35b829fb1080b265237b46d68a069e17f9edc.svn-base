@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.Diamond" width="260" height="215" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image width="260" height="215" x="0" y="0" source="bt_frame_buy_png" fillMode="clip"/>
+	<e:Button label="" x="130" y="168" name="purchase" anchorOffsetX="105" anchorOffsetY="29">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_buy_buy_0_png" source.down="bt_buy_buy_0_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="Icon" width="143" height="120" x="104" y="12" source="shop_icon_ingot_1_png" fillMode="clip" anchorOffsetX="0" anchorOffsetY="0" name="Icon"/>
+	<e:Image width="80" height="80" x="180" y="0" source="icon_recharge_1_png" fillMode="clip" name="corner"/>
+	<e:Image width="42" height="42" x="60" y="144" source="icon_rmb_png" fillMode="clip" touchEnabled="false"/>
+</e:Skin>

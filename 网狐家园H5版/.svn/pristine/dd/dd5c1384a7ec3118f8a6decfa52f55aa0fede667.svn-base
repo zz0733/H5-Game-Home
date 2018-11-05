@@ -1,0 +1,270 @@
+/** 
+ * 网络服务
+**/
+
+namespace managers{
+    export class ServiceManager implements df.IConnectSocket,df.ISocketService
+    {
+        /**
+        *单例实例 
+        */
+        private static m_sInstance: ServiceManager;
+
+        /**
+         * 消息队列
+         */
+        _MsgQueue: network.Message[] = [];
+
+        /**
+         * 当前服务
+         */
+        private m_pTcpService: any;
+
+        /**
+         * 服务类型 
+         */
+        private m_eServiceMode: number = df.eServerKind.PLAZA;
+
+        /**
+         * 业务代理
+         */
+        private _viewFrame: any;
+
+        /**
+         * 当前服务列表
+         */
+        private _curServerList: any;
+
+        /**
+         * 当前服务索引
+         */
+        private _curServerIdx: number = 0;
+
+        /**
+         * 重连次数
+         */
+        m_ReConnectCount: number;
+
+         /**
+          * 最大连接次数
+          */
+        m_ReConnectMax: number = 5
+
+        /**
+         * 连接超时
+         */
+        m_ReConnectTimeOut: number = 10;
+
+        /**
+         * 默认服务信息
+         */
+        public m_DefaultServerInfo = 
+        {
+            domain:"s88.foxuc.com",
+            port :8100,
+            webAddr:"testwww.foxuc.com"
+        }
+
+        /**
+         * 登录列表
+         */
+        private m_LogonList = [];
+
+        /**
+         * 登录代理
+         */
+        private m_AgentList = [];
+
+        /**
+         * 游戏列表
+         */
+        private m_GameList = [];
+
+        /**
+         * 网关列表 
+         */
+        private m_GateList = [];
+
+        /**
+        *获取当前实例
+        */
+        public static getInstance(): ServiceManager
+        {
+            if(this.m_sInstance == null)
+            {
+                this.m_sInstance = new ServiceManager();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+         }
+
+
+        public init():void
+        {
+            //TCP服务
+            this.m_pTcpService = null;
+
+            //服务类型
+            this.m_eServiceMode = df.eServerKind.PLAZA;
+        }
+
+        /**
+         * 服务类型 
+         */
+        public setServiceMode(mode: number)
+        {
+            this.m_eServiceMode = mode;
+        }
+
+        /**
+         * 服务索引
+         */
+        public setServerIdx(idx: number)
+        {
+            this._curServerIdx = idx;
+        }
+
+        /**
+         * 当前服务列表
+         */
+        public setCurServerList(list: any)
+        {
+            this._curServerList = list;
+        }
+
+         //连接成功
+        public socketConnectSuccess():void
+        {   
+             //重置变量
+            this.m_ReConnectCount = 0;   
+
+            //保存服务
+
+        }
+
+         /**
+         * 重连机制
+         */
+         onReconnect()
+         {
+        
+             //this.createConnect(connect.domain,Number(connect.port));
+
+             managers.FrameManager.getInstance().showPopWait("网络重连中");
+             
+         }
+
+        /**
+         * 重连超时
+         */
+         onReconnectTimeOut()
+         {
+
+         }
+
+        /**
+         * 重连失败
+         */
+        public onReconnectFailure()
+        {
+            if (null == this._viewFrame)
+                return;
+
+            this._viewFrame.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_CONNECT_FAIlURE)); 
+        }
+
+        /**
+         * 消息代理
+         */
+        public setViewFrame(view: any)
+        {
+            this._viewFrame = null;
+
+            if (null == view)
+                return;
+
+            this._viewFrame = view;
+        }
+
+        public getViewFrame()
+        {
+            return this._viewFrame ? this._viewFrame : null;
+        }
+
+        /**
+         * 获取TCP服务
+         */
+        public getTcpService()
+        {
+            return this.m_pTcpService ? this.m_pTcpService : null;
+        }
+
+        //创建服务
+        public createSocketService(host: string,port: number,serviceMode: df.eServerKind = df.eServerKind.PLAZA)
+        {
+            var tcpService = new service.TcpSocketService(this);
+            tcpService.createConnect(host,port);
+
+            this.m_pTcpService = tcpService;
+            this.m_eServiceMode = serviceMode;
+        }
+        
+        /**
+         * 关闭服务
+         */
+        closeService():void
+        {
+            if (this.m_pTcpService)
+            {
+                //关闭SOCKET
+                this.m_pTcpService.closeService();
+                this.m_pTcpService = null;
+
+                //重置变量
+                this._curServerIdx = 0;
+                this.m_ReConnectCount = 0;   
+                this._curServerList = null;
+            }
+        }
+         /**
+          * 刷新服务
+          */
+         onUpdate():void
+         {
+             //服务刷新
+            if (this.m_pTcpService && this.m_pTcpService.onUpdate)
+            {
+                this.m_pTcpService.onUpdate();
+            }
+            
+            if (this._MsgQueue.length == 0)   return;
+
+            if (null == this._viewFrame)
+            {
+                 console.log("_viewFrame is null"); 
+                 return;
+            }
+           
+            //处理队列
+            if (null != this._viewFrame.onMessage)
+            {   
+                //变量定义
+                var dispatch: network.Message[] = [];
+                var length = this._MsgQueue.length;
+                length = (length < df.MAX_UNIT) ? length : df.MAX_UNIT;
+
+                //分帧处理
+                dispatch = this._MsgQueue.slice(0,length);
+                this._MsgQueue.splice(0,length);
+
+                //消息分发
+                while(dispatch.length)
+                {
+                    var msg = dispatch[0];
+                    this._viewFrame.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH,false,false,msg));
+                    dispatch.shift();
+                }
+            }
+         }
+    }
+}    

@@ -1,0 +1,115 @@
+/*单例
+*游戏定时器管理类
+*多定时器队列处理
+*定时器实例生命周期
+*/
+namespace managers
+{
+    export class TimerControl 
+    {   
+        /**
+        *单例实例 
+        */
+        private static m_sInstance: TimerControl;
+
+        /**
+         * 时间队列
+         */
+        private  _timerQueue: any[] = [];
+
+         /**
+        *获取实例 
+        */
+        public static getInstance():TimerControl
+        {
+            if(this.m_sInstance == null)
+            {
+                this.m_sInstance = new TimerControl();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+         }
+
+          /**
+          * 初始化
+          */
+          public init():void
+          {
+              this.clean();
+          } 
+
+          /**
+           * 创建定时器
+           */
+          public createTime(target: any,delay :number = 1000.0/60.0,repeat: number,callback: Function,key: string="timer"):boolean
+          { 
+              //遍历查找
+              this._timerQueue.forEach(timer => {
+                  if (timer[2] == key)
+                  {
+                      console.log("队列中存在相同key的定时器");
+                      return false;
+                  }
+              });
+
+              //创建定时
+              let vector = [target,key,callback];
+              let timer = new egret.Timer(delay,repeat);
+              timer.addEventListener(egret.TimerEvent.TIMER, callback, target);
+              timer.start();
+
+              //加入定时队列
+              this._timerQueue.push(vector);
+
+              return true;
+          }
+
+          /**
+           * 关闭定时器
+           */
+          public killTime(target: any,key: string):boolean
+          {
+              this._timerQueue.forEach(timer => {
+                  if (timer[2] == key)
+                  {
+                      egret.assert(target == timer[1])
+                      if (target != timer[1])
+                      {
+                          console.log("对象不匹配");
+                          return false;
+                      }
+
+                      //回调方法
+                      var callback = timer[3]
+
+                      //移除定时
+                      target.removeEventListener(egret.TimerEvent.TIMER,callback,target);
+                      this._timerQueue.shift();
+
+                      return true;
+
+                  }
+              });
+              return true;
+          }
+
+
+          /**
+           * 移除所有定时器
+           */
+          public clean()
+          {
+               this._timerQueue.forEach(timer => {
+                   //移除定时
+                    var target = timer[0];
+                    var callback = timer[3];
+                    target.removeEventListener(egret.TimerEvent.TIMER,callback,target);
+               });
+
+
+               this._timerQueue = [];
+          }
+
+          
+    }
+}

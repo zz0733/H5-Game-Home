@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+        <title></title>
+
+        <style>
+            .ui-articles { width: 95%; margin: 0 auto; }
+            .ui-articles h1 { text-align: center; border-bottom: 1px solid #ccc; font-weight: bold; font-size: 1em; padding: 10px 0; }
+            .ui-articles-content { padding: .8em .3em; font-size: 1em; }
+            .ui-articles-content p, .ui-articles-content img { margin: .5em 0 }
+            .ui-articles-content img { width: 100%; display: block; }
+            body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+                margin: 0; padding: 0;
+            }
+            body { font-size: 24px; }
+			p{ color: #fff;font-family:"宋体","幼圆","黑体",sans-serif;}
+            @media only screen and (max-width: 360px) and (min-width: 320px) {
+                body { font-size: 14px !important; }
+            }
+            @media only screen and (max-width: 360px) and (min-width: 350px) {
+                body { font-size: 14px !important; }
+            }
+            @media only screen and (max-width: 480px) and (min-width: 360px) {
+                body { font-size: 16px !important; }
+            }
+            @media only screen and (max-width: 480px) and (min-width: 470px) {
+                body { font-size: 16px !important; }
+            }
+            @media only screen and (max-width: 560px) and (min-width: 480px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 570px) and (min-width: 560px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 640px) and (min-width: 570px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 640px) and (min-width: 630px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 710px) and (min-width: 640px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 800px) and (min-width: 710px) {
+                body { font-size: 18px !important; }
+            }
+            @media only screen and (max-width: 1080px) and (min-width: 800px) {
+                body { font-size: 20px !important; }
+            }
+            @media only screen and (max-width: 1280px) and (min-width: 1080px) {
+                body { font-size: 22px !important; }
+            }
+            @media only screen and (max-width: 1500px) and (min-width: 1280px) {
+                body { font-size: 24px !important; }
+            }
+            .l1:link, .l1:visited { text-decoration: none; color: #005ce5; }
+            .l1:hover { color: #005ce5; text-decoration: none; }
+            .Pd50 {padding-right:40px;}
+        </style>
+    </head>
+    <body>
+        <div class="ui-articles">
+            <div class="ui-articles-content">
+                <p><strong style="font-weight:bold;color: #ffff00"><联系客服></strong></p>
+                <p><a href="tel:15882201185" class="l1 Pd50" style="font-size:150%;color: #ff7700">联系电话 158-8220-1185</a></p>
+                <p> <a id="BizQQWPAInfo" href="javascript:;" title="企业QQ" class="l1 Pd50" style="font-size:150%;color: #ff7700">官方QQ 1337275678</a>
+                <script charset="utf-8" type="text/javascript" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+                <script type="text/javascript">
+                    BizQQWPA.addCustom({ aty: '0', a: '0', nameAccount: 1337275678, selector: 'BizQQWPAInfo' });
+                    </script>
+                </p>
+                <p><strong style="font-weight:bold;color: #ffff00;"><如何充值></strong></p>
+                <p>登录游戏后，点击大厅主界面底部的“充值”按钮，进入充值界面，在界面内选择您想要充值的游戏币金额进行购买即可。</p>
+				
+				<p><strong style="font-weight:bold;color: #ffff00;"><充值不到账></strong></p>
+				<p>充值可能会出现延迟，如在24小时内还未到账，请联系客服并提供必要查询信息，如游戏帐号、充值时间、充值金额以及您的联系方式，我们将及时为您处理。给您造成的不便，敬请谅解！</p>
+				               
+ 			    <p><strong style="font-weight:bold;color: #ffff00;"><如何存取款></strong></p>
+                <p>登录游戏后，点击大厅主界面底部的“钱包”按钮，进入钱包界面，在界面内输入您想要存取的游戏币金额，并选择点击“存入”或“取出”按钮即可。</p>
+				
+				<p><strong style="font-weight:bold;color: #ffff00;"><如何修改个人信息></strong></p>
+                <p>登录游戏后，点击大厅主界面左下角的“个人信息”区域，进入个人信息界面，在界面内修改个人信息或登录密码即可。</p>
+
+				<p><strong style="font-weight:bold;color: #ffff00;"><不同游戏场></strong></p>
+                <p>游戏根据不同底分要求和携带游戏币限制，设置有不同游戏场。底分越高意味着输赢幅度越大，游戏更加刺激。请根据您的个人意愿和携带游戏币数量，选择适合自己的游戏场进行游戏。</p>
+				
+				<p><strong style="font-weight:bold;color: #ffff00;"><快速开始></strong></p>
+                <p>不清楚应该选择哪个游戏场，可点击大厅界面中间的“快速开始”按钮，系统将自动为您分配适合您的游戏场。</p>
+				
+				<p><strong style="font-weight:bold;color: #ffff00;"><经验值></strong></p>
+                <p>根据您的游戏时长可积累经验值，游戏时长越长，经验值越高。积累达到一定经验值将获得升级，每升一级可获得一颗星，积累五颗星升级一个月亮，积累五个月亮升级一个太阳，以此类推。</p>
+				
+				<p><strong style="font-weight:bold;color: #ffff00;"><等级></strong></p> 
+				<p>根据您携带游戏币数量将对应一个等级，且每个等级会赋予一个称号，如图所示：</p>
+				
+				<table width= "100% " bordercolor="#fff" border="1" cellspacing="0" cellpadding="5"  style="color: #fff;">
+					<tr>
+						<td align="center" >等级</td>
+						<td align="center" >称号</td>
+						<td align="center" >携带游戏币数量</td>
+					</tr>
+					<tr>
+						<td align="center" >1</td>
+						<td align="center" >务农</td>
+						<td align="center" >0-1,999</td>
+					</tr>
+					<tr>
+						<td align="center" >2</td>
+						<td align="center" >佃户</td>
+						<td align="center" >2,000-3,999</td>
+					</tr>
+					<tr>
+						<td align="center" >3</td>
+						<td align="center" >雇工</td>
+						<td align="center" >4,000-7,999</td>
+					</tr>
+					<tr>
+						<td align="center" >4</td>
+						<td align="center" >作坊主</td>
+						<td align="center" >8,000-19,999</td>
+					</tr>
+					<tr>
+						<td align="center" >5</td>
+						<td align="center" >农场主</td>
+						<td align="center" >20,000-39,999</td>
+					</tr>
+					<tr>
+						<td align="center" >6</td>
+						<td align="center" >地主</td>
+						<td align="center" >40,000-79,999</td>
+					</tr>
+					<tr>
+						<td align="center" >7</td>
+						<td align="center" >大地主</td>
+						<td align="center" >80,000-149,999</td>
+					</tr>
+					<tr>
+						<td align="center" >8</td>
+						<td align="center" >财主</td>
+						<td align="center" >150,000-299,999</td>
+					</tr>
+					<tr>
+						<td align="center" >9</td>
+						<td align="center" >富翁</td>
+						<td align="center" >300,000-499,999</td>
+					</tr>
+					<tr>
+						<td align="center" >10</td>
+						<td align="center" >大富翁</td>
+						<td align="center" >500,000-999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >11</td>
+						<td align="center" >小财神</td>
+						<td align="center" >1,000,000-1,999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >12</td>
+						<td align="center" >大财神</td>
+						<td align="center" >2,000,000-4,999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >13</td>
+						<td align="center" >赌棍</td>
+						<td align="center" >5,000,000-9,999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >14</td>
+						<td align="center" >赌侠</td>
+						<td align="center" >10,000,000-49,999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >15</td>
+						<td align="center" >赌王</td>
+						<td align="center" >50,000,000-99,999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >16</td>
+						<td align="center" >赌圣</td>
+						<td align="center" >100,000,000-499,999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >17</td>
+						<td align="center" >赌神</td>
+						<td align="center" >500,000,000-999,999,999</td>
+					</tr>
+					<tr>
+						<td align="center" >18</td>
+						<td align="center" >职业赌神</td>
+						<td align="center" >1,000,000,000及以上</td>
+					</tr>
+				</table>
+				<p><strong style="font-weight:bold;color: #ffff00;"><会员身份></strong></p>
+                <p>会员身份包括：蓝钻、黄钻、铂钻、红钻。获得会员身份，可享有特殊身份标记，彰显您的尊贵身份。</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,509 @@
+/**
+ * 约战框架
+ */
+namespace frame {
+    //操作标识 请100-199范围
+    const OP_MODE_CREATETABLE = 100 			//创建房间
+    const OP_MODE_FLUSHWEALTH = 101         	//刷新财富
+    const OP_MODE_QUERYTABLE = 102			    //查找桌子
+
+    const OP_MODE_DISMISSTABLE = 105         	//解散桌子
+    const OP_MODE_TABLEUSER = 106         	    //桌子用户
+
+    export class BattleFrame {
+        private _delegate: any;
+        private _dispatcher: egret.EventDispatcher;
+        private _opreateCode: number;
+        constructor(delegate) {
+            this._delegate = delegate;
+            this._dispatcher = new egret.EventDispatcher();
+            this.addEventListener();
+        }
+
+        public getDispatcher() {
+            return this._dispatcher;
+        }
+
+        /**
+         * 添加监听
+         */
+        public addEventListener() {
+            //注册通知
+            this._dispatcher.addEventListener(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE, this.connectComplete, this);
+            this._dispatcher.addEventListener(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH, this.onMessage, this);
+        }
+
+        /**
+         * 移除监听
+         */
+        public removeEventListener() {
+            this._dispatcher.removeEventListener(customEvent.CustomEvent.EVENT_CONNECT_COMPLETE, this.connectComplete, this);
+            this._dispatcher.removeEventListener(customEvent.CustomEvent.EVENT_MESSAGE_DISPATCH, this.onMessage, this);
+        }
+
+        //查询财富
+        public onFlushWealth(): void {
+            //操作记录
+            this._opreateCode = OP_MODE_FLUSHWEALTH;
+            managers.TcpServiceCtrl.getInstance().onConnectPlaza();
+        }
+
+        //查询约战信息
+        private _gameID: number;
+        private _queryKind: number;
+        private _queryid: number;
+        public onQueryTable(querykind, queryid, gameid) {
+            this._gameID = gameid;
+            this._queryKind = querykind
+            this._queryid = queryid
+
+            //操作记录
+            this._opreateCode = OP_MODE_QUERYTABLE;
+            this.onConnectBattle();
+        }
+
+        //创建桌子
+        private _cbCurrencyKind: number;
+        private _lCellScore: number;
+        private _battleConfig: any;
+        private _wPayType: number;
+        public onNCreateTable(gameid, cbCurrencyKind, lCellScore, config, wPayType) {
+            this._opreateCode = OP_MODE_CREATETABLE;
+            this._cbCurrencyKind = cbCurrencyKind;
+            this._lCellScore = lCellScore;
+            this._gameID = gameid;
+            this._battleConfig = config;
+            this._wPayType = wPayType;
+
+            this.onConnectBattle();
+        }
+
+        //解散桌子
+        private _dwMappedNum: number;
+        public onDismissTable(gameid, dwMappedNum) {
+            //操作记录
+            this._opreateCode = OP_MODE_DISMISSTABLE;
+            this._gameID = gameid
+            this._dwMappedNum = dwMappedNum
+            this.onConnectBattle()
+        }
+
+        //获取桌子用户
+        public onQueryTableUserList(gameid, dwMappedNum) {
+            this._gameID = gameid;
+            this._dwMappedNum = dwMappedNum;
+            this._opreateCode = OP_MODE_TABLEUSER;
+            this.onConnectBattle()
+        }
+
+        //连接成功
+        public connectComplete(): void {
+            if (this._delegate && this._delegate.connectComplete) {
+                this._delegate.connectComplete();
+            }
+
+            if (this._opreateCode == OP_MODE_QUERYTABLE) {
+                this.sendQueryTable(); //查找桌子
+            } else if (this._opreateCode == OP_MODE_CREATETABLE) {
+                this.sendCreateTable();//创建桌子
+            } else if (this._opreateCode == OP_MODE_FLUSHWEALTH) {
+                this.sendFlushWealth();//刷新财富
+            } else if (this._opreateCode == OP_MODE_DISMISSTABLE) {
+                this.sendDismissTable();//解散桌子
+            } else if (this._opreateCode == OP_MODE_TABLEUSER) {
+                this.sendQueryTableUser();//查询用户
+            }
+        }
+
+        /**查询桌子 */
+        public sendQueryTable() {
+            let query = df.CMD_GA_QueryTable();
+            query.wKindID = this._gameID ? this._gameID : 0;
+            query.dwUserID = managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID;
+            query.cbQueryKind = this._queryKind;
+            query.dwQueryArgKey = this._queryid;
+
+            let tcpService = managers.TcpServiceCtrl.getInstance().getGateWayService().getTcpService();
+            let pBuffer = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+            pBuffer.Append_WORD(query.wKindID);
+            pBuffer.Append_DWORD(query.dwUserID);
+            pBuffer.Append_Byte(query.cbQueryKind);
+            pBuffer.Append_DWORD(query.dwQueryArgKey);
+
+            tcpService.SendSocketData(df.MDM_GA_BATTLE_SERVICE, df.SUB_GA_QUERY_TABLE, pBuffer, pBuffer.getLength());
+        }
+
+        /**创建约战 */
+        public sendCreateTable() {
+            let tcpService = managers.TcpServiceCtrl.getInstance().getGateWayService().getTcpService();
+            //构造数据
+            let createTable = df.CMD_GA_CreateTable();
+            createTable.dwUserID = managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID;
+            createTable.dwStationID = df.STATION_ID;
+            createTable.szPassword = managers.FrameManager.getInstance().m_GlobalUserItem.szPassword;
+            createTable.dwGroupID = 0;
+            createTable.dwGroupCreaterID = 0;
+            createTable.wKindID = this._gameID;
+            createTable.wPayType = this._wPayType;
+            createTable.wPlayerCount = this._battleConfig.wPlayerCount ? this._battleConfig.wPlayerCount : 0;
+            createTable.cbSettleKind = this._battleConfig.cbSettleKind ? this._battleConfig.cbSettleKind : 0;
+            createTable.cbVideoMode = this._battleConfig.cbVideoMode ? this._battleConfig.cbVideoMode : 0;
+            createTable.cbCurrencyKind = this._cbCurrencyKind;
+            createTable.cbForbidSameIP = this._battleConfig.cbForbidSameIP ? this._battleConfig.cbForbidSameIP : 0;
+            createTable.wPlayCount = this._battleConfig.wPlayCount ? this._battleConfig.wPlayCount : 0;
+            createTable.dwPlayTime = this._battleConfig.dwPlayTime ? this._battleConfig.dwPlayTime : 0;
+            createTable.lBaseScore = this._lCellScore;
+            createTable.szMachineID = managers.FrameManager.getInstance().m_GlobalUserItem.szMachine;
+
+            let pBuffer = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+            pBuffer.Append_DWORD(createTable.dwUserID);
+            pBuffer.Append_DWORD(createTable.dwStationID);
+            pBuffer.Append_UTF16(createTable.szPassword, df.LEN_PASSWORD);
+            pBuffer.Append_DWORD(createTable.dwGroupID);
+            pBuffer.Append_DWORD(createTable.dwGroupCreaterID);
+            pBuffer.Append_WORD(createTable.wKindID);
+            pBuffer.Append_WORD(createTable.wPayType);
+            pBuffer.Append_WORD(createTable.wPlayerCount);
+            pBuffer.Append_Byte(createTable.cbSettleKind);
+            pBuffer.Append_Byte(createTable.cbVideoMode);
+            pBuffer.Append_Byte(createTable.cbCurrencyKind);
+            pBuffer.Append_Byte(createTable.cbForbidSameIP);
+            pBuffer.Append_WORD(createTable.wPlayCount);
+            pBuffer.Append_DWORD(createTable.dwPlayTime);
+            pBuffer.Append_SCORE(createTable.lBaseScore);
+            pBuffer.Append_UTF16(createTable.szMachineID, df.LEN_COMPUTER_ID);
+
+            tcpService.SendSocketData(df.MDM_GA_BATTLE_SERVICE, df.SUB_GA_CREATE_TABLE, pBuffer, pBuffer.getLength());
+        }
+
+        /**刷新财富 */
+        public sendFlushWealth() {
+            let FlushData = {
+                dwUserID: 0
+            }
+
+            FlushData.dwUserID = managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID;
+            let pBuffer = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+            pBuffer.Append_DWORD(FlushData.dwUserID);
+            let tcpService = managers.TcpServiceCtrl.getInstance().getTcpService();
+            tcpService.SendSocketData(df.MDM_GP_USER_SERVICE, df.SUB_GP_QUERY_WEALTH_LUA, pBuffer, pBuffer.getLength());
+
+        }
+
+        /**约战解散 */
+        public sendDismissTable() {
+            let dismissTable = df.CMD_GA_DismissTable();
+            dismissTable.wKindID = this._gameID;
+            dismissTable.dwUserID = managers.FrameManager.getInstance().m_GlobalUserItem.dwUserID;
+            dismissTable.dwMappedNum = this._dwMappedNum;
+            dismissTable.szPassword = managers.FrameManager.getInstance().m_GlobalUserItem.szPassword;
+
+            let pBuffer = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+            pBuffer.Append_WORD(dismissTable.wKindID);
+            pBuffer.Append_DWORD(dismissTable.dwMappedNum);
+            pBuffer.Append_DWORD(dismissTable.dwUserID);
+            pBuffer.Append_UTF16(dismissTable.szPassword, df.LEN_PASSWORD);
+
+            let tcpService = managers.TcpServiceCtrl.getInstance().getGateWayService().getTcpService();
+            tcpService.SendSocketData(df.MDM_GA_BATTLE_SERVICE, df.SUB_GA_DISMISS_TABLE, pBuffer, pBuffer.getLength());
+        }
+
+        /**查询用户 */
+        public sendQueryTableUser() {
+            let tableUserList = df.CMD_GA_GetTableUserList();
+            tableUserList.wKindID = this._gameID;
+            tableUserList.dwMappedNum = this._dwMappedNum;
+
+            let pBuffer = utils.Memory.newLitteEndianByteArray(df.Len_Tcp_Head);
+            pBuffer.Append_WORD(tableUserList.wKindID);
+            pBuffer.Append_DWORD(tableUserList.dwMappedNum);
+
+            let tcpService = managers.TcpServiceCtrl.getInstance().getGateWayService().getTcpService();
+            tcpService.SendSocketData(df.MDM_GA_BATTLE_SERVICE, df.SUB_GA_GET_TABLE_USERLIST, pBuffer, pBuffer.getLength());
+        }
+
+        /**
+        * 网络消息
+        */
+        public onMessage(e: egret.Event): void {
+            let msg = e.data as network.Message;
+            const wMainCmd = msg.wMainCmd;
+            const wSubCmd = msg.wSubCmd;
+
+            switch (wMainCmd) {
+                case df.MDM_GP_USER_SERVICE:
+                    {
+                        if (this._opreateCode == OP_MODE_FLUSHWEALTH && wSubCmd == df.SUB_GP_USER_WEALTH) {
+                            this.onUserWealth(msg);
+                        }
+                    }
+                    break;
+                case df.MDM_GA_BATTLE_SERVICE:
+                    {
+                        this.onSubBattleService(msg)
+                    }
+                    break;
+                case df.MDM_GA_LOGIC_SERVICE:
+                    {
+                        this.onSubLogicService(msg);
+                    }
+                    break;
+                case df.MDM_GA_GROUP_SERVICE:
+                    {
+
+                    }
+                    break;
+            }
+        }
+
+        /**财富更新 */
+        private onUserWealth(msg: network.Message) {
+            let cbMask = msg.cbBuffer.Pop_Byte();
+            let lUserIngot = msg.cbBuffer.Pop_SCORE();
+            let lUserMedal = msg.cbBuffer.Pop_SCORE();
+            let lUserScore = msg.cbBuffer.Pop_SCORE();
+            let lUserRoomCard = msg.cbBuffer.Pop_SCORE();
+
+            if (lUserIngot && (cbMask & df.WEALTH_MASK_INGOT) != 0) {
+                managers.FrameManager.getInstance().m_GlobalUserItem.lUserIngot = lUserIngot;
+            }
+            if (lUserMedal && (cbMask & df.WEALTH_MASK_MEDAL) != 0) {
+                managers.FrameManager.getInstance().m_GlobalUserItem.lUserMedal = lUserMedal;
+            }
+            if (lUserScore && (cbMask & df.WEALTH_MASK_SCORE) != 0) {
+                managers.FrameManager.getInstance().m_GlobalUserItem.lUserScore = lUserScore;
+            }
+            if (lUserRoomCard && (cbMask & df.WEALTH_MASK_ROOMCARD) != 0) {
+                managers.FrameManager.getInstance().m_GlobalUserItem.lUserRoomCard = lUserRoomCard;
+            }
+
+            //通知UI刷新
+            if (this._delegate) {
+                this._delegate.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_BATTLE_INFO_REFRESH));
+            }
+        }
+
+        //约战信息
+        public onSubBattleService(msg: network.Message) {
+            const wSubCmd = msg.wSubCmd;
+            switch (wSubCmd) {
+                case df.SUB_GA_TABLE_ITEM:
+                    {
+                        this.onSocketTableItem(msg);
+                    }
+                    break;
+                case df.SUB_GA_TABLE_LIST:
+                    {
+                        this.onSocketTableList(msg);
+                    }
+                    break;
+                case df.SUB_GA_OPERATE_FAILED:
+                    {
+                        this.onSocketOperateFailed(msg);
+                    }
+                    break
+                case df.SUB_GA_TABLE_PARAMLIST:
+                    {
+                        this.onSocketTableParamList(msg);
+                    }
+                    break;
+                case df.SUB_GA_TABLE_USERLIST:
+                    {
+                        this.onSocketTableUserList(msg);
+                    }
+                    break;
+                case df.SUB_GA_DISMISS_RESULT:
+                    {
+                        this.onSocketDissMissResult(msg);
+                    }
+                    break;
+            }
+        }
+
+        //业务逻辑消息
+        public onSubLogicService(msg: network.Message) {
+            const wSubCmd = msg.wSubCmd;
+            switch (wSubCmd) {
+                case df.SUB_GA_WEALTH_UPDATE:
+                    {
+                        this.onSocketWealthUpdate(msg);
+                    }
+                    break;
+                default:
+                    break
+            }
+        }
+
+        /**操作失败 */
+        public onSocketOperateFailed(msg: network.Message) {
+            let errorCode = msg.cbBuffer.Pop_WORD();
+            let str = msg.cbBuffer.Pop_UTF16((msg.wLength - 2) / 2);
+            console.log(str);
+
+            managers.FrameManager.getInstance().dismissPopWait();
+            managers.FrameManager.getInstance().showToast(str);
+
+            //关闭服务
+            if (null != this._delegate && this._delegate.onCloseBattleService) {
+                this._delegate.onCloseBattleService();
+            }
+        }
+
+        /**约战信息 */
+        public onSocketTableItem(msg: network.Message) {
+            let tableItem = new battle.BattleTableItem(msg.cbBuffer);
+
+            //保存信息
+            managers.TcpServiceCtrl.getInstance().getServerInfo().m_curBattle = tableItem;
+
+            //关闭服务
+            if (null != this._delegate && this._delegate.onCloseBattleService) {
+                this._delegate.onCloseBattleService();
+            }
+
+            managers.FrameManager.getInstance().dismissPopWait();
+            managers.FrameManager.getInstance().showPopWait("加载游戏中,请稍等", false, this._delegate.onStartBattleGame);
+        }
+
+        /**约战参数 */
+        public onSocketTableParamList(msg: network.Message) {
+            //置空            
+            managers.TcpServiceCtrl.getInstance().getServerInfo().m_BattleParamList = [];
+
+            while (msg.cbBuffer.getByteArray().bytesAvailable >= 12) {
+                let param = new battle.BattleParam(msg.cbBuffer);
+                managers.TcpServiceCtrl.getInstance().getServerInfo().m_BattleParamList.push(param);
+            }
+
+            //刷新列表
+            this._delegate.onUpdateList();
+
+            //关闭服务
+            if (null != this._delegate && this._delegate.onCloseBattleService) {
+                this._delegate.onCloseBattleService();
+            }
+        }
+
+        /**约战列表 */
+        public onSocketTableList(msg: network.Message) {
+            //桌子数目
+            const wTableCount = msg.cbBuffer.Pop_WORD();
+
+            //清空
+            managers.TcpServiceCtrl.getInstance().getServerInfo().m_BattleList = [];
+            for (let i = 0; i < wTableCount; i++) {
+                let tableItem = new battle.BattleTableItem(msg.cbBuffer);
+                managers.TcpServiceCtrl.getInstance().getServerInfo().m_BattleList.push(tableItem);
+            }
+
+            //关闭服务
+            if (wTableCount == 0) {
+                if (null != this._delegate && this._delegate.onCloseBattleService) {
+                    this._delegate.onCloseBattleService();
+                }
+                return;
+            }
+
+            //刷新列表
+            this._delegate.onUpdateList();
+
+        }
+
+        /**约战用户列表 */
+        public onSocketTableUserList(msg: network.Message) {
+            let struct = df.CMD_GA_TableUserList();
+            struct.dwMappedNum = msg.cbBuffer.Pop_DWORD();
+            struct.wUserCount = msg.cbBuffer.Pop_WORD();
+
+            let userList: any[] = [];
+            for (let i = 0; i < struct.wUserCount; i++) {
+                let tagTableUserItem = df.tagTableUserItem();
+                tagTableUserItem.wFaceID = msg.cbBuffer.Pop_WORD();
+                tagTableUserItem.wChairID = msg.cbBuffer.Pop_WORD();
+                tagTableUserItem.dwUserID = msg.cbBuffer.Pop_DWORD();
+                tagTableUserItem.dwGameID = msg.cbBuffer.Pop_DWORD();
+                tagTableUserItem.dwCustomID = msg.cbBuffer.Pop_DWORD();
+                tagTableUserItem.szNickName = msg.cbBuffer.Pop_UTF16(df.LEN_ACCOUNTS);
+                userList.push(tagTableUserItem);
+            }
+
+            let paramList = managers.TcpServiceCtrl.getInstance().getServerInfo().m_BattleParamList;
+            if (null != paramList) {
+                if (paramList.length > 0) {
+                    for (let i = 0; i < paramList.length; i++) {
+                        let param = paramList[i];
+                        if (param.dwMappedNum == struct.dwMappedNum) {
+                            param.wUserCount = struct.wUserCount
+                            if (null == param.tableUserList[i])
+                                param.tableUserList[i] = new battle.BattleUserItem()
+                            param.tableUserList[i].onInitWithData(userList[i])
+                        }
+                    }
+                }
+            }
+
+            //关闭服务
+            if (null != this._delegate && this._delegate.onCloseBattleService) {
+                this._delegate.onCloseBattleService();
+            }
+        }
+
+        /**解散结果 */
+        public onSocketDissMissResult(msg: network.Message) {
+            let result = df.CMD_GA_DismissResult();
+            result.cbResultCode = msg.cbBuffer.Pop_Byte();
+            result.szDescribeString = msg.cbBuffer.Pop_UTF16(msg.cbBuffer.getByteArray().bytesAvailable / 2);
+
+            if (this._delegate && this._delegate.onDismissResult) {
+                this._delegate.onDismissResult(result);
+            }
+
+        }
+
+        /**财富更新 */
+        public onSocketWealthUpdate(msg: network.Message) {
+            const lUserIngot = msg.cbBuffer.Pop_SCORE();    //用户钻石
+            const lUserRoomCard = msg.cbBuffer.Pop_SCORE(); //用户房卡
+
+            managers.FrameManager.getInstance().m_GlobalUserItem.lUserIngot = lUserIngot;
+            managers.FrameManager.getInstance().m_GlobalUserItem.lUserRoomCard = lUserRoomCard;
+
+            //UI刷新
+            if (this._delegate) {
+                this._delegate.dispatchEvent(new customEvent.CustomEvent(customEvent.CustomEvent.EVENT_BATTLE_REFRESH));
+            }
+        }
+
+        /**
+         * 约战连接
+         */
+        public onConnectBattle() {
+            managers.TcpServiceCtrl.getInstance().createGateWayService().connectGateWay();
+        }
+
+        /**
+         * 约战记录
+         */
+        public onHttpGetBattleInfo(listener) {
+
+        }
+
+        /**
+         * 发送心跳
+         */
+        public sendPing(): void {
+            //构造数据
+            let Ping = new utils.ByteArray();
+
+            //设置偏移
+            Ping.position(df.Len_Tcp_Head);
+
+            //发送心跳
+            if (null == managers.TcpServiceCtrl.getInstance().getGateWayService()) 
+                return
+                
+            let tcpService = managers.TcpServiceCtrl.getInstance().getGateWayService().getTcpService();
+            tcpService.SendSocketData(df.MDM_KN_COMMAND, df.SUB_KN_DETECT_SOCKET, Ping, Ping.getLength());
+        }
+    }
+}

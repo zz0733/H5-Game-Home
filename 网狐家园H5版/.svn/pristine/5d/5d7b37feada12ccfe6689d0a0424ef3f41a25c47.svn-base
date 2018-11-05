@@ -1,0 +1,76 @@
+/**
+ * 游戏交互
+ */
+namespace game {
+    export namespace sparrowsclm {
+        export class GameViewLayer extends eui.UILayer {
+             protected createChildren(): void {
+                super.createChildren();
+
+                this.name = "GameViewLayer";
+
+                this.once(egret.Event.ADDED_TO_STAGE, this.onInitLayer, this);
+                this.once(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+
+                //注册触摸
+                this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+
+            }
+            private _gameEngine: GameClientEngine;
+            constructor(engine: any) {
+                super();
+                this._gameEngine = engine;
+
+            }
+            /**初始化 */
+            private onInitLayer(): void {
+                let componet = new eui.Component();
+                this.addChild(componet);
+
+                componet.skinName = skins.sparrowsclm.GameLayer;
+
+                //显示自己信息
+                this.showMyselfInfo()
+            }
+
+            /**显示自己信息 */
+            private showMyselfInfo() {
+                const myself = this._gameEngine.getMeUserItem();
+                
+            }
+
+             /** 触摸事件
+            * onTouchBegan
+            * onTouchMove
+            * onTouchEnd
+            */
+            private onTouchBegan(event: egret.TouchEvent) {
+                //console.log("onTouch Began");
+                this._bMoved = false;
+            }
+
+            private _bMoved = false;
+            private onTouchMove(event: egret.TouchEvent) {
+                //console.log("onTouch move");
+                this._bMoved = true;
+            }
+
+            private onTouchEnd(event: egret.TouchEvent) {
+                //console.log("onTouch end");
+
+            }
+
+            /**
+             * 移除舞台 
+             */
+            private onExit() {
+                //移除触摸
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegan, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            }
+        }
+    }
+}

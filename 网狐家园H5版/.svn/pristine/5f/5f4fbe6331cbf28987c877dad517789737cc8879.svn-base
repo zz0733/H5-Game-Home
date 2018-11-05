@@ -1,0 +1,177 @@
+/**网络数据包
+ * 消息包的发送
+ * 数据包的解析
+ */
+var network;
+(function (network) {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 消息发送
+     */
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 发送验证
+     */
+    function sendValidPacket(service, args) {
+        //构造数据
+        var validate = new utils.__ByteArray();
+        //设置偏移
+        validate.position(df.Len_Tcp_Head);
+        //写入缓冲
+        validate.Append_Byte(args[0]);
+        validate.Append_Byte(args[1]);
+        validate.Append_Byte(args[2]);
+        validate.Append_Byte(args[3]);
+        validate.Append_INT(args[4]);
+        service.SendSocketData(df.MDM_KN_COMMAND, df.SUB_KN_VALIDATE_SOCKET, validate, validate.getLength());
+    }
+    network.sendValidPacket = sendValidPacket;
+    /**
+     * 发送注册
+     */
+    function sendRegister(service, args) {
+        //构造数据
+        var CMD_MP_RegisterAccounts = new utils.__ByteArray();
+        //设置偏移
+        CMD_MP_RegisterAccounts.position(df.Len_Tcp_Head);
+        CMD_MP_RegisterAccounts.Append_WORD(args[0]);
+        CMD_MP_RegisterAccounts.Append_INT(args[1]);
+        CMD_MP_RegisterAccounts.Append_WORD(args[2]);
+        CMD_MP_RegisterAccounts.Append_WORD(args[3]);
+        CMD_MP_RegisterAccounts.Append_WORD(args[4]);
+        CMD_MP_RegisterAccounts.Append_Byte(args[5]);
+        CMD_MP_RegisterAccounts.Append_DWORD(args[6]);
+        CMD_MP_RegisterAccounts.Append_DWORD(args[7]);
+        CMD_MP_RegisterAccounts.Append_DWORD(args[8]);
+        CMD_MP_RegisterAccounts.Append_DWORD(args[9]);
+        CMD_MP_RegisterAccounts.Append_DWORD(args[10]);
+        CMD_MP_RegisterAccounts.Append_UTF16(args[11], 33);
+        CMD_MP_RegisterAccounts.Append_WORD(args[12]);
+        CMD_MP_RegisterAccounts.Append_Byte(args[13]);
+        CMD_MP_RegisterAccounts.Append_UTF16(args[14], 32);
+        CMD_MP_RegisterAccounts.Append_UTF16(args[15], 32);
+        CMD_MP_RegisterAccounts.Append_UTF16(args[16], 33);
+        service.SendSocketData(df.MDM_KN_COMMAND, df.SUB_KN_VIRTUAL_DATA, CMD_MP_RegisterAccounts, CMD_MP_RegisterAccounts.getLength());
+    }
+    network.sendRegister = sendRegister;
+    /**
+     * 发送登录
+     */
+    function sendLogon(service, args) {
+        //帐号登录
+        var CMD_MP_LogonAccounts = new utils.__ByteArray();
+        //设置偏移
+        CMD_MP_LogonAccounts.position(df.Len_Tcp_Head);
+        CMD_MP_LogonAccounts.Append_WORD(args[0]);
+        CMD_MP_LogonAccounts.Append_INT(args[1]);
+        CMD_MP_LogonAccounts.Append_WORD(args[2]);
+        CMD_MP_LogonAccounts.Append_WORD(args[3]);
+        CMD_MP_LogonAccounts.Append_WORD(args[4]);
+        CMD_MP_LogonAccounts.Append_Byte(args[5]);
+        CMD_MP_LogonAccounts.Append_DWORD(args[6]);
+        CMD_MP_LogonAccounts.Append_DWORD(args[7]);
+        CMD_MP_LogonAccounts.Append_DWORD(args[8]);
+        CMD_MP_LogonAccounts.Append_DWORD(args[9]);
+        CMD_MP_LogonAccounts.Append_DWORD(args[10]);
+        CMD_MP_LogonAccounts.Append_UTF16(args[11], 33);
+        CMD_MP_LogonAccounts.Append_UTF16(args[12], 33);
+        CMD_MP_LogonAccounts.Append_UTF16(args[13], 32);
+        service.SendSocketData(df.MDM_KN_COMMAND, df.SUB_KN_VIRTUAL_DATA, CMD_MP_LogonAccounts, CMD_MP_LogonAccounts.getLength());
+    }
+    network.sendLogon = sendLogon;
+    /**
+     * 虚拟连接
+     */
+    function sendServiceLink(service, args) {
+        //构造数据
+        var ServiceLink = new utils.__ByteArray();
+        //设置偏移
+        ServiceLink.position(df.Len_Tcp_Head);
+        ServiceLink.Append_DWORD(args[0]);
+        ServiceLink.Append_Byte(args[1]);
+        ServiceLink.Append_WORD(args[2]);
+        service.SendSocketData(df.MDM_KN_COMMAND, df.SUB_KN_SERVICE_LINK, ServiceLink, ServiceLink.getLength());
+    }
+    network.sendServiceLink = sendServiceLink;
+    /**
+    * 发送心跳
+    */
+    function sendPing(service) {
+        //构造数据
+        var Ping = new utils.__ByteArray();
+        //设置偏移
+        Ping.position(df.Len_Tcp_Head);
+        //发送心跳
+        service.SendSocketData(df.MDM_KN_COMMAND, df.SUB_KN_DETECT_SOCKET, Ping, Ping.getLength());
+    }
+    network.sendPing = sendPing;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /***
+     * 消息解析
+     */
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    //虚拟连接成功
+    function onSubVirtualSuccess(buffer) {
+        var virtualSucces = { dwClientID: 0, dwServerID: 0 };
+        var orignalPos = buffer.getPosition();
+        virtualSucces.dwClientID = buffer.Pop_DWORD();
+        virtualSucces.dwServerID = buffer.Pop_DWORD();
+        buffer.position(orignalPos);
+        return virtualSucces;
+    }
+    network.onSubVirtualSuccess = onSubVirtualSuccess;
+    //登录成功
+    function onSubLogonSuccess(buffer) {
+        var orignalPos = buffer.getPosition();
+        var CMD_MP_LogonSuccess = {
+            //属性资料
+            wSiteID: 0,
+            wFaceID: 0,
+            dwUserID: 0,
+            dwGameID: 0,
+            dwCustomID: 0,
+            dwUserBean: 0,
+            dwUserMedal: 0,
+            dwExperience: 0,
+            dwLoveLiness: 0,
+            //用户成绩
+            lUserGold: 0,
+            lUserInsure: 0,
+            //用户属性
+            cbGender: 0,
+            szAccounts: "",
+            szNickName: "",
+            szUserToken: "",
+        };
+        CMD_MP_LogonSuccess.wSiteID = buffer.Pop_WORD();
+        CMD_MP_LogonSuccess.wFaceID = buffer.Pop_WORD();
+        CMD_MP_LogonSuccess.dwUserID = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwGameID = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwCustomID = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwUserBean = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwUserMedal = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwExperience = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.dwLoveLiness = buffer.Pop_DWORD();
+        CMD_MP_LogonSuccess.lUserGold = buffer.Pop_SCORE();
+        CMD_MP_LogonSuccess.lUserInsure = buffer.Pop_SCORE();
+        CMD_MP_LogonSuccess.cbGender = buffer.Pop_Byte();
+        CMD_MP_LogonSuccess.szAccounts = buffer.Pop_UTF16(32);
+        CMD_MP_LogonSuccess.szNickName = buffer.Pop_UTF16(32);
+        CMD_MP_LogonSuccess.szUserToken = buffer.Pop_UTF16(33);
+        buffer.position(orignalPos);
+        return CMD_MP_LogonSuccess;
+    }
+    network.onSubLogonSuccess = onSubLogonSuccess;
+    //登录失败
+    function onSubLogonFailure(buffer) {
+        var CMD_MP_LogonFailure = {
+            dwErrorCode: 0,
+            szDescribeString: "" //错误描述
+        };
+        CMD_MP_LogonFailure.dwErrorCode = buffer.Pop_DWORD();
+        CMD_MP_LogonFailure.szDescribeString = buffer.Pop_UTF16(buffer.getByteArray().readAvailable / 2);
+        return CMD_MP_LogonFailure;
+    }
+    network.onSubLogonFailure = onSubLogonFailure;
+})(network || (network = {}));
+//# sourceMappingURL=NetFrame.js.map

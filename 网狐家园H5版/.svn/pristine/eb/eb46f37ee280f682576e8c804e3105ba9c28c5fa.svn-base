@@ -1,0 +1,308 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+/**
+ * TCP服务
+ */
+var service;
+(function (service) {
+    /**
+    * 心跳维护时间
+    */
+    var HeartTime = 5000;
+    /**
+     * 验证时间
+     */
+    var ValidateTimeOut = 5000;
+    var CONNECT_SUCCESS = true;
+    var CONNECT_FAILURE = false;
+    var TcpSocketService = (function () {
+        /**
+         * 构造
+         */
+        function TcpSocketService() {
+            /**
+             * 接收长度
+             */
+            this.m_wRecvSize = 0;
+            /**
+             * 最大连接
+             */
+            this.m_ReConnectMax = 5;
+            /**
+             * 连接超时
+             */
+            this.m_ReConnectTimeOut = 10;
+            /**
+             * 连接方式
+             */
+            this.m_ConnectKind = df.SERVICE_MODE_LINK;
+            /**
+             * 当前时间
+             */
+            this.m_CurTime = 0;
+            /**
+             * 接收容器
+             */
+            this.m_RecvQueue = [];
+            //websocket
+            this.m_Socket = new network.TcpSocket();
+            this.m_Socket.setServiceModule(this);
+            //事件实例
+            this.m_EventDispatcher = new egret.EventDispatcher();
+            //加密实例
+            this.m_Crypt = new network.Crypt();
+            //接收大小
+            this.m_wRecvSize = 0;
+            //缓冲队列
+            this.m_RecvQueue = [];
+        }
+        /**
+         * 创建连接
+         */
+        TcpSocketService.prototype.createConnect = function (host, port) {
+            egret.assert(null != this.m_Socket);
+            if (null == this.m_Socket) {
+                //websocket
+                this.m_Socket = new network.TcpSocket();
+                this.m_Socket.setServiceModule(this);
+            }
+            this.m_Socket.connect(host, port);
+        };
+        //缓冲队列
+        TcpSocketService.prototype.pushRecvBuffer = function (buffer) {
+            this.m_RecvQueue.push(buffer);
+        };
+        //连接模块
+        TcpSocketService.prototype.setConnectModule = function (module) {
+            this.m_ConnectModule = module;
+        };
+        //服务类型
+        TcpSocketService.prototype.setConnectKind = function (kind) {
+            this.m_ConnectKind = kind;
+        };
+        /**
+         * 解密数据
+         */
+        TcpSocketService.prototype.setSocketBuffer = function (buffer) {
+            var _this = this;
+            //重置变量
+            this.m_CurTime = egret.getTimer();
+            return new Promise(function (resolve, reject) {
+                var offset = 0; //记录偏移
+                var splicing = false; //粘包标记
+                try {
+                    //网络长度
+                    _this.m_wRecvSize = buffer.getLength();
+                    //解密映射
+                    while (_this.m_wRecvSize >= df.Len_Tcp_Head) {
+                        if (offset > 0) {
+                            splicing = true;
+                        }
+                        //设置偏移
+                        buffer.position(offset);
+                        //数据类型
+                        var cbDataKind = utils.MathUtils.getUnsignedByte(buffer.Pop_Byte());
+                        //校验字段
+                        var cbCheckCode = utils.MathUtils.getUnsignedByte(buffer.Pop_Byte());
+                        //缓冲长度
+                        var wPacketSize = buffer.Pop_WORD();
+                        //设置包头
+                        _this.m_Crypt.setTCPInfo([cbDataKind, cbCheckCode, wPacketSize]);
+                        //长度校验
+                        egret.assert((wPacketSize >= df.Len_Tcp_Info) && (wPacketSize <= df.SOCKET_TCP_BUFFER));
+                        if ((wPacketSize < df.Len_Tcp_Info) || (wPacketSize > df.SOCKET_TCP_BUFFER)) {
+                            throw new Error("消息包错误");
+                        }
+                        //完整判断
+                        if (_this.m_wRecvSize < wPacketSize) {
+                            throw new Error("消息包接收不完整");
+                        }
+                        //解密数据
+                        // let temp = [
+                        //                         1,71,82,0,126,236,243,14,223,82,228,86,71,119,151,24,205,223,219,16,170,76,
+                        //                         210,181,153,115,242,58,238,171,255,218,124,42,225,179,103,12,82,82,128,
+                        //                         94,162,252,237,165,228,16,93,99,170,182,16,102,93,87,104,92,206,200,177,153,
+                        //                         110,121,125,179,248,8,83,233,99,200,102,192,198,26,141,230,217,0,223,61 
+                        //               ]
+                        // buffer.clear();
+                        // for (var k = 0; k < 82;k++)
+                        // {
+                        //     buffer.Append_Byte(temp[k]);
+                        // }
+                        if (_this.m_Crypt.CrevasseBuffer(buffer, wPacketSize, offset) == false) {
+                            egret.assert(false);
+                            throw new Error("解密失败");
+                        }
+                        //读取命令码
+                        buffer.position(4);
+                        var wMain = buffer.Pop_WORD();
+                        var wSub = buffer.Pop_WORD();
+                        console.log("\u4E3B\u547D\u4EE4: " + wMain + ",\u5B50\u547D\u4EE4: " + wSub);
+                        if (wMain == df.MDM_KN_COMMAND) {
+                            //内核命令
+                            if (wSub == df.SUB_KN_DETECT_SOCKET) {
+                            }
+                        }
+                        else {
+                            var lcode = buffer.Pop_INT();
+                            var str = buffer.Pop_UTF16((wPacketSize - df.Len_Tcp_Head - 4) / 2);
+                            console.log(str);
+                        }
+                        //处理长度
+                        _this.m_wRecvSize -= wPacketSize;
+                        egret.assert(_this.m_wRecvSize >= 0);
+                        //记录偏移
+                        offset += wPacketSize;
+                        //判断完成
+                        if (_this.m_wRecvSize < df.Len_Tcp_Head) {
+                            resolve();
+                            buffer = null;
+                        }
+                        console.log("\u5DF2\u5904\u7406\u957F\u5EA6: " + wPacketSize + ",\u5269\u4F59\u957F\u5EA6: " + _this.m_wRecvSize);
+                    }
+                }
+                catch (e) {
+                    //释放引用
+                    buffer = null;
+                    //处理长度
+                    _this.m_wRecvSize -= wPacketSize;
+                    //记录偏移
+                    offset += wPacketSize;
+                    reject("数据解析异常");
+                }
+            });
+        };
+        /**
+         * 发送数据
+         */
+        TcpSocketService.prototype.SendSocketData = function (wMainCmd, wSubCmd, data, wSize) {
+            //加密消息包
+            var packages = (this.initSocketData(wMainCmd, wSubCmd, data, wSize));
+            //发送数据
+            if (this.m_Socket) {
+                //偏移前置
+                packages.position(0);
+                //写流
+                this.m_Socket.writeBytes(packages.getByteArray());
+                //引用释放
+                packages = null;
+            }
+            return true;
+        };
+        /***
+         * 封包加密
+         */
+        TcpSocketService.prototype.initSocketData = function (wMainCmd, wSubCmd, data, wSize) {
+            //定义变量
+            var packages;
+            var mapResult;
+            var buffer = data;
+            //加密数据
+            if (((this.m_Crypt.getDataFlag() & network.DK_MAPPED) != 0)) {
+                //设置偏移
+                buffer.position(df.Len_Tcp_Info);
+                //设置命令码
+                buffer.Append_WORD(wMainCmd);
+                buffer.Append_WORD(wSubCmd);
+                //映射数据
+                mapResult = this.m_Crypt.EncryptBuffer(buffer, wSize);
+            }
+            //构造数据包
+            packages = new utils.__ByteArray();
+            //偏移前置
+            buffer.position(0);
+            //填充包头
+            buffer.Append_Byte(mapResult[0]);
+            buffer.Append_Byte(mapResult[1]);
+            buffer.Append_WORD(mapResult[2]);
+            packages.Append_Bytes(buffer.getByteArray());
+            //引用置空
+            buffer.clear();
+            buffer = null;
+            return packages;
+        };
+        //连接成功
+        TcpSocketService.prototype.socketConnectSuccess = function () {
+            //连接状态
+            this.m_Socket.setConnectStatus(2 /* soc_connected */);
+            //记录时间
+            this.m_CurTime = egret.getTimer();
+            //发送注册
+            var args = [65535, 1, 0x40, utils.VersionValue(1, 1, 0, 1), utils.VersionValue(1, 1, 0, 1),
+                1000, "e10adc3949ba59abbe56e057f20f883e",
+                0, 0, "KOBE249", "KOBE249", "DWWEZOEZOEZOEDWWEZOEZOEZOEZOEZOE", "15013618888"];
+            network.sendRegister(this, args);
+        };
+        /**
+         * socket响应
+         */
+        TcpSocketService.prototype.socketConnectFailure = function () {
+        };
+        /**
+         * 关闭服务
+         */
+        TcpSocketService.prototype.closeService = function () {
+            //关闭socket
+            if (null != this.m_Socket) {
+                if (this.m_Socket.isConnected()) {
+                    //this.m_Socket.close();
+                }
+                //this.m_Socket = null;
+            }
+            //释放引用
+            if (null != this.m_Crypt) {
+                this.m_Crypt = null;
+            }
+            console.log("TcpService服务关闭");
+        };
+        /**
+         * 重连机制
+         */
+        TcpSocketService.prototype.reconnectionService = function () {
+        };
+        /**
+         * 重连超时
+         */
+        TcpSocketService.prototype.reconnectTimeOut = function () {
+        };
+        /**
+         * 刷新
+         */
+        TcpSocketService.prototype.onUpdate = function () {
+            var _this = this;
+            //时间差
+            var curTime = egret.getTimer();
+            var delay = curTime - this.m_CurTime;
+            // console.log(`spend ${delay}毫秒`)
+            if (null == this.m_Socket) {
+                return;
+            }
+            //发送心跳
+            if (delay >= HeartTime && (true == this.m_Socket.isConnected())) {
+                do {
+                    // network.sendPing(this);
+                    this.m_CurTime = egret.getTimer();
+                    console.log("发送心跳");
+                } while (false);
+            }
+            //缓冲队列处理
+            if (this.m_RecvQueue.length > 0) {
+                var buffer = this.m_RecvQueue[0];
+                this.setSocketBuffer(buffer)
+                    .then(function () {
+                    _this.m_RecvQueue.shift();
+                })
+                    .catch(function (err) {
+                    console.error(err);
+                    //移除错误包,继续解析 
+                    _this.m_RecvQueue.shift();
+                });
+            }
+        };
+        return TcpSocketService;
+    }());
+    service.TcpSocketService = TcpSocketService;
+    __reflect(TcpSocketService.prototype, "service.TcpSocketService", ["df.IConnectSocket", "df.ISocketService"]);
+})(service || (service = {}));
+//# sourceMappingURL=TcpSocketService.js.map

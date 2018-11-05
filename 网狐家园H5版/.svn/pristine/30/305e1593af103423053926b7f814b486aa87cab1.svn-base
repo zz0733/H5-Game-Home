@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="skins.Dialog" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="BG" width="668" height="433" x="667" y="375" source="query_bg_def_png" fillMode="clip" anchorOffsetX="334" anchorOffsetY="216.5"/>
+	<e:Label id="Text" text="系统提示" x="667" y="350" anchorOffsetX="250" width="500" anchorOffsetY="90" height="180" textAlign="center" verticalAlign="middle" textColor="0x451f0b" size="32" multiline="true" name="text"/>
+	<e:Image id="Title" width="140" height="37" x="667" y="170" source="title_system_png" fillMode="clip" anchorOffsetX="70" anchorOffsetY="0"/>
+	<e:Button id="Agree" label="" x="637" y="505" anchorOffsetX="202" anchorOffsetY="42" name="agree">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_query_confirm_0_png" source.down="bt_query_confirm_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="Cancell" label="" x="697" y="505" anchorOffsetY="42" name="cancell">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="bt_query_cancel_0_png" source.down="bt_query_cancel_1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

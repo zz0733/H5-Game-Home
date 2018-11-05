@@ -1,0 +1,118 @@
+/** 网络服务
+*直连模式
+*虚拟模式
+**/
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var managers;
+(function (managers) {
+    var ServiceManager = (function () {
+        function ServiceManager() {
+            /**
+             * 消息队列
+             */
+            this.MsgQueue = [];
+            /**
+             * 网络连接方式
+             */
+            this.m_ConnectKind = df.SERVICE_MODE_LINK;
+            /**
+             * 服务类型
+             */
+            this.m_eServiceMode = 1 /* LogonService */;
+        }
+        /**
+        *获取当前实例
+        */
+        ServiceManager.getInstance = function () {
+            if (this.m_sInstance == null) {
+                this.m_sInstance = new ServiceManager();
+                this.m_sInstance.init();
+            }
+            return this.m_sInstance;
+        };
+        ServiceManager.prototype.init = function () {
+            //TCP服务
+            this.m_pTcpService = null;
+            //服务类型
+            this.m_eServiceMode = 1 /* LogonService */;
+        };
+        /**
+         * 设置连接方式
+         */
+        ServiceManager.prototype.setConnectKind = function (kind) {
+            this.m_ConnectKind = kind;
+        };
+        /**
+         * 设置服务类型
+         */
+        ServiceManager.prototype.setServiceMode = function (mode) {
+            this.m_eServiceMode = mode;
+        };
+        /**
+         * 设置委托
+         */
+        ServiceManager.prototype.setDelegate = function (delegate) {
+            this.m_pDelegate = null;
+            this.m_pDelegate = delegate;
+        };
+        ServiceManager.prototype.getDelegate = function () {
+            return this.m_pDelegate ? this.m_pDelegate : null;
+        };
+        /**
+         * 获取服务模块
+         */
+        ServiceManager.prototype.getServiceModule = function () {
+            return this.m_ServiceModule ? this.m_ServiceModule : null;
+        };
+        /**
+         * 网络接收
+         */
+        ServiceManager.prototype.setViewFrame = function (view) {
+            this._viewFrame = null;
+            this._viewFrame = view;
+        };
+        ServiceManager.prototype.getViewFrame = function () {
+            return this._viewFrame ? this._viewFrame : null;
+        };
+        /**
+         * 获取TCP服务
+         */
+        ServiceManager.prototype.getTcpService = function () {
+            return this.m_pTcpService ? this.m_pTcpService : null;
+        };
+        //启动服务
+        ServiceManager.prototype.LoadService = function (service, serviceModule, serviceMode) {
+            //释放引用
+            this.m_pTcpService = null;
+            //保存服务
+            this.m_pTcpService = service;
+            //服务类型
+            this.m_eServiceMode = serviceMode;
+            //服务模块
+            this.m_ServiceModule = serviceModule;
+        };
+        /**
+         * 刷新服务
+         */
+        ServiceManager.prototype.onUpdate = function () {
+            //服务刷新
+            if (this.m_pTcpService && this.m_pTcpService.onUpdate) {
+                this.m_pTcpService.onUpdate();
+            }
+            //处理队列
+            if (this.m_pDelegate && this.m_pDelegate.onMessage) {
+                if (this.MsgQueue.length == 0)
+                    return;
+                var msg = this.MsgQueue[0];
+                this.m_pDelegate.onMessage(msg);
+                this.MsgQueue.shift();
+            }
+        };
+        return ServiceManager;
+    }());
+    managers.ServiceManager = ServiceManager;
+    __reflect(ServiceManager.prototype, "managers.ServiceManager");
+})(managers || (managers = {}));
+//# sourceMappingURL=ServiceManager.js.map

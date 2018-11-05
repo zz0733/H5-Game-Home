@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<e:Skin class="skins.ButtonSkin" states="up,down,disabled" minHeight="50" minWidth="100" xmlns:e="http://ns.egret.com/eui" xmlns:client="client.*" xmlns:w="http://ns.egret.com/wing">
+	<e:Image width="549" height="156" includeIn="down" x="0" y="0" alpha="0.8" fillMode="clip" anchorOffsetX="0" source="bt_regist_confirm_png"/>
+	<e:Image width="549" height="156" includeIn="up" x="0" y="0" fillMode="clip" anchorOffsetX="0" visible="true" source="bt_regist_confirm_png"/>
+</e:Skin>

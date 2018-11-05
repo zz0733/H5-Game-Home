@@ -1,0 +1,10 @@
+{
+  "global": {
+    "globalAutoLayerMarkEnable": true,
+    "globalBindingDataTestObj": []
+  },
+  "16657e82812": {
+    "bindingDataTestObj": [],
+    "guideLinesEnabled": true
+  }
+}

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<e:Skin class="skins.ButtonSkin" states="up,down,disabled" minHeight="50" minWidth="100" xmlns:e="http://ns.egret.com/eui" xmlns:client="client.*">
+	<e:Image width="451" height="152" includeIn="down" x="0" y="0" source="bt_wechat_png" alpha="0.9" fillMode="clip" visible="true" anchorOffsetX="0"/>
+	<e:Image width="453" height="152" includeIn="up" x="0" y="0" source="bt_wechat_png" fillMode="clip" anchorOffsetX="0"/>
+</e:Skin>

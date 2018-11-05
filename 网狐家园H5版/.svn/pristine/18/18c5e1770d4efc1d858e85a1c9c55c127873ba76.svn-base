@@ -1,0 +1,8 @@
+/**
+ * 游戏定义 
+ */
+namespace cmd {
+    export namespace sparrowsclm {
+        
+    }
+}

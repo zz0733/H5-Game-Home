@@ -1,0 +1,44 @@
+/**
+ * http封装
+ */
+
+namespace utils{
+    export class HttpRequest
+    {
+        /**
+         * 构造
+         */
+        constructor(target: any,url: string,param: string,method: string,onCompleteHandler: any,onErrorHandler: any,onProgressHandler?: any)
+        {
+
+            this.initHttpRequest(target,url,param,method,onCompleteHandler,onErrorHandler,onProgressHandler);
+
+        }
+
+        /**
+         * @param url       请求地址
+         * @param param     请求参数
+         * @param method    请求方法
+         * @param target    代理对象
+         */
+
+        public initHttpRequest(target: any,url: string,param: string,method: string,onCompleteHandler: any,onErrorHandler: any,onProgressHandler?: any)
+        {
+            egret.assert(url.length>0);
+            egret.assert((method==egret.HttpMethod.GET) || (method==egret.HttpMethod.POST));
+
+            var request = new egret.HttpRequest();
+            request.responseType = egret.HttpResponseType.TEXT;
+            request.open(url+param,method);
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+            request.send();
+            request.once(egret.Event.COMPLETE,onCompleteHandler,target);
+            request.once(egret.IOErrorEvent.IO_ERROR,onErrorHandler,target);
+
+            if (null != onProgressHandler)
+            {
+                request.once(egret.ProgressEvent.PROGRESS,onProgressHandler,target);
+            }
+        }
+    }
+}
