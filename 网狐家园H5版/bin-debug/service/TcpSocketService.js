@@ -9,7 +9,7 @@ var service;
     var HeartTime = 5000;
     var CONNECT_SUCCESS = true;
     var CONNECT_FAILURE = false;
-    var TcpSocketService = /** @class */ (function () {
+    var TcpSocketService = (function () {
         /**
          * 构造
          */

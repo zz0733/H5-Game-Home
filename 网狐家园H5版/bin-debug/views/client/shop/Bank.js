@@ -8,7 +8,7 @@ var shop;
         Save: 1,
         Take: 2
     };
-    var Bank = /** @class */ (function () {
+    var Bank = (function () {
         function Bank(viewFrame, companet) {
             this._bankOperateCode = BankOperateCode.Save;
             this._viewFrame = viewFrame;

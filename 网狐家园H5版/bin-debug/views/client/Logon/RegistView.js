@@ -13,7 +13,7 @@ var client;
     /**
      * 注册服务
      */
-    var Regist = /** @class */ (function (_super) {
+    var Regist = (function (_super) {
         __extends(Regist, _super);
         function Regist(scene) {
             var _this = _super.call(this) || this;

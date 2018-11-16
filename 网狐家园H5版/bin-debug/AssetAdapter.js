@@ -26,7 +26,7 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var AssetAdapter = /** @class */ (function () {
+var AssetAdapter = (function () {
     function AssetAdapter() {
     }
     /**

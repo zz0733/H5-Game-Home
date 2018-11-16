@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var client;
 (function (client) {
-    var InfoModifyLayer = /** @class */ (function (_super) {
+    var InfoModifyLayer = (function (_super) {
         __extends(InfoModifyLayer, _super);
         function InfoModifyLayer(scene) {
             var _this = _super.call(this) || this;

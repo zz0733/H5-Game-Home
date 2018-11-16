@@ -6,5 +6,18 @@
   "16657e82812": {
     "bindingDataTestObj": [],
     "guideLinesEnabled": true
+  },
+  "166ed1fefb0": {
+    "guideLines": [
+      {
+        "type": "v",
+        "pos": 90.75
+      },
+      {
+        "type": "h",
+        "pos": 51.25
+      }
+    ],
+    "guideLinesEnabled": true
   }
 }

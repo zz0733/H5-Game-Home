@@ -3,7 +3,7 @@
  */
 var models;
 (function (models) {
-    var UserData = /** @class */ (function () {
+    var UserData = (function () {
         /**
          * 构造
          */
@@ -67,8 +67,8 @@ var models;
             this.lUserScore = data.lUserScore; //用户游戏币	
             this.lUserInsure = data.lUserInsure; //用户银行	
             //会员资料
-            this.cbMemberOrder = data.cbMemberOrder, //会员等级
-                this.MemberOverDate = data.MemberOverDate, //到期时间
+            this.cbMemberOrder = data.cbMemberOrder,
+                this.MemberOverDate = data.MemberOverDate,
                 //附加信息
                 this.wLockServerID = data.wLockServerID; //锁定房间	
         }

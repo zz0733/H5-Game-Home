@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var controller;
 (function (controller) {
-    var LoginController = /** @class */ (function (_super) {
+    var LoginController = (function (_super) {
         __extends(LoginController, _super);
         /**
          * 构造

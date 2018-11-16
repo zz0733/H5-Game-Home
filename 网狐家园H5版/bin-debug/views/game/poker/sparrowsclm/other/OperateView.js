@@ -23,7 +23,7 @@ var game;
             0x02: "resource/eui_skins/game/poker/sparrowsclm/operate/PengButton.exml",
             0x40: "resource/eui_skins/game/poker/sparrowsclm/operate/HuButton.exml"
         };
-        var OperateView = /** @class */ (function (_super) {
+        var OperateView = (function (_super) {
             __extends(OperateView, _super);
             function OperateView(scene, callback) {
                 var _this = _super.call(this) || this;

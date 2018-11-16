@@ -12,7 +12,7 @@ namespace game {
             0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,						//同子
             0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,						//同子
             0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,                       //同子
-        ]
+        ];
 
         /////////////////////////////////////////////////////////////////////////
 
@@ -193,7 +193,7 @@ namespace game {
                     cbCardIndex[this.SwitchToCardIndex(cbCardData[i])]++;
                     cbPos++;
                 }
-                egret.assert(cbPos <= MAX_COUNT)
+                egret.assert(cbPos <= MAX_COUNT);
                 return cbCardCount;
             }
 

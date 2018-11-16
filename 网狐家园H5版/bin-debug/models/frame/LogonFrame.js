@@ -10,7 +10,7 @@ var frame;
     var LOGON_MODE_RELOADROOM = 4; //重载房间
     var LOGON_MODE_RELOADAGENT = 5; //重载房间
     var LOGON_MODE_RELOADGAME = 6; //重载游戏
-    var LogonFrame = /** @class */ (function () {
+    var LogonFrame = (function () {
         function LogonFrame(viewFrame) {
             this._operateCode = 0;
             this._reLoadKind = 0;

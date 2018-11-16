@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var client;
 (function (client) {
-    var OptionLayer = /** @class */ (function (_super) {
+    var OptionLayer = (function (_super) {
         __extends(OptionLayer, _super);
         function OptionLayer(scene, mode) {
             if (mode === void 0) { mode = 0; }

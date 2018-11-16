@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var client;
 (function (client) {
-    var PasswordModifyLayer = /** @class */ (function (_super) {
+    var PasswordModifyLayer = (function (_super) {
         __extends(PasswordModifyLayer, _super);
         function PasswordModifyLayer(scene) {
             var _this = _super.call(this) || this;

@@ -5,7 +5,7 @@
 */
 var managers;
 (function (managers) {
-    var TimerCtrl = /** @class */ (function () {
+    var TimerCtrl = (function () {
         function TimerCtrl() {
             /**
              * 时间队列

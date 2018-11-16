@@ -7,7 +7,7 @@ var game;
     (function (sparrowsclm) {
         sparrowsclm.MASK_CHI_HU_RIGHT = 0x0fffffff;
         var MAX_RIGHT_COUNT = 32;
-        var CChiHuRight = /** @class */ (function () {
+        var CChiHuRight = (function () {
             //构造
             function CChiHuRight() {
                 this.m_dwRight = utils.allocArray(MAX_RIGHT_COUNT, Number);

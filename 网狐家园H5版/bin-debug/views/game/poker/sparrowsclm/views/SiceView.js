@@ -13,7 +13,7 @@ var game;
 (function (game) {
     var sparrowsclm;
     (function (sparrowsclm) {
-        var SiceView = /** @class */ (function (_super) {
+        var SiceView = (function (_super) {
             __extends(SiceView, _super);
             function SiceView(lsice0, lsice1, callback) {
                 var _this = _super.call(this) || this;

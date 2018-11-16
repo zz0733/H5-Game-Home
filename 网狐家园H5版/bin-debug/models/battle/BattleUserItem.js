@@ -1,6 +1,6 @@
 var battle;
 (function (battle) {
-    var BattleUserItem = /** @class */ (function () {
+    var BattleUserItem = (function () {
         function BattleUserItem() {
             this.wFaceID = 0; //头像标识
             this.wChairID = 0; //椅子标识

@@ -3,7 +3,7 @@
  */
 var utils;
 (function (utils) {
-    var MD5 = /** @class */ (function () {
+    var MD5 = (function () {
         /**
          * 构造
          */

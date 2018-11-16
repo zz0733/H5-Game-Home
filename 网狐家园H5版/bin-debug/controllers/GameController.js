@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var controller;
 (function (controller) {
-    var GameController = /** @class */ (function (_super) {
+    var GameController = (function (_super) {
         __extends(GameController, _super);
         function GameController(gameModule) {
             var _this = _super.call(this) || this;

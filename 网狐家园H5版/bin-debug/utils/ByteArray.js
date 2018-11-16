@@ -7,7 +7,7 @@ var utils;
      * 自定义二进制数组
      * 读取和写入方法命名请根据服务器类型来
      */
-    var ByteArray = /** @class */ (function () {
+    var ByteArray = (function () {
         function ByteArray() {
             this.bytearray = new egret.ByteArray();
             this.bytearray.endian = egret.Endian.LITTLE_ENDIAN;

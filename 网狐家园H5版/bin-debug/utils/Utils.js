@@ -1,7 +1,7 @@
 var utils;
 (function (utils) {
     //数学库
-    var MathUtils = /** @class */ (function () {
+    var MathUtils = (function () {
         function MathUtils() {
         }
         MathUtils.getUnsignedByte = function (byte) {
@@ -41,7 +41,7 @@ var utils;
     }());
     utils.MathUtils = MathUtils;
     //字符库
-    var StringUtils = /** @class */ (function () {
+    var StringUtils = (function () {
         function StringUtils() {
         }
         StringUtils.reverse = function (str) {

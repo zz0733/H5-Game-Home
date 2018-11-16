@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var client;
 (function (client) {
-    var BenefitLayer = /** @class */ (function (_super) {
+    var BenefitLayer = (function (_super) {
         __extends(BenefitLayer, _super);
         function BenefitLayer(scene) {
             var _this = _super.call(this) || this;

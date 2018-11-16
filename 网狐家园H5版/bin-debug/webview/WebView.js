@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var exp;
 (function (exp) {
-    var WebView = /** @class */ (function (_super) {
+    var WebView = (function (_super) {
         __extends(WebView, _super);
         function WebView() {
             var _this = _super.call(this) || this;

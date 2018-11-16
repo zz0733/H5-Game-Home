@@ -10,7 +10,7 @@ var shop;
         "http://" + managers.TcpServiceCtrl.getInstance().m_DefaultServerInfo.webAddr + "/Ashx/ProService.ashx",
         "http://" + managers.TcpServiceCtrl.getInstance().m_DefaultServerInfo.webAddr + "/Ashx/ProService.ashx"
     ];
-    var Recharge = /** @class */ (function () {
+    var Recharge = (function () {
         function Recharge(viewFrame, panel) {
             this._isHaveData = false;
             this._viewFrame = viewFrame;

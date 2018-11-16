@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 var client;
 (function (client) {
     var NUMBER = 6;
-    var BattleFindLayer = /** @class */ (function (_super) {
+    var BattleFindLayer = (function (_super) {
         __extends(BattleFindLayer, _super);
         function BattleFindLayer(scene) {
             var _this = _super.call(this) || this;

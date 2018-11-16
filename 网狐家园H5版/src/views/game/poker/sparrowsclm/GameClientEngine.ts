@@ -313,7 +313,7 @@ namespace game {
                         break;
                     case cmd.sparrowsclm.SUB_S_GAME_RULE_NOTIFY:
                         {
-                            let ruleNotify = new cmd.sparrowsclm.CMD_S_GAME_RULE_NOTIFY()
+                            let ruleNotify = new cmd.sparrowsclm.CMD_S_GAME_RULE_NOTIFY();
                             ruleNotify.onInit(msg.cbBuffer);
 
                             if (true == ruleNotify.bForceExit) {
@@ -380,21 +380,21 @@ namespace game {
                 //排序手牌
                 this._gameLogic.SortCardList(start.cbCardData, MAX_COUNT);
 
-                //构造数据
+                //构造数据action数据
                 let action: any = {};
                 action.bLock = false;
                 action.nKind = this.AK_GAME_BEGIN;
-                action.actions = utils.allocArray<Number>(3, Number);
-                action.actions[0] = this.AK_SICE;              //色子动画
+                action.actions = utils.allocArray<Number>(3, Number);//一个动作包含三个动作
+                action.actions[0] = this.AK_SICE;              //骰子动画
                 action.actions[1] = this.AK_DISPATCH_CARD;     //发牌动画
                 action.actions[2] = this.AK_SEND_CARD;         //庄家抓牌
 
-                action.lSiceCount = start.lSiceCount;
-                action.wBankerUser = start.wBankerUser;
-                action.wCurrentUser = start.wCurrentUser;
-                action.wCurrBaoUser = start.wCurrBaoUser;
-                action.cbCardData = start.cbCardData;
-                action.cbActionMask = start.cbUserAction;
+                action.lSiceCount = start.lSiceCount;//骰子点数
+                action.wBankerUser = start.wBankerUser;//庄家
+                action.wCurrentUser = start.wCurrentUser;//当前用户
+                action.wCurrBaoUser = start.wCurrBaoUser;//报胡用户
+                action.cbCardData = start.cbCardData;//玩家牌列表
+                action.cbActionMask = start.cbUserAction;//动作掩码
 
                 //动作队列
                 this._actionList.push(action);
@@ -629,12 +629,12 @@ namespace game {
                 if (action.actions.length > 0) {
                     if (index == this.AK_SICE) {
 
-                        if (action.lSiceCount == 0) { //骰子是0点？
+                        if (action.lSiceCount == 0) { //骰子是0点
                             this.startGameStart(this._actionList[0], this.AK_DISPATCH_CARD);//骰子动画
                             return;
                         }
 
-                        this.startSice(action.lSiceCount & 0x0000FFFF); //其余点数由其他玩家
+                        this.startSice(action.lSiceCount & 0x0000FFFF); //其余点数由其他玩家，规定发牌顺序
                     } else if (index == this.AK_DISPATCH_CARD) { //发牌
                         //构造发牌数据
                         let dispatchInfo: any[] = [];
@@ -645,7 +645,7 @@ namespace game {
                                 let dispatch: any = {};
                                 //玩家视图
                                 const viewId = this.switchViewChairID(nPos);//通过座位ID获取视图ID?
-                                if (viewId == cmd.sparrowsclm.MY_VIEW) nIndex++;
+                                if (viewId == cmd.sparrowsclm.MY_VIEW) nIndex++;//
                                 nPos = (nPos + 1) % cmd.sparrowsclm.PLAYER_COUNT;
                                 //发牌位置
                                 dispatch.viewId = viewId;
@@ -765,8 +765,8 @@ namespace game {
             private startSendCard(action: any) {
                 //数据更新
                 if (action.wCurrentUser == this.getMeChair()) {
-                    const cardIndex = this._gameLogic.SwitchToCardIndex(action.cbCardData)
-                    this._cbCardIndex[cardIndex] = Number(this._cbCardIndex[cardIndex]) + 1
+                    const cardIndex = this._gameLogic.SwitchToCardIndex(action.cbCardData);
+                    this._cbCardIndex[cardIndex] = Number(this._cbCardIndex[cardIndex]) + 1;
                     this._cbCardData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     this._gameLogic.SwitchToCardDatas(this._cbCardIndex, this._cbCardData);
                 }
@@ -1045,7 +1045,7 @@ namespace game {
 
                     let callback = () => {
                         this.startGameStart(this._actionList[0], this.AK_DISPATCH_CARD);
-                    }
+                    };
                     this._gameviewLayer.drawSice(sice1, sice2, callback);
                 }
             }
@@ -1139,11 +1139,11 @@ namespace game {
                 action.nKind = this.AK_OUT_CARD;
                 action.bTrusteeOut = false;
                 action.special = special;
-                action.wOutCardUser = MyChair
+                action.wOutCardUser = MyChair;
                 action.cbOutCardData = cbCard;
                 action.bSelfOut = true;
 
-                this._actionList.push(action)
+                this._actionList.push(action);
                 this.beginGameAction()
             }
 

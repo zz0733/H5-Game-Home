@@ -13,7 +13,7 @@ var client;
     /**
      * 登录层
      */
-    var LogonLayer = /** @class */ (function (_super) {
+    var LogonLayer = (function (_super) {
         __extends(LogonLayer, _super);
         function LogonLayer() {
             var _this = _super !== null && _super.apply(this, arguments) || this;

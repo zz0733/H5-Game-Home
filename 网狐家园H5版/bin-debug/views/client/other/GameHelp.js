@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var client;
 (function (client) {
-    var GameHelp = /** @class */ (function (_super) {
+    var GameHelp = (function (_super) {
         __extends(GameHelp, _super);
         function GameHelp(scene, kindID) {
             if (kindID === void 0) { kindID = 0; }

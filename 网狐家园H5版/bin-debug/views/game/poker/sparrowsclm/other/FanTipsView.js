@@ -15,7 +15,7 @@ var game;
 (function (game) {
     var sparrowsclm;
     (function (sparrowsclm) {
-        var FanTipsView = /** @class */ (function (_super) {
+        var FanTipsView = (function (_super) {
             __extends(FanTipsView, _super);
             function FanTipsView(scene) {
                 var _this = _super.call(this) || this;

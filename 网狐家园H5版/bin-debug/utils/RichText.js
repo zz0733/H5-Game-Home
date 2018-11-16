@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var utils;
 (function (utils) {
-    var RichText = /** @class */ (function (_super) {
+    var RichText = (function (_super) {
         __extends(RichText, _super);
         function RichText(textAreaWidth, width, height) {
             var _this = _super.call(this) || this;

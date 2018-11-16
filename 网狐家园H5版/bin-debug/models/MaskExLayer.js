@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var models;
 (function (models) {
-    var MaskExLayer = /** @class */ (function (_super) {
+    var MaskExLayer = (function (_super) {
         __extends(MaskExLayer, _super);
         function MaskExLayer(scene, maskAlpha, removeHandler) {
             var _this = _super.call(this) || this;

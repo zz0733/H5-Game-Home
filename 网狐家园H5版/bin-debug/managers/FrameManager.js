@@ -6,7 +6,7 @@
 */
 var managers;
 (function (managers) {
-    var FrameManager = /** @class */ (function () {
+    var FrameManager = (function () {
         function FrameManager() {
             /**
              * 自动登录

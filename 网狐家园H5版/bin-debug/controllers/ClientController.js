@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var controller;
 (function (controller_1) {
-    var ClientController = /** @class */ (function (_super) {
+    var ClientController = (function (_super) {
         __extends(ClientController, _super);
         /**
          * 构造

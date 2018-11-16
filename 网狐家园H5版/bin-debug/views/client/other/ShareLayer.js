@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var client;
 (function (client) {
-    var ShareLayer = /** @class */ (function (_super) {
+    var ShareLayer = (function (_super) {
         __extends(ShareLayer, _super);
         function ShareLayer(scene, maskAlpha, removeHandler) {
             return _super.call(this, scene, maskAlpha, removeHandler) || this;

@@ -3,7 +3,7 @@
  */
 var managers;
 (function (managers) {
-    var GateWayCtrl = /** @class */ (function () {
+    var GateWayCtrl = (function () {
         /**
          * 构造
          */

@@ -3,7 +3,7 @@
 **/
 var managers;
 (function (managers) {
-    var TcpServiceCtrl = /** @class */ (function () {
+    var TcpServiceCtrl = (function () {
         function TcpServiceCtrl() {
             /**
              * 消息队列

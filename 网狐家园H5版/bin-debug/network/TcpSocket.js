@@ -16,7 +16,7 @@ var network;
     /**
      * 套接字处理
      */
-    var TcpSocket = /** @class */ (function (_super) {
+    var TcpSocket = (function (_super) {
         __extends(TcpSocket, _super);
         /**
         * 构造套接字

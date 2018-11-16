@@ -51,7 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 */
 var controller;
 (function (controller) {
-    var WelComeController = /** @class */ (function (_super) {
+    var WelComeController = (function (_super) {
         __extends(WelComeController, _super);
         //构造
         function WelComeController() {

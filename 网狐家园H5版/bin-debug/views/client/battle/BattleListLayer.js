@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var client;
 (function (client) {
-    var BattleListLayer = /** @class */ (function (_super) {
+    var BattleListLayer = (function (_super) {
         __extends(BattleListLayer, _super);
         function BattleListLayer(scene) {
             var _this = _super.call(this) || this;

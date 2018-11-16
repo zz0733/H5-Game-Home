@@ -19,7 +19,7 @@ var client;
     var QUESTION_URL = "http://service.foxuc.com/GameNotice.aspx?StationID=" + ("" + df.STATION_ID) + "&TypeID=2&KindID=1";
     //比赛规则
     var MATCHRULE_URL = "http://service.foxuc.com/GameMatch.aspx?PlazaStation=" + ("" + df.STATION_ID) + "&TypeID=1&MatchID=";
-    var NoticeLayer = /** @class */ (function (_super) {
+    var NoticeLayer = (function (_super) {
         __extends(NoticeLayer, _super);
         function NoticeLayer(scene, noticetype, kindID) {
             var _this = _super.call(this) || this;

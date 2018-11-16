@@ -3,7 +3,7 @@
  */
 var models;
 (function (models) {
-    var UserItem = /** @class */ (function () {
+    var UserItem = (function () {
         /**
          * 构造拷贝
          */

@@ -36,7 +36,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var LoadingUI = /** @class */ (function (_super) {
+var LoadingUI = (function (_super) {
     __extends(LoadingUI, _super);
     function LoadingUI() {
         var _this = _super.call(this) || this;

@@ -16,7 +16,7 @@ var models;
     /**
      * 视图遍历 先入后出
      */
-    var ViewWalker = /** @class */ (function () {
+    var ViewWalker = (function () {
         /**
          * 构造
          */
@@ -128,7 +128,7 @@ var models;
         };
         return ViewWalker;
     }());
-    var Controller = /** @class */ (function (_super) {
+    var Controller = (function (_super) {
         __extends(Controller, _super);
         /**
         * 构造

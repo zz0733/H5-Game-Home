@@ -13,7 +13,7 @@ var utils;
     /**
      * 数字图片标签
      */
-    var LabelAtlas = /** @class */ (function (_super) {
+    var LabelAtlas = (function (_super) {
         __extends(LabelAtlas, _super);
         /**
          * 构造

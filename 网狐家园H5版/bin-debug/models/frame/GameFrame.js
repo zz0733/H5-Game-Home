@@ -11,7 +11,7 @@ var frame;
     var VIDEO = 6;
     var ACTION_TYPE_GAME = 1;
     var ACTION_TYPE_FRAME = 2;
-    var GameFrame = /** @class */ (function () {
+    var GameFrame = (function () {
         function GameFrame(delegate) {
             this._dismissState = {}; //约战状态
             this._wKindID = df.INVALID_WORD; //游戏ID

@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var client;
 (function (client) {
-    var NumInput = /** @class */ (function (_super) {
+    var NumInput = (function (_super) {
         __extends(NumInput, _super);
         function NumInput(scene, showData, changeListener) {
             var _this = _super.call(this) || this;

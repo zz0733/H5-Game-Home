@@ -5,6 +5,9 @@
 	<e:Component id="user_info_1" x="1171" y="168" skinName="UserInfo" name="user_info_1" visible="false"/>
 	<e:Component id="user_info_2" x="424" skinName="UserInfo" name="user_info_2" top="0" visible="false"/>
 	<e:Component id="user_info_3" x="21" y="168" skinName="UserInfo" name="user_info_3" visible="false"/>
+	<e:Group id="runfast_out_card_container_0" width="620" height="129" y="413" horizontalCenter="0">
+		<e:Image horizontalCenter="0" verticalCenter="0"/>
+	</e:Group>
 	<e:Group id="button_start" width="200" height="200" y="377" horizontalCenter="0">
 		<e:Button id="btn_desk" label="" y="35" scaleX="1" scaleY="1" name="btn_change_desk" x="-183">
 			<e:skinName>
@@ -91,22 +94,53 @@
 		</e:skinName>
 	</e:Button>
 	<e:Group id="holder_container_0" width="900" height="204" bottom="0" horizontalCenter="0">
-		<e:Image id="poker_0" source="poker_01" horizontalCenter="0" verticalCenter="0" visible="false"/>
+		<e:Image id="poker_0" source="poker_01" scaleX="1" scaleY="1" horizontalCenter="0" verticalCenter="0" visible="false"/>
 	</e:Group>
 	<e:Group width="178" height="138" y="367" id="holder_container_1" right="0" visible="false">
 		<e:Image source="poker_bg_0" horizontalCenter="0" verticalCenter="0" scaleX="0.8" scaleY="0.8"/>
-		<e:Component name="poker_num" horizontalCenter="0" verticalCenter="0"/>
+		<e:Component id="poker_num_1" name="poker_num" horizontalCenter="0" verticalCenter="0"/>
 	</e:Group>
 	<e:Group id="holder_container_2" width="178" height="138" y="187" x="402" visible="false">
 		<e:Image source="poker_bg_0" horizontalCenter="0" verticalCenter="0" x="1194" y="1" scaleX="0.8" scaleY="0.8"/>
-		<e:Component name="poker_num" horizontalCenter="0" verticalCenter="0"/>
+		<e:Component id="poker_num_2" name="poker_num" horizontalCenter="0" verticalCenter="0"/>
 	</e:Group>
 	<e:Group id="holder_container_3" width="178" height="138" y="367" left="0" visible="false">
 		<e:Image source="poker_bg_0" horizontalCenter="0" verticalCenter="0" x="1194" y="1" scaleX="0.8" scaleY="0.8"/>
-		<e:Component name="poker_num" horizontalCenter="0" verticalCenter="0"/>
+		<e:Component id="poker_num_3" name="poker_num" horizontalCenter="0" verticalCenter="0"/>
 	</e:Group>
 	<e:Image id="runfast_ready_label_0" x="168" y="542" source="runfast_ga_pic_zhunbei_hand_png" name="runfast_ready_label_0" visible="false"/>
 	<e:Image id="runfast_ready_label_1" x="1050" y="208" source="runfast_ga_pic_zhunbei_hand_png" name="runfast_ready_label_1" visible="false"/>
 	<e:Image id="runfast_ready_label_3" x="567" y="26" source="runfast_ga_pic_zhunbei_hand_png" name="runfast_ready_label_2" visible="false"/>
 	<e:Image id="runfast_ready_label_2" x="162" y="197" source="runfast_ga_pic_zhunbei_hand_png" name="runfast_ready_label_3" visible="false"/>
+	<e:Group id="runfast_clock" x="150" y="9">
+		<e:Component id="runfast_clock_0" x="425" y="287" skinName="ClockSkin" visible="false"/>
+		<e:Component x="945" y="175" skinName="ClockSkin" id="runfast_clock_1" scaleX="0.5" scaleY="0.5" visible="false"/>
+		<e:Component x="464" y="0" skinName="ClockSkin" id="runfast_clock_2" scaleX="0.5" scaleY="0.5" visible="false"/>
+		<e:Component x="0" y="174" skinName="ClockSkin" id="runfast_clock_3" scaleX="0.5" scaleY="0.5" visible="false"/>
+	</e:Group>
+	<e:Group id="group_report_0" x="126" y="529" visible="false">
+		<e:Image id="runfast_action_alert_0" source="runfast_game_action_alert_1_png" y="-62"/>
+		<e:Image id="runfast_action_txt_report_0" source="runfast_game_txt_report_png" horizontalCenter="0" y="10"/>
+	</e:Group>
+	<e:Group id="group_report_1" x="1079" y="181" visible="false">
+		<e:Image id="runfast_action_alert_1" source="runfast_game_action_alert_1_png" y="-62"/>
+		<e:Image source="runfast_game_txt_report_png" horizontalCenter="0" y="10" id="runfast_action_txt_report_1"/>
+	</e:Group>
+	<e:Group id="group_report_2" x="546" y="57" visible="false">
+		<e:Image id="runfast_action_alert_2" source="runfast_game_action_alert_1_png" y="-62" x="-17"/>
+		<e:Image source="runfast_game_txt_report_png" y="-40" id="runfast_action_txt_report_2" x="66"/>
+	</e:Group>
+	<e:Group id="group_report_3" x="126" y="174" visible="false">
+		<e:Image id="runfast_action_alert_3" source="runfast_game_action_alert_1_png" y="-62"/>
+		<e:Image source="runfast_game_txt_report_png" horizontalCenter="0" y="10" id="runfast_action_txt_report_3"/>
+	</e:Group>
+	<e:Group width="500" height="129" y="223" id="runfast_out_card_container_1" x="672">
+		<e:Component x="415" y="17" skinName="Poker" scaleX="0.7" scaleY="0.7" visible="false"/>
+	</e:Group>
+	<e:Group id="runfast_out_card_container_3" width="500" height="129" y="223" x="155">
+		<e:Component x="30" y="17" skinName="Poker" scaleX="0.7" scaleY="0.7" visible="false"/>
+	</e:Group>
+	<e:Group id="runfast_out_card_container_2" width="500" height="129" y="60" x="558">
+		<e:Component x="33" y="17" skinName="Poker" scaleX="0.7" scaleY="0.7" visible="false"/>
+	</e:Group>
 </e:Skin>

@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var client;
 (function (client) {
-    var ModifyFaceLayer = /** @class */ (function (_super) {
+    var ModifyFaceLayer = (function (_super) {
         __extends(ModifyFaceLayer, _super);
         function ModifyFaceLayer(scene) {
             var _this = _super.call(this) || this;

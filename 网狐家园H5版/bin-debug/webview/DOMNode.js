@@ -1,6 +1,6 @@
 var exp;
 (function (exp) {
-    var DOMRoot = /** @class */ (function () {
+    var DOMRoot = (function () {
         function DOMRoot() {
         }
         /**
@@ -68,7 +68,7 @@ var exp;
     /**
      * DOM 元件和 egret 显示对象的映射。 egret 显示对象属性的修改会同时改变 DOM 元件属性
      */
-    var DOMNode = /** @class */ (function () {
+    var DOMNode = (function () {
         function DOMNode() {
             this.lastMatrix = new egret.Matrix();
             this.lastWidth = 0;

@@ -1,6 +1,6 @@
 var battle;
 (function (battle) {
-    var BattleTableItem = /** @class */ (function () {
+    var BattleTableItem = (function () {
         function BattleTableItem(buffer) {
             this.onInit(buffer);
         }

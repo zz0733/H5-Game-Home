@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var models;
 (function (models) {
-    var HeadSprite = /** @class */ (function (_super) {
+    var HeadSprite = (function (_super) {
         __extends(HeadSprite, _super);
         /**
          * 构造

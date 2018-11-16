@@ -16,6 +16,8 @@ var game;
             __extends(Poker, _super);
             function Poker(num) {
                 var _this = _super.call(this) || this;
+                _this.outStatus = false;
+                _this.m_lock = false;
                 _this.value = num;
                 _this._frontResource = "poker" + "_" + _this.getColor(num) + _this.getValue(num).toString(16).toUpperCase();
                 _this._backResource = "poker_bg_0";
@@ -23,6 +25,11 @@ var game;
                 _this._img.texture = RES.getRes(_this._frontResource);
                 _this.addChild(_this._img);
                 _this.changeToFront();
+                _this._mask = new egret.Shape();
+                _this._mask.graphics.beginFill(0x000000, 0.6);
+                _this._mask.graphics.drawRect(0, 0, 102, 137);
+                _this._mask.graphics.endFill();
+                _this._mask.name = "mask";
                 return _this;
             }
             Poker.prototype.getColor = function (value) {
@@ -37,7 +44,42 @@ var game;
             Poker.prototype.changeToBack = function () {
                 this._img.texture = RES.getRes(this._backResource);
             };
+            Object.defineProperty(Poker.prototype, "out", {
+                get: function () {
+                    return this.outStatus;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Poker.prototype.initStatus = function () {
+                if (this.outStatus == true) {
+                    this.toggleSelected();
+                }
+            };
             Poker.prototype.toggleSelected = function () {
+                this.outStatus = !this.outStatus;
+                if (this.outStatus) {
+                    this._img.y -= 10;
+                }
+                else {
+                    this._img.y += 10;
+                }
+            };
+            Poker.prototype.addMask = function () {
+                //增加
+                if (this.getChildByName("mask")) {
+                }
+                else {
+                    this._mask.y = this._img.y;
+                    this.addChild(this._mask);
+                }
+            };
+            Poker.prototype.removeMask = function () {
+                if (this.getChildByName("mask")) {
+                    this.removeChild(this._mask);
+                }
+                else {
+                }
             };
             return Poker;
         }(egret.Sprite));

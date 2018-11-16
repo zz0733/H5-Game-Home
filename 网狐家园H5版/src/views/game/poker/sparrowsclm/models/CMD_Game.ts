@@ -523,7 +523,7 @@ namespace cmd {
                     }
                 }
             }
-        };
+        }
 
         //动作提醒
         export class CMD_S_GAME_ACTION_NOTIFY {

@@ -21,7 +21,7 @@ var game;
          * 场景消息
          * 用户服务
          */
-        var GameClientEngine = /** @class */ (function (_super) {
+        var GameClientEngine = (function (_super) {
             __extends(GameClientEngine, _super);
             /**
              * 构造
@@ -350,20 +350,20 @@ var game;
                 this._bBaoHuFlag = false;
                 //排序手牌
                 this._gameLogic.SortCardList(start.cbCardData, sparrowsclm.MAX_COUNT);
-                //构造数据
+                //构造数据action数据
                 var action = {};
                 action.bLock = false;
                 action.nKind = this.AK_GAME_BEGIN;
-                action.actions = utils.allocArray(3, Number);
-                action.actions[0] = this.AK_SICE; //色子动画
+                action.actions = utils.allocArray(3, Number); //一个动作包含三个动作
+                action.actions[0] = this.AK_SICE; //骰子动画
                 action.actions[1] = this.AK_DISPATCH_CARD; //发牌动画
                 action.actions[2] = this.AK_SEND_CARD; //庄家抓牌
-                action.lSiceCount = start.lSiceCount;
-                action.wBankerUser = start.wBankerUser;
-                action.wCurrentUser = start.wCurrentUser;
-                action.wCurrBaoUser = start.wCurrBaoUser;
-                action.cbCardData = start.cbCardData;
-                action.cbActionMask = start.cbUserAction;
+                action.lSiceCount = start.lSiceCount; //骰子点数
+                action.wBankerUser = start.wBankerUser; //庄家
+                action.wCurrentUser = start.wCurrentUser; //当前用户
+                action.wCurrBaoUser = start.wCurrBaoUser; //报胡用户
+                action.cbCardData = start.cbCardData; //玩家牌列表
+                action.cbActionMask = start.cbUserAction; //动作掩码
                 //动作队列
                 this._actionList.push(action);
                 this.beginGameAction();
@@ -561,7 +561,7 @@ var game;
                             this.startGameStart(this._actionList[0], this.AK_DISPATCH_CARD); //骰子动画
                             return;
                         }
-                        this.startSice(action.lSiceCount & 0x0000FFFF); //其余点数由其他玩家
+                        this.startSice(action.lSiceCount & 0x0000FFFF); //其余点数由其他玩家，规定发牌顺序
                     }
                     else if (index == this.AK_DISPATCH_CARD) {
                         //构造发牌数据
@@ -574,7 +574,7 @@ var game;
                                 //玩家视图
                                 var viewId = this.switchViewChairID(nPos); //通过座位ID获取视图ID?
                                 if (viewId == cmd.sparrowsclm.MY_VIEW)
-                                    nIndex++;
+                                    nIndex++; //
                                 nPos = (nPos + 1) % cmd.sparrowsclm.PLAYER_COUNT;
                                 //发牌位置
                                 dispatch.viewId = viewId;

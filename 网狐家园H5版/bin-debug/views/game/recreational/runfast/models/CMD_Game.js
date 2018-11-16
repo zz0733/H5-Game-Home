@@ -10,13 +10,13 @@ var cmd;
         runfast.GAME_NAME = "跑得快";
         runfast.GAME_PLAYER = 4;
         runfast.MY_VIEW = 0; //自己视图
-        runfast.LEFT_VIEW = 1;
-        runfast.RIGHT_VIEW = 2;
-        runfast.TOP_VIEW = 3;
+        runfast.RIGHT_VIEW = 1;
+        runfast.TOP_VIEW = 2;
+        runfast.LEFT_VIEW = 3;
         //手牌参数
         runfast.FULL_COUNT = 40;
         runfast.HAND_COUNT = 10;
-        runfast.MAX_CARD_VALUE = 14; //手牌最大权重？
+        runfast.MAX_CARD_VALUE = 14; //手牌最大权重
         //首出牌
         runfast.FIRST_OUT_CARD = 0x35;
         //关于游戏状态的定义？
@@ -33,7 +33,7 @@ var cmd;
         runfast.SUB_S_OUT_CARD = 101; //出牌
         runfast.SUB_S_PASS_CARD = 102; //过牌
         runfast.SUB_S_SHUT_CARD = 103; //关牌
-        runfast.SUB_S_START_CARD = 104; //开始出牌？
+        runfast.SUB_S_START_CARD = 104; //开始出牌
         runfast.SUB_S_GAME_END = 105; //游戏结束
         runfast.SUB_S_PHRASE = 106; //玩家发言
         runfast.SUB_S_TRUSTEE = 107; //托管消息
@@ -44,6 +44,20 @@ var cmd;
         runfast.SUB_C_TRUSTEE = 3; //托管
         runfast.SUB_C_PHRASE = 4; //发言
         runfast.SUB_C_ALLOT_CARD_DATA = 5; //配牌数据
+        runfast.TIME_GAME_START = 30;
+        runfast.TIME_GAME_OPERATE = 20;
+        //服务端牌型
+        var SUB_S_POKER_KIND;
+        (function (SUB_S_POKER_KIND) {
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_ERROR"] = 0] = "CT_ERROR";
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_SINGLE"] = 1] = "CT_SINGLE";
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_SINGLE_LINE"] = 2] = "CT_SINGLE_LINE";
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_DOUBLE"] = 3] = "CT_DOUBLE";
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_DOUBLE_LINE"] = 4] = "CT_DOUBLE_LINE";
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_THREE"] = 5] = "CT_THREE";
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_THREE_LINE"] = 6] = "CT_THREE_LINE";
+            SUB_S_POKER_KIND[SUB_S_POKER_KIND["CT_BOMB"] = 10] = "CT_BOMB"; //炸弹类型
+        })(SUB_S_POKER_KIND = runfast.SUB_S_POKER_KIND || (runfast.SUB_S_POKER_KIND = {}));
         var tagCustomConfig = (function () {
             function tagCustomConfig() {
                 this.bRandDisCard = false;
@@ -95,7 +109,7 @@ var cmd;
         //发送扑克
         var CMD_S_GameStart = (function () {
             function CMD_S_GameStart() {
-                this.cbCardCount = utils.allocArray(runfast.GAME_PLAYER, Number); //牌的总数量
+                this.cbCardCount = utils.allocArray(runfast.GAME_PLAYER, Number); //牌的数量
                 this.cbCardData = utils.allocArray(runfast.HAND_COUNT, Number); //当前玩家扑克列表
             }
             CMD_S_GameStart.prototype.onInit = function (buffer) {
@@ -113,17 +127,36 @@ var cmd;
         }());
         runfast.CMD_S_GameStart = CMD_S_GameStart;
         //用户出牌
-        var CMD_S_OutCar = (function () {
-            function CMD_S_OutCar() {
+        var CMD_S_OutCard = (function () {
+            function CMD_S_OutCard() {
                 this.cbCardData = utils.allocArray(runfast.HAND_COUNT, Number);
+                this.bTrustee = false;
+                this.bReportSingle = false;
+                this.cbCardType = SUB_S_POKER_KIND.CT_ERROR;
+                this.cbCardCount = 0;
+                this.wOutCardUser = df.INVALID_ITEM;
             }
-            return CMD_S_OutCar;
+            CMD_S_OutCard.prototype.onInit = function (buffer) {
+                this.bTrustee = buffer.Pop_BOOL();
+                this.bReportSingle = buffer.Pop_BOOL();
+                this.cbCardType = buffer.Pop_Byte();
+                this.cbCardCount = buffer.Pop_Byte();
+                this.wOutCardUser = buffer.Pop_WORD();
+                for (var n = 0; n < runfast.HAND_COUNT; n++) {
+                    this.cbCardData[n] = buffer.Pop_Byte();
+                }
+            };
+            return CMD_S_OutCard;
         }());
-        runfast.CMD_S_OutCar = CMD_S_OutCar;
+        runfast.CMD_S_OutCard = CMD_S_OutCard;
         //放弃出牌玩家
         var CMD_S_PassCard = (function () {
             function CMD_S_PassCard() {
+                this.wPassCardUser = 0;
             }
+            CMD_S_PassCard.prototype.onInit = function (buffer) {
+                this.wPassCardUser = buffer.Pop_WORD();
+            };
             return CMD_S_PassCard;
         }());
         runfast.CMD_S_PassCard = CMD_S_PassCard;
@@ -137,7 +170,13 @@ var cmd;
         //开始出牌
         var CMD_S_StartCard = (function () {
             function CMD_S_StartCard() {
+                this.bTurnOver = false;
+                this.wCurrentUser = df.INVALID_ITEM;
             }
+            CMD_S_StartCard.prototype.onInit = function (buffer) {
+                this.bTurnOver = buffer.Pop_BOOL();
+                this.wCurrentUser = buffer.Pop_WORD();
+            };
             return CMD_S_StartCard;
         }());
         runfast.CMD_S_StartCard = CMD_S_StartCard;
@@ -156,7 +195,33 @@ var cmd;
                 this.cbLastOutCard = utils.allocArray(runfast.HAND_COUNT, Number); //最后出牌列表
                 this.cbBombCount = utils.allocArray(runfast.GAME_PLAYER, Number); //炸弹数目->每个玩家的炸弹数量
                 this.lGameScore = utils.allocArray(runfast.GAME_PLAYER, Number);
+                this.wWinPlayer = df.INVALID_ITEM;
+                this.wShutCardUser = df.INVALID_ITEM;
+                this.cbLastOutCardCount = df.INVALID_ITEM;
+                this.lCellScore = df.INVALID_ITEM;
             }
+            CMD_S_GameEnd.prototype.onInit = function (buffer) {
+                this.wWinPlayer = buffer.Pop_WORD();
+                this.wShutCardUser = buffer.Pop_WORD();
+                for (var n = 0; n < runfast.GAME_PLAYER; n++) {
+                    this.cbHandCardCount[n] = buffer.Pop_Byte();
+                }
+                for (var n = 0; n < runfast.GAME_PLAYER; n++) {
+                    for (var m = 0; m < runfast.HAND_COUNT; m++) {
+                        this.cbHandCardData[n][m] = buffer.Pop_Byte();
+                    }
+                }
+                for (var n = 0; n < runfast.HAND_COUNT; n++) {
+                    this.cbLastOutCard[n] = buffer.Pop_Byte();
+                }
+                this.lCellScore = buffer.Pop_LONG();
+                for (var n = 0; n < runfast.GAME_PLAYER; n++) {
+                    this.cbBombCount[n] = buffer.Pop_Byte();
+                }
+                for (var n = 0; n < runfast.GAME_PLAYER; n++) {
+                    this.lGameScore[n] = buffer.Pop_LONGLONG();
+                }
+            };
             return CMD_S_GameEnd;
         }());
         runfast.CMD_S_GameEnd = CMD_S_GameEnd;

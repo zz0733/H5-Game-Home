@@ -48,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
  */
 var client;
 (function (client) {
-    var ClientLayer = /** @class */ (function (_super) {
+    var ClientLayer = (function (_super) {
         __extends(ClientLayer, _super);
         function ClientLayer() {
             var _this = _super !== null && _super.apply(this, arguments) || this;

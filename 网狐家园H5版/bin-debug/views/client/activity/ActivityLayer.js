@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var client;
 (function (client) {
-    var ActivityLayer = /** @class */ (function (_super) {
+    var ActivityLayer = (function (_super) {
         __extends(ActivityLayer, _super);
         function ActivityLayer(scene) {
             var _this = _super.call(this) || this;

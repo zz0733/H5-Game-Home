@@ -12,7 +12,7 @@ namespace game {
             constructor(scene: any,clockId?: number) {
                 super();
                 this._scene = scene;
-                this._gameEngine = this._scene._gameEngine
+                this._gameEngine = this._scene._gameEngine;
                 this._clockID = clockId;
                 this.onInitClock();
 
@@ -29,7 +29,7 @@ namespace game {
                     let clock = companet.getChildByName(`clock${i}`) as eui.Panel;
                     var mcFactory: egret.MovieClipDataFactory = new egret.MovieClipDataFactory( data, txtr );
                     var mc: egret.MovieClip = new egret.MovieClip( mcFactory.generateMovieClipData( "clockanim" ) ); 
-                    clock.addChild(mc)
+                    clock.addChild(mc);
                     mc.x = -4;
                     this._clockMC.push(mc);
                     mc.visible = false;

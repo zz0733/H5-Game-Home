@@ -68,7 +68,7 @@ namespace game {
                 let params: any = {};
                 if (null == cardParam) {
                     if (viewId != cmd.sparrowsclm.MY_VIEW) {
-                        params.bSheet = false;
+                        params.bSheet = false;//反面
                         params.texture = "game_handcard_" + viewId + "_png";
                         params.width = 24;
                         params.height = 63;

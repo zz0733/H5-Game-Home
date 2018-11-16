@@ -9,14 +9,14 @@ namespace cmd {
 
         export const GAME_PLAYER = 4;
         export const MY_VIEW = 0;                    //自己视图
-        export const LEFT_VIEW = 1;
-        export const RIGHT_VIEW = 2;
-        export const TOP_VIEW = 3;
+        export const RIGHT_VIEW = 1;
+        export const TOP_VIEW = 2;
+        export const LEFT_VIEW = 3;
 
         //手牌参数
         export const FULL_COUNT = 40;
         export const HAND_COUNT = 10;
-        export const MAX_CARD_VALUE = 14;//手牌最大权重？
+        export const MAX_CARD_VALUE = 14;//手牌最大权重
 
         //首出牌
         export const FIRST_OUT_CARD = 0x35;
@@ -38,7 +38,7 @@ namespace cmd {
         export const SUB_S_OUT_CARD = 101;     //出牌
         export const SUB_S_PASS_CARD = 102;    //过牌
         export const SUB_S_SHUT_CARD = 103;    //关牌
-        export const SUB_S_START_CARD = 104;   //开始出牌？
+        export const SUB_S_START_CARD = 104;   //开始出牌
         export const SUB_S_GAME_END = 105;     //游戏结束
         export const SUB_S_PHRASE = 106;       //玩家发言
         export const SUB_S_TRUSTEE = 107;      //托管消息
@@ -50,6 +50,21 @@ namespace cmd {
         export const SUB_C_TRUSTEE = 3;//托管
         export const SUB_C_PHRASE = 4;//发言
         export const SUB_C_ALLOT_CARD_DATA = 5;//配牌数据
+
+        export const TIME_GAME_START   	= 30;
+        export const TIME_GAME_OPERATE =  20;
+
+        //服务端牌型
+        export enum SUB_S_POKER_KIND {
+            CT_ERROR				=	0,//错误类型
+            CT_SINGLE				=	1,//单牌类型
+            CT_SINGLE_LINE          =   2,//单连类型
+            CT_DOUBLE				=	3,//对牌类型
+            CT_DOUBLE_LINE          =   4,//对连类型
+            CT_THREE				=	5,//三条类型
+            CT_THREE_LINE			=	6,//三连类型
+            CT_BOMB				    =   10//炸弹类型
+        }
 
 
         export class tagCustomConfig {
@@ -122,7 +137,7 @@ namespace cmd {
             wCurrentUser;//当前玩家
             wShutCardUser;//关牌玩家
             wStartChairId;//开始发牌玩家
-            cbCardCount = utils.allocArray<Number>(GAME_PLAYER, Number);//牌的总数量
+            cbCardCount = utils.allocArray<Number>(GAME_PLAYER, Number);//牌的数量
             cbCardData = utils.allocArray<Number>(HAND_COUNT, Number);//当前玩家扑克列表
 
             onInit(buffer: utils.ByteArray) {
@@ -139,17 +154,45 @@ namespace cmd {
         }
 
         //用户出牌
-        export class CMD_S_OutCar {
+        export class CMD_S_OutCard {
             bTrustee: boolean;//是否托管
             bReportSingle: boolean;//是否报单
             cbCardType;//出牌类型
             cbCardCount;//出牌数目
+            wOutCardUser;//
             cbCardData = utils.allocArray<Number>(HAND_COUNT, Number);
+
+            constructor() {
+                this.bTrustee = false;
+                this.bReportSingle = false;
+                this.cbCardType = SUB_S_POKER_KIND.CT_ERROR;
+                this.cbCardCount = 0;
+                this.wOutCardUser = df.INVALID_ITEM;
+            }
+
+            onInit(buffer: utils.ByteArray) {
+                this.bTrustee = buffer.Pop_BOOL();
+                this.bReportSingle = buffer.Pop_BOOL();
+                this.cbCardType = buffer.Pop_Byte();
+                this.cbCardCount = buffer.Pop_Byte();
+                this.wOutCardUser = buffer.Pop_WORD();
+                for (let n = 0; n < HAND_COUNT; n++) {
+                    this.cbCardData[n] = buffer.Pop_Byte();
+                }
+            }
         }
 
         //放弃出牌玩家
         export class CMD_S_PassCard {
             wPassCardUser;
+
+            constructor() {
+                this.wPassCardUser = 0;
+            }
+
+            onInit(buffer: utils.ByteArray) {
+                this.wPassCardUser = buffer.Pop_WORD();
+            }
         }
 
         //关牌玩家
@@ -159,8 +202,18 @@ namespace cmd {
 
         //开始出牌
         export class CMD_S_StartCard {
-            bTurnOver: boolean;
-            wCurrentUser;//当前玩家
+            bTurnOver: boolean;     //一轮结束
+            wCurrentUser;           //当前玩家
+
+            constructor() {
+                this.bTurnOver = false;
+                this.wCurrentUser = df.INVALID_ITEM;
+            }
+
+            onInit(buffer: utils.ByteArray) {
+                this.bTurnOver = buffer.Pop_BOOL();
+                this.wCurrentUser = buffer.Pop_WORD();
+            }
         }
 
         //玩家发言
@@ -173,7 +226,7 @@ namespace cmd {
         export class CMD_S_GameEnd {
             //游戏信息
             wWinPlayer;
-            wShutCardUser;//关牌用户，关牌有且只能有一个?
+            wShutCardUser;//关牌用户，关牌有且只能有一个
             cbHandCardCount = utils.allocArray<Number>(GAME_PLAYER, Number);//所有玩家剩余扑克数量
             cbHandCardData = utils.alloc2Array<Number>(GAME_PLAYER, HAND_COUNT, Number);//剩余扑克
             cbLastOutCard = utils.allocArray<Number>(HAND_COUNT, Number);//最后出牌列表
@@ -183,6 +236,39 @@ namespace cmd {
             lCellScore;//单元积分
             cbBombCount = utils.allocArray<Number>(GAME_PLAYER, Number);//炸弹数目->每个玩家的炸弹数量
             lGameScore = utils.allocArray<Number>(GAME_PLAYER, Number);
+
+            constructor() {
+                this.wWinPlayer = df.INVALID_ITEM;
+                this.wShutCardUser = df.INVALID_ITEM;
+
+                this.cbLastOutCardCount = df.INVALID_ITEM;
+
+                this.lCellScore = df.INVALID_ITEM;
+            }
+
+            onInit(buffer: utils.ByteArray) {
+                this.wWinPlayer = buffer.Pop_WORD();
+                this.wShutCardUser = buffer.Pop_WORD();
+                for (let n = 0; n < GAME_PLAYER; n++) {
+                    this.cbHandCardCount[n] = buffer.Pop_Byte();
+                }
+                for (let n = 0; n < GAME_PLAYER; n++) {
+                    for (let m = 0; m < HAND_COUNT; m++) {
+                        this.cbHandCardData[n][m] = buffer.Pop_Byte();
+                    }
+                }
+                for (let n = 0; n < HAND_COUNT; n++) {
+                    this.cbLastOutCard[n] = buffer.Pop_Byte();
+                }
+
+                this.lCellScore = buffer.Pop_LONG();
+                for (let n = 0; n < GAME_PLAYER; n++) {
+                    this.cbBombCount[n] = buffer.Pop_Byte();
+                }
+                for (let n = 0; n < GAME_PLAYER; n++) {
+                    this.lGameScore[n] = buffer.Pop_LONGLONG();
+                }
+            }
         }
 
         //托管消息

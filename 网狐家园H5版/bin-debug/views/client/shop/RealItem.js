@@ -5,7 +5,7 @@ var shop;
 (function (shop) {
     var ITEM_LIST_URL = "http://" + managers.TcpServiceCtrl.getInstance().m_DefaultServerInfo.webAddr + "/Ashx/ProService.ashx?action=GetAwardList";
     var EXCHANGE_URL = "http://" + managers.TcpServiceCtrl.getInstance().m_DefaultServerInfo.webAddr + "/Ashx/ProService.ashx?action=ConvertScore";
-    var RealItem = /** @class */ (function () {
+    var RealItem = (function () {
         function RealItem(viewFrame, panel) {
             this._isHaveData = false;
             this._viewFrame = viewFrame;

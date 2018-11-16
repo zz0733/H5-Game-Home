@@ -52,7 +52,11 @@ declare module skins.sparrowsclm{
 	class GameLayer extends eui.Skin{
 	}
 }
+declare class ClockSkin extends eui.Skin{
+}
 declare class GameLayer extends eui.Skin{
+}
+declare class Poker extends eui.Skin{
 }
 declare class TableInfo extends eui.Skin{
 }

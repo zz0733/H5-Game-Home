@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="ResultUserSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="runfast_game_userframe_png"/>
+	<e:Component id="user_head" x="13" y="13"/>
+	<e:Component id="user_cards" horizontalCenter="0" verticalCenter="0"/>
+	<e:Component id="user_bomb" verticalCenter="0" x="783"/>
+	<e:Component id="user_score" verticalCenter="0" x="1006"/>
+	<e:Image width="80" height="80" x="13" y="13"/>
+	<e:Label id="user_name" text="Anthony" x="99" y="24" size="24"/>
+	<e:Label id="user_id" text="ID:20306054" x="99" y="55" size="24" textColor="0xadf902"/>
+	<e:Component skinName="Poker" scaleX="0.5" scaleY="0.5" horizontalCenter="0" verticalCenter="0" visible="false"/>
+</e:Skin>

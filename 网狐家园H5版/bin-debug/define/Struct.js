@@ -1,7 +1,7 @@
 var df;
 (function (df) {
     //用户积分
-    var tagUserScore = /** @class */ (function () {
+    var tagUserScore = (function () {
         function tagUserScore() {
         }
         return tagUserScore;
@@ -9,7 +9,7 @@ var df;
     df.tagUserScore = tagUserScore;
     ;
     //用户积分
-    var tagMobileUserScore = /** @class */ (function () {
+    var tagMobileUserScore = (function () {
         function tagMobileUserScore() {
         }
         return tagMobileUserScore;
@@ -17,7 +17,7 @@ var df;
     df.tagMobileUserScore = tagMobileUserScore;
     ;
     //用户状态
-    var tagUserStatus = /** @class */ (function () {
+    var tagUserStatus = (function () {
         function tagUserStatus() {
         }
         return tagUserStatus;
@@ -25,7 +25,7 @@ var df;
     df.tagUserStatus = tagUserStatus;
     ;
     //用户段位
-    var tagUserSegment = /** @class */ (function () {
+    var tagUserSegment = (function () {
         function tagUserSegment() {
         }
         return tagUserSegment;
@@ -33,7 +33,7 @@ var df;
     df.tagUserSegment = tagUserSegment;
     ;
     //桌子状态
-    var tagTableStatus = /** @class */ (function () {
+    var tagTableStatus = (function () {
         function tagTableStatus() {
         }
         return tagTableStatus;
@@ -41,7 +41,7 @@ var df;
     df.tagTableStatus = tagTableStatus;
     ;
     //轮次子项
-    var tagMatchRoundItem = /** @class */ (function () {
+    var tagMatchRoundItem = (function () {
         function tagMatchRoundItem() {
         }
         return tagMatchRoundItem;

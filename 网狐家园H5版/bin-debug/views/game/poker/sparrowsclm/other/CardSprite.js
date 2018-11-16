@@ -45,7 +45,7 @@ var game;
             0x28: "八筒",
             0x29: "九筒"
         };
-        var CardSprite = /** @class */ (function (_super) {
+        var CardSprite = (function (_super) {
             __extends(CardSprite, _super);
             /**
              * 构造

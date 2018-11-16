@@ -9,7 +9,7 @@ var frame;
     var OP_MODE_QUERYTABLE = 102; //查找桌子
     var OP_MODE_DISMISSTABLE = 105; //解散桌子
     var OP_MODE_TABLEUSER = 106; //桌子用户
-    var BattleFrame = /** @class */ (function () {
+    var BattleFrame = (function () {
         function BattleFrame(delegate) {
             this._delegate = delegate;
             this._dispatcher = new egret.EventDispatcher();

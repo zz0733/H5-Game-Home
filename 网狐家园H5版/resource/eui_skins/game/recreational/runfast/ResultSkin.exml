@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="ResultSkin" width="1334" height="750" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="runfast_game_background_1_png" horizontalCenter="0" verticalCenter="0"/>
+	<e:Image source="runfast_game_background_2_png" horizontalCenter="0" y="127"/>
+	<e:Group id="user_info" x="121" y="127">
+		<e:Component id="result_user_0" skinName="ResultUserSkin"/>
+		<e:Component skinName="ResultUserSkin" id="result_user_1" y="113"/>
+		<e:Component skinName="ResultUserSkin" id="result_user_2" y="226"/>
+		<e:Component skinName="ResultUserSkin" id="result_user_3" y="339"/>
+	</e:Group>
+	<e:Button id="btn_continue" label="" y="627" horizontalCenter="0">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="runfast_game_btn_continue_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image id="result_label" y="31" horizontalCenter="0" source="runfast_game_flag_peace_png"/>
+	<e:Group x="196" y="86">
+		<e:Image x="0" y="0" source="runfast_game_txt_user_png"/>
+		<e:Image x="457" y="0" source="runfast_game_txt_card_png"/>
+		<e:Image x="692" y="0" source="runfast_game_txt_bomb_png"/>
+		<e:Image x="888" y="0" source="runfast_game_txt_score_png"/>
+	</e:Group>
+</e:Skin>

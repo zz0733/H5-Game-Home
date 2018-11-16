@@ -5,7 +5,7 @@ namespace frame {
 
     const NORMAL = 0
     const RETRY = 1
-    const BATTLE = 2
+    const BATTLE = 2;
     const DISTRIBUTE = 4
     const MATCH = 5
     const VIDEO = 6

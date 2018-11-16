@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var client;
 (function (client) {
-    var RankCell = /** @class */ (function (_super) {
+    var RankCell = (function (_super) {
         __extends(RankCell, _super);
         function RankCell() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -36,7 +36,7 @@ var client;
         };
         return RankCell;
     }(eui.Component));
-    var RankLayer = /** @class */ (function (_super) {
+    var RankLayer = (function (_super) {
         __extends(RankLayer, _super);
         function RankLayer(scene) {
             var _this = _super.call(this) || this;

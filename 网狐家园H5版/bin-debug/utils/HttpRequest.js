@@ -3,7 +3,7 @@
  */
 var utils;
 (function (utils) {
-    var HttpRequest = /** @class */ (function () {
+    var HttpRequest = (function () {
         /**
          * 构造
          */

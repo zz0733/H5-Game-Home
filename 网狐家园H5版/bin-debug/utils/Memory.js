@@ -3,7 +3,7 @@
  */
 var utils;
 (function (utils) {
-    var Memory = /** @class */ (function () {
+    var Memory = (function () {
         function Memory() {
         }
         /**拷贝内存*/

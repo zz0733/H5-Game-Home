@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var customEvent;
 (function (customEvent) {
-    var CustomEvent = /** @class */ (function (_super) {
+    var CustomEvent = (function (_super) {
         __extends(CustomEvent, _super);
         /**
          * 构造方法

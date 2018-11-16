@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="ClockSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<w:Config id="166ed1fefb0"/>
+	<e:Image source="runfast_clock_flag_png"/>
+	<e:Component id="label" x="91" y="51.5"/>
+</e:Skin>

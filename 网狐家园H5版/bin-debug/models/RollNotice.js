@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var models;
 (function (models) {
-    var RollNotice = /** @class */ (function (_super) {
+    var RollNotice = (function (_super) {
         __extends(RollNotice, _super);
         /**
          * 构造

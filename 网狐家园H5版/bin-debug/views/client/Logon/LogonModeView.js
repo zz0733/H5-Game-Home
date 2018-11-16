@@ -13,7 +13,7 @@ var client;
     /**
      * 登录
      */
-    var LogonModeView = /** @class */ (function (_super) {
+    var LogonModeView = (function (_super) {
         __extends(LogonModeView, _super);
         function LogonModeView(scene) {
             var _this = _super.call(this) || this;

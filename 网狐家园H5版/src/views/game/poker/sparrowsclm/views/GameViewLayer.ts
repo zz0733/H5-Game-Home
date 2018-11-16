@@ -1,9 +1,11 @@
 /**
  * 游戏交互
  */
+
 namespace game {
     export namespace sparrowsclm {
         //用户头像位置
+        import CMD_C_OutCard = cmd.runfast.CMD_C_OutCard;
         const HeadPoint: any[] = [{ x: 667, y: 618 }, { x: 1074, y: 172 }, { x: 144, y: 172 }];
         export class GameViewLayer extends eui.UILayer {
             private _gameEngine: GameClientEngine;
@@ -160,6 +162,7 @@ namespace game {
                 if (null != this._outCardControl) {
                     this._outCardControl.setOutCard(df.INVALID_ITEM);
                 }
+
             }
 
             /**帧率刷新 */
@@ -263,7 +266,7 @@ namespace game {
 
                     let callfunc = () => {
                         this.createHandCards(dispatch.viewId, dispatch.cardData);//
-                        this._gameEngine._cbRemindCardCount--;//剩余的牌数
+                        this._gameEngine._cbRemindCardCount--;//剩余的牌数,为什么不减少两张
                         this.setRemaindNum(this._gameEngine._cbRemindCardCount);
                     };
 

@@ -4,7 +4,7 @@
  */
 var cache;
 (function (cache) {
-    var localization = /** @class */ (function () {
+    var localization = (function () {
         function localization() {
             this._cache = {};
         }

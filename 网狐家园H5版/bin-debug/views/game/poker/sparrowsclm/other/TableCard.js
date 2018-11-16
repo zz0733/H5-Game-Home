@@ -17,7 +17,7 @@ var game;
         var ONE_LINE = [8, 6, 6];
         //动画位置
         var ANIMATE_POS = [new egret.Point(700, 250), new egret.Point(240, 50), new egret.Point(-30, 400)];
-        var TableCard = /** @class */ (function () {
+        var TableCard = (function () {
             function TableCard(scene) {
                 this._cbCardsData = []; //玩家桌面扑克数据
                 this._cardsPanel = []; //扑克根节点

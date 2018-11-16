@@ -76,7 +76,7 @@ var game;
         sparrowsclm.CHR_HAI_DI_PAO = 0x02000000; //海底炮
         sparrowsclm.CHR_BAO_JIAO = 0x04000000; //报叫
         //////////////////////////////////////////////////////////////////////////
-        var tagKindItem = /** @class */ (function () {
+        var tagKindItem = (function () {
             function tagKindItem() {
                 this.cbWeaveKind = 0; //组合类型
                 this.cbCenterCard = 0; //中心扑克
@@ -84,7 +84,7 @@ var game;
             }
             return tagKindItem;
         }());
-        var tagAnalyseItem = /** @class */ (function () {
+        var tagAnalyseItem = (function () {
             function tagAnalyseItem() {
                 this.cbCardEye = 0; //牌眼扑克
                 this.cbWeaveKind = [0, 0, 0]; //组合类型
@@ -93,7 +93,7 @@ var game;
             }
             return tagAnalyseItem;
         }());
-        var TingCardInfo = /** @class */ (function () {
+        var TingCardInfo = (function () {
             function TingCardInfo() {
                 this.cbTingCount = 0; //听牌数目
                 this.cbChiHuFan = []; //吃胡番数
@@ -104,7 +104,7 @@ var game;
             return TingCardInfo;
         }());
         sparrowsclm.TingCardInfo = TingCardInfo;
-        var GameLogic = /** @class */ (function () {
+        var GameLogic = (function () {
             function GameLogic() {
             }
             GameLogic.prototype.GetCardValue = function (cbCardData) {

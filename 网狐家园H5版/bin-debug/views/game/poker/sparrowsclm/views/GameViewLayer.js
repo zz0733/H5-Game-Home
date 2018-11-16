@@ -1,3 +1,6 @@
+/**
+ * 游戏交互
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -8,16 +11,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-/**
- * 游戏交互
- */
 var game;
 (function (game) {
     var sparrowsclm;
     (function (sparrowsclm) {
-        //用户头像位置
         var HeadPoint = [{ x: 667, y: 618 }, { x: 1074, y: 172 }, { x: 144, y: 172 }];
-        var GameViewLayer = /** @class */ (function (_super) {
+        var GameViewLayer = (function (_super) {
             __extends(GameViewLayer, _super);
             /**
              * 构造
@@ -232,7 +231,7 @@ var game;
                     var dispatch = dispatchInfo[i];
                     var callfunc = function () {
                         _this.createHandCards(dispatch.viewId, dispatch.cardData); //
-                        _this._gameEngine._cbRemindCardCount--; //剩余的牌数
+                        _this._gameEngine._cbRemindCardCount--; //剩余的牌数,为什么不减少两张
                         _this.setRemaindNum(_this._gameEngine._cbRemindCardCount);
                     };
                     actions.push(callfunc);

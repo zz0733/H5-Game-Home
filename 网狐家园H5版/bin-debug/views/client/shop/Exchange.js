@@ -5,7 +5,7 @@ var shop;
 (function (shop) {
     var INGOT_LIST_URL = "http://" + managers.TcpServiceCtrl.getInstance().m_DefaultServerInfo.webAddr + "/Ashx/ProService.ashx?action=GetIngotList";
     var EXCHANGE_URL = "http://" + managers.TcpServiceCtrl.getInstance().m_DefaultServerInfo.webAddr + "/Ashx/ProService.ashx?action=ConvertScore";
-    var Exchange = /** @class */ (function () {
+    var Exchange = (function () {
         function Exchange(viewFrame, panel) {
             this._isHaveData = false;
             this._viewFrame = viewFrame;

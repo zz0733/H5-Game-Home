@@ -17,7 +17,7 @@ var client;
         Wechat: 0,
         AliPay: 1
     };
-    var ShopLayer = /** @class */ (function (_super) {
+    var ShopLayer = (function (_super) {
         __extends(ShopLayer, _super);
         function ShopLayer(scene, showIndex) {
             var _this = _super.call(this) || this;

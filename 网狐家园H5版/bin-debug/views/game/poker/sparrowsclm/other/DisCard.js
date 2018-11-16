@@ -7,7 +7,7 @@ var game;
     var sparrowsclm;
     (function (sparrowsclm) {
         var OUT_POS = [new egret.Point(0, 0), new egret.Point(949, 112), new egret.Point(235, 112)];
-        var DisCard = /** @class */ (function () {
+        var DisCard = (function () {
             function DisCard(scene) {
                 this._scene = scene;
                 this.onInit();

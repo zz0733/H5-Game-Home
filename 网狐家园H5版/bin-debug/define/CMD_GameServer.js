@@ -18,7 +18,7 @@ var df;
     df.SUB_GR_UPDATE_NOTIFY = 200; //升级提示
     //////////////////////////////////////////////////////////////////////////
     //I D 登录
-    var CMD_GR_LogonByUserID = /** @class */ (function () {
+    var CMD_GR_LogonByUserID = (function () {
         function CMD_GR_LogonByUserID() {
             //版本信息
             this.dwPlazaVersion = 0; //广场版本
@@ -35,7 +35,7 @@ var df;
     df.CMD_GR_LogonByUserID = CMD_GR_LogonByUserID;
     ;
     //帐号登录
-    var CMD_GR_LogonByAccounts = /** @class */ (function () {
+    var CMD_GR_LogonByAccounts = (function () {
         function CMD_GR_LogonByAccounts() {
             //版本信息
             this.dwPlazaVersion = 0; //广场版本
@@ -52,7 +52,7 @@ var df;
     df.CMD_GR_LogonByAccounts = CMD_GR_LogonByAccounts;
     ;
     //手机登录
-    var CMD_GR_LogonByMobile = /** @class */ (function () {
+    var CMD_GR_LogonByMobile = (function () {
         function CMD_GR_LogonByMobile() {
             //版本信息
             this.wGameID = 0; //游戏标识
@@ -82,7 +82,7 @@ var df;
     df.CMD_GR_LogonByMobile = CMD_GR_LogonByMobile;
     ;
     //登录成功
-    var CMD_GR_LogonSuccess = /** @class */ (function () {
+    var CMD_GR_LogonSuccess = (function () {
         function CMD_GR_LogonSuccess(buffer) {
             this.dwUserID = 0; //登陆成功
             this.dwUserRight = 0; //用户权限
@@ -99,7 +99,7 @@ var df;
     df.CMD_GR_LogonSuccess = CMD_GR_LogonSuccess;
     ;
     //登录失败
-    var CMD_GR_LogonFailure = /** @class */ (function () {
+    var CMD_GR_LogonFailure = (function () {
         function CMD_GR_LogonFailure(buffer) {
             this.lErrorCode = 0; //错误代码
             this.wLockServerID = 0; //锁定房间
@@ -113,7 +113,7 @@ var df;
     df.CMD_GR_LogonFailure = CMD_GR_LogonFailure;
     ;
     //升级提示
-    var CMD_GR_UpdateNotify = /** @class */ (function () {
+    var CMD_GR_UpdateNotify = (function () {
         function CMD_GR_UpdateNotify(buffer) {
             //升级标志
             this.cbMustUpdatePlaza = 0; //强行升级
@@ -144,7 +144,7 @@ var df;
     df.SUB_GR_CONFIG_USER_RIGHT = 104; //玩家权限
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //列表配置
-    var CMD_GR_ConfigColumn = /** @class */ (function () {
+    var CMD_GR_ConfigColumn = (function () {
         function CMD_GR_ConfigColumn() {
             this.cbColumnCount = 0; //列表数目
         }
@@ -153,7 +153,7 @@ var df;
     df.CMD_GR_ConfigColumn = CMD_GR_ConfigColumn;
     ;
     //房间配置
-    var CMD_GR_ConfigServer = /** @class */ (function () {
+    var CMD_GR_ConfigServer = (function () {
         function CMD_GR_ConfigServer(buffer) {
             this.wKindID = 0; //类型索引
             this.wTableCount = 0; //桌子数目
@@ -177,7 +177,7 @@ var df;
     df.CMD_GR_ConfigServer = CMD_GR_ConfigServer;
     ;
     //房间规则
-    var CMD_GR_ConfigRule = /** @class */ (function () {
+    var CMD_GR_ConfigRule = (function () {
         function CMD_GR_ConfigRule() {
             this.dwServerRule = 0; //房间规则
         }
@@ -186,7 +186,7 @@ var df;
     df.CMD_GR_ConfigRule = CMD_GR_ConfigRule;
     ;
     //玩家权限
-    var CMD_GR_ConfigUserRight = /** @class */ (function () {
+    var CMD_GR_ConfigUserRight = (function () {
         function CMD_GR_ConfigUserRight() {
             this.dwUserRight = 0; //玩家权限
         }
@@ -240,7 +240,7 @@ var df;
     df.CONSUMER_MATCH_FEE = 3; //比赛费用
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     //旁观请求
-    var CMD_GR_UserLookon = /** @class */ (function () {
+    var CMD_GR_UserLookon = (function () {
         function CMD_GR_UserLookon() {
         }
         return CMD_GR_UserLookon;
@@ -248,7 +248,7 @@ var df;
     df.CMD_GR_UserLookon = CMD_GR_UserLookon;
     ;
     //坐下请求
-    var CMD_GR_UserSitDown = /** @class */ (function () {
+    var CMD_GR_UserSitDown = (function () {
         function CMD_GR_UserSitDown() {
         }
         return CMD_GR_UserSitDown;
@@ -256,7 +256,7 @@ var df;
     df.CMD_GR_UserSitDown = CMD_GR_UserSitDown;
     ;
     //起立请求
-    var CMD_GR_UserStandUp = /** @class */ (function () {
+    var CMD_GR_UserStandUp = (function () {
         function CMD_GR_UserStandUp() {
         }
         return CMD_GR_UserStandUp;
@@ -264,7 +264,7 @@ var df;
     df.CMD_GR_UserStandUp = CMD_GR_UserStandUp;
     ;
     //用户分数
-    var CMD_GR_UserScore = /** @class */ (function () {
+    var CMD_GR_UserScore = (function () {
         function CMD_GR_UserScore() {
         }
         return CMD_GR_UserScore;
@@ -272,7 +272,7 @@ var df;
     df.CMD_GR_UserScore = CMD_GR_UserScore;
     ;
     //用户分数
-    var CMD_GR_MobileUserScore = /** @class */ (function () {
+    var CMD_GR_MobileUserScore = (function () {
         function CMD_GR_MobileUserScore() {
         }
         return CMD_GR_MobileUserScore;
@@ -280,7 +280,7 @@ var df;
     df.CMD_GR_MobileUserScore = CMD_GR_MobileUserScore;
     ;
     //用户段位
-    var CMD_GR_UserSegment = /** @class */ (function () {
+    var CMD_GR_UserSegment = (function () {
         function CMD_GR_UserSegment() {
         }
         return CMD_GR_UserSegment;
@@ -288,7 +288,7 @@ var df;
     df.CMD_GR_UserSegment = CMD_GR_UserSegment;
     ;
     //用户状态
-    var CMD_GR_UserStatus = /** @class */ (function () {
+    var CMD_GR_UserStatus = (function () {
         function CMD_GR_UserStatus() {
         }
         return CMD_GR_UserStatus;
@@ -296,7 +296,7 @@ var df;
     df.CMD_GR_UserStatus = CMD_GR_UserStatus;
     ;
     //用户财富
-    var CMD_GR_UserWealth = /** @class */ (function () {
+    var CMD_GR_UserWealth = (function () {
         function CMD_GR_UserWealth() {
         }
         return CMD_GR_UserWealth;
@@ -304,7 +304,7 @@ var df;
     df.CMD_GR_UserWealth = CMD_GR_UserWealth;
     ;
     //请求失败
-    var CMD_GR_RequestFailure = /** @class */ (function () {
+    var CMD_GR_RequestFailure = (function () {
         function CMD_GR_RequestFailure(buffer) {
             this.cbFailureCode = buffer.cbBuffer.Pop_Byte();
             this.szDescribeString = buffer.cbBuffer.Pop_UTF16(buffer.cbBuffer.getByteArray().bytesAvailable / 2);
@@ -314,7 +314,7 @@ var df;
     df.CMD_GR_RequestFailure = CMD_GR_RequestFailure;
     ;
     //用户聊天
-    var CMD_GR_S_UserChat = /** @class */ (function () {
+    var CMD_GR_S_UserChat = (function () {
         function CMD_GR_S_UserChat() {
         }
         return CMD_GR_S_UserChat;
@@ -322,7 +322,7 @@ var df;
     df.CMD_GR_S_UserChat = CMD_GR_S_UserChat;
     ;
     //用户聊天
-    var CMD_GR_R_UserChat = /** @class */ (function () {
+    var CMD_GR_R_UserChat = (function () {
         function CMD_GR_R_UserChat() {
         }
         return CMD_GR_R_UserChat;
@@ -330,7 +330,7 @@ var df;
     df.CMD_GR_R_UserChat = CMD_GR_R_UserChat;
     ;
     //用户私聊
-    var CMD_GR_S_UserWisper = /** @class */ (function () {
+    var CMD_GR_S_UserWisper = (function () {
         function CMD_GR_S_UserWisper() {
         }
         return CMD_GR_S_UserWisper;
@@ -338,7 +338,7 @@ var df;
     df.CMD_GR_S_UserWisper = CMD_GR_S_UserWisper;
     ;
     //用户私聊
-    var CMD_GR_R_UserWisper = /** @class */ (function () {
+    var CMD_GR_R_UserWisper = (function () {
         function CMD_GR_R_UserWisper() {
         }
         return CMD_GR_R_UserWisper;
@@ -346,7 +346,7 @@ var df;
     df.CMD_GR_R_UserWisper = CMD_GR_R_UserWisper;
     ;
     //用户会话
-    var CMD_GR_UserConversation = /** @class */ (function () {
+    var CMD_GR_UserConversation = (function () {
         function CMD_GR_UserConversation() {
         }
         return CMD_GR_UserConversation;
@@ -354,7 +354,7 @@ var df;
     df.CMD_GR_UserConversation = CMD_GR_UserConversation;
     ;
     //拒绝玩家
-    var CMD_GR_UserRepulseSit = /** @class */ (function () {
+    var CMD_GR_UserRepulseSit = (function () {
         function CMD_GR_UserRepulseSit() {
         }
         return CMD_GR_UserRepulseSit;
@@ -362,7 +362,7 @@ var df;
     df.CMD_GR_UserRepulseSit = CMD_GR_UserRepulseSit;
     ;
     //请求用户信息
-    var CMD_GR_UserInfoReq = /** @class */ (function () {
+    var CMD_GR_UserInfoReq = (function () {
         function CMD_GR_UserInfoReq() {
         }
         return CMD_GR_UserInfoReq;
@@ -370,7 +370,7 @@ var df;
     df.CMD_GR_UserInfoReq = CMD_GR_UserInfoReq;
     ;
     //请求用户信息
-    var CMD_GR_ChairUserInfoReq = /** @class */ (function () {
+    var CMD_GR_ChairUserInfoReq = (function () {
         function CMD_GR_ChairUserInfoReq() {
         }
         return CMD_GR_ChairUserInfoReq;
@@ -378,7 +378,7 @@ var df;
     df.CMD_GR_ChairUserInfoReq = CMD_GR_ChairUserInfoReq;
     ;
     //解散桌子
-    var CMD_GR_DismissTable = /** @class */ (function () {
+    var CMD_GR_DismissTable = (function () {
         function CMD_GR_DismissTable() {
         }
         return CMD_GR_DismissTable;
@@ -386,7 +386,7 @@ var df;
     df.CMD_GR_DismissTable = CMD_GR_DismissTable;
     ;
     //解散结果
-    var CMD_GR_DismissResult = /** @class */ (function () {
+    var CMD_GR_DismissResult = (function () {
         function CMD_GR_DismissResult() {
         }
         return CMD_GR_DismissResult;
@@ -394,7 +394,7 @@ var df;
     df.CMD_GR_DismissResult = CMD_GR_DismissResult;
     ;
     //比赛分享
-    var CMD_GR_UserMatchShare = /** @class */ (function () {
+    var CMD_GR_UserMatchShare = (function () {
         function CMD_GR_UserMatchShare() {
         }
         return CMD_GR_UserMatchShare;
@@ -402,7 +402,7 @@ var df;
     df.CMD_GR_UserMatchShare = CMD_GR_UserMatchShare;
     ;
     //邀请用户
-    var CMD_GR_R_InviteUser = /** @class */ (function () {
+    var CMD_GR_R_InviteUser = (function () {
         function CMD_GR_R_InviteUser() {
         }
         return CMD_GR_R_InviteUser;
@@ -410,7 +410,7 @@ var df;
     df.CMD_GR_R_InviteUser = CMD_GR_R_InviteUser;
     ;
     //邀请用户
-    var CMD_GR_S_InviteUser = /** @class */ (function () {
+    var CMD_GR_S_InviteUser = (function () {
         function CMD_GR_S_InviteUser() {
         }
         return CMD_GR_S_InviteUser;
@@ -418,7 +418,7 @@ var df;
     df.CMD_GR_S_InviteUser = CMD_GR_S_InviteUser;
     ;
     //喇叭消息
-    var CMD_GR_UserBugle = /** @class */ (function () {
+    var CMD_GR_UserBugle = (function () {
         function CMD_GR_UserBugle() {
         }
         return CMD_GR_UserBugle;
@@ -432,7 +432,7 @@ var df;
     df.UR_LIMIT_FLEE_RATE = 0x04; //限制逃率
     df.UR_LIMIT_GAME_SCORE = 0x08; //限制积分
     //用户规则
-    var CMD_GR_UserRule = /** @class */ (function () {
+    var CMD_GR_UserRule = (function () {
         function CMD_GR_UserRule() {
         }
         return CMD_GR_UserRule;
@@ -448,7 +448,7 @@ var df;
     df.SUB_GR_SCORE_VARIATION = 103; //底分变更
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //桌子信息
-    var CMD_GR_TableInfo = /** @class */ (function () {
+    var CMD_GR_TableInfo = (function () {
         function CMD_GR_TableInfo() {
         }
         return CMD_GR_TableInfo;
@@ -456,7 +456,7 @@ var df;
     df.CMD_GR_TableInfo = CMD_GR_TableInfo;
     ;
     //桌子状态
-    var CMD_GR_TableStatus = /** @class */ (function () {
+    var CMD_GR_TableStatus = (function () {
         function CMD_GR_TableStatus() {
         }
         return CMD_GR_TableStatus;
@@ -464,7 +464,7 @@ var df;
     df.CMD_GR_TableStatus = CMD_GR_TableStatus;
     ;
     //桌子分数
-    var CMD_GR_TableScore = /** @class */ (function () {
+    var CMD_GR_TableScore = (function () {
         function CMD_GR_TableScore() {
         }
         return CMD_GR_TableScore;
@@ -472,7 +472,7 @@ var df;
     df.CMD_GR_TableScore = CMD_GR_TableScore;
     ;
     //底分变更
-    var CMD_GR_ScoreVariation = /** @class */ (function () {
+    var CMD_GR_ScoreVariation = (function () {
         function CMD_GR_ScoreVariation() {
         }
         return CMD_GR_ScoreVariation;
@@ -500,7 +500,7 @@ var df;
     df.OSW_ROOM = 1; //大厅消息
     df.OSW_GAME = 2; //游戏消息
     //发送警告
-    var CMD_GR_SendWarning = /** @class */ (function () {
+    var CMD_GR_SendWarning = (function () {
         function CMD_GR_SendWarning() {
         }
         return CMD_GR_SendWarning;
@@ -508,7 +508,7 @@ var df;
     df.CMD_GR_SendWarning = CMD_GR_SendWarning;
     ;
     //系统消息
-    var CMD_GR_SendMessage = /** @class */ (function () {
+    var CMD_GR_SendMessage = (function () {
         function CMD_GR_SendMessage() {
         }
         return CMD_GR_SendMessage;
@@ -516,7 +516,7 @@ var df;
     df.CMD_GR_SendMessage = CMD_GR_SendMessage;
     ;
     //查看地址
-    var CMD_GR_LookUserIP = /** @class */ (function () {
+    var CMD_GR_LookUserIP = (function () {
         function CMD_GR_LookUserIP() {
         }
         return CMD_GR_LookUserIP;
@@ -524,7 +524,7 @@ var df;
     df.CMD_GR_LookUserIP = CMD_GR_LookUserIP;
     ;
     //踢出用户
-    var CMD_GR_KillUser = /** @class */ (function () {
+    var CMD_GR_KillUser = (function () {
         function CMD_GR_KillUser() {
         }
         return CMD_GR_KillUser;
@@ -532,7 +532,7 @@ var df;
     df.CMD_GR_KillUser = CMD_GR_KillUser;
     ;
     //解散游戏
-    var CMD_GR_DismissGame = /** @class */ (function () {
+    var CMD_GR_DismissGame = (function () {
         function CMD_GR_DismissGame() {
         }
         return CMD_GR_DismissGame;
@@ -540,7 +540,7 @@ var df;
     df.CMD_GR_DismissGame = CMD_GR_DismissGame;
     ;
     //解散比赛
-    var CMD_GR_DismissMatch = /** @class */ (function () {
+    var CMD_GR_DismissMatch = (function () {
         function CMD_GR_DismissMatch() {
         }
         return CMD_GR_DismissMatch;
@@ -548,7 +548,7 @@ var df;
     df.CMD_GR_DismissMatch = CMD_GR_DismissMatch;
     ;
     //禁用帐户
-    var CMD_GR_LimitAccounts = /** @class */ (function () {
+    var CMD_GR_LimitAccounts = (function () {
         function CMD_GR_LimitAccounts() {
         }
         return CMD_GR_LimitAccounts;
@@ -556,7 +556,7 @@ var df;
     df.CMD_GR_LimitAccounts = CMD_GR_LimitAccounts;
     ;
     //权限设置
-    var CMD_GR_SetUserRight = /** @class */ (function () {
+    var CMD_GR_SetUserRight = (function () {
         function CMD_GR_SetUserRight() {
         }
         return CMD_GR_SetUserRight;
@@ -564,7 +564,7 @@ var df;
     df.CMD_GR_SetUserRight = CMD_GR_SetUserRight;
     ;
     //房间设置
-    var CMD_GR_OptionServer = /** @class */ (function () {
+    var CMD_GR_OptionServer = (function () {
         function CMD_GR_OptionServer() {
         }
         return CMD_GR_OptionServer;
@@ -572,7 +572,7 @@ var df;
     df.CMD_GR_OptionServer = CMD_GR_OptionServer;
     ;
     //踢出所有用户
-    var CMD_GR_KickAllUser = /** @class */ (function () {
+    var CMD_GR_KickAllUser = (function () {
         function CMD_GR_KickAllUser() {
         }
         return CMD_GR_KickAllUser;
@@ -580,7 +580,7 @@ var df;
     df.CMD_GR_KickAllUser = CMD_GR_KickAllUser;
     ;
     //限制聊天
-    var CMD_GR_LimitUserChat = /** @class */ (function () {
+    var CMD_GR_LimitUserChat = (function () {
         function CMD_GR_LimitUserChat() {
         }
         return CMD_GR_LimitUserChat;
@@ -588,7 +588,7 @@ var df;
     df.CMD_GR_LimitUserChat = CMD_GR_LimitUserChat;
     ;
     //房间选项
-    var CMD_GR_ManageServerOption = /** @class */ (function () {
+    var CMD_GR_ManageServerOption = (function () {
         function CMD_GR_ManageServerOption() {
         }
         return CMD_GR_ManageServerOption;
@@ -601,7 +601,7 @@ var df;
     df.SUB_GR_KICK_USER = 1; //踢走用户
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //踢走用户
-    var CMD_GR_KickUser = /** @class */ (function () {
+    var CMD_GR_KickUser = (function () {
         function CMD_GR_KickUser() {
         }
         return CMD_GR_KickUser;
@@ -633,7 +633,7 @@ var df;
     df.SUB_GR_QUERY_NOT_FOUND = 201; //查询不到
     //////////////////////////////////////////////////////////////////////////
     //查询用户
-    var CMD_GR_QueryByGameID = /** @class */ (function () {
+    var CMD_GR_QueryByGameID = (function () {
         function CMD_GR_QueryByGameID() {
         }
         return CMD_GR_QueryByGameID;
@@ -641,7 +641,7 @@ var df;
     df.CMD_GR_QueryByGameID = CMD_GR_QueryByGameID;
     ;
     //查询用户
-    var CMD_GR_QueryByAccounts = /** @class */ (function () {
+    var CMD_GR_QueryByAccounts = (function () {
         function CMD_GR_QueryByAccounts() {
         }
         return CMD_GR_QueryByAccounts;
@@ -649,7 +649,7 @@ var df;
     df.CMD_GR_QueryByAccounts = CMD_GR_QueryByAccounts;
     ;
     //查找不到
-    var CMD_GR_QueryNotFound = /** @class */ (function () {
+    var CMD_GR_QueryNotFound = (function () {
         function CMD_GR_QueryNotFound() {
         }
         return CMD_GR_QueryNotFound;
@@ -674,7 +674,7 @@ var df;
     df.SUB_GR_SHARE_RESULT = 13; //分享结果
     df.SUB_GR_SIGNUP_SUCCESS = 14; //报名成功
     //比赛信息
-    var CMD_GR_MatchRequest = /** @class */ (function () {
+    var CMD_GR_MatchRequest = (function () {
         function CMD_GR_MatchRequest() {
         }
         return CMD_GR_MatchRequest;
@@ -683,7 +683,7 @@ var df;
     ;
     //
     //定时赛数据
-    var tagLockTimeMatchData = /** @class */ (function () {
+    var tagLockTimeMatchData = (function () {
         function tagLockTimeMatchData() {
         }
         return tagLockTimeMatchData;
@@ -691,7 +691,7 @@ var df;
     df.tagLockTimeMatchData = tagLockTimeMatchData;
     ;
     //即时赛数据
-    var tagImmediateMatchData = /** @class */ (function () {
+    var tagImmediateMatchData = (function () {
         function tagImmediateMatchData() {
         }
         return tagImmediateMatchData;
@@ -699,7 +699,7 @@ var df;
     df.tagImmediateMatchData = tagImmediateMatchData;
     ;
     //比赛人数
-    var CMD_GR_MatchNumber = /** @class */ (function () {
+    var CMD_GR_MatchNumber = (function () {
         function CMD_GR_MatchNumber() {
         }
         return CMD_GR_MatchNumber;
@@ -707,7 +707,7 @@ var df;
     df.CMD_GR_MatchNumber = CMD_GR_MatchNumber;
     ;
     //分享结果
-    var CMD_GR_ShareResult = /** @class */ (function () {
+    var CMD_GR_ShareResult = (function () {
         function CMD_GR_ShareResult() {
         }
         return CMD_GR_ShareResult;
@@ -759,7 +759,7 @@ var df;
     df.SUB_GF_ACTION_MESSAGE = 201; //动作消息
     /////////////////////////////////////////////////////////////////////////////////////////////
     //游戏配置
-    var CMD_GF_GameOption = /** @class */ (function () {
+    var CMD_GF_GameOption = (function () {
         function CMD_GF_GameOption() {
         }
         return CMD_GF_GameOption;
@@ -767,7 +767,7 @@ var df;
     df.CMD_GF_GameOption = CMD_GF_GameOption;
     ;
     //游戏环境
-    var CMD_GF_GameStatus = /** @class */ (function () {
+    var CMD_GF_GameStatus = (function () {
         function CMD_GF_GameStatus() {
         }
         return CMD_GF_GameStatus;
@@ -784,7 +784,7 @@ var df;
     //     public							szChatString;		                //聊天信息
     // };
     //发送语音
-    var CMD_GF_SendVoice = /** @class */ (function () {
+    var CMD_GF_SendVoice = (function () {
         function CMD_GF_SendVoice() {
         }
         return CMD_GF_SendVoice;
@@ -792,7 +792,7 @@ var df;
     df.CMD_GF_SendVoice = CMD_GF_SendVoice;
     ;
     //用户语音
-    var CMD_GF_UserVoice = /** @class */ (function () {
+    var CMD_GF_UserVoice = (function () {
         function CMD_GF_UserVoice() {
         }
         return CMD_GF_UserVoice;
@@ -800,7 +800,7 @@ var df;
     df.CMD_GF_UserVoice = CMD_GF_UserVoice;
     ;
     //旁观配置
-    var CMD_GF_LookonConfig = /** @class */ (function () {
+    var CMD_GF_LookonConfig = (function () {
         function CMD_GF_LookonConfig() {
         }
         return CMD_GF_LookonConfig;
@@ -808,7 +808,7 @@ var df;
     df.CMD_GF_LookonConfig = CMD_GF_LookonConfig;
     ;
     //旁观状态
-    var CMD_GF_LookonStatus = /** @class */ (function () {
+    var CMD_GF_LookonStatus = (function () {
         function CMD_GF_LookonStatus() {
         }
         return CMD_GF_LookonStatus;
@@ -816,7 +816,7 @@ var df;
     df.CMD_GF_LookonStatus = CMD_GF_LookonStatus;
     ;
     //旁观坐下
-    var CMD_GF_Look2Sit = /** @class */ (function () {
+    var CMD_GF_Look2Sit = (function () {
         function CMD_GF_Look2Sit() {
         }
         return CMD_GF_Look2Sit;
@@ -824,7 +824,7 @@ var df;
     df.CMD_GF_Look2Sit = CMD_GF_Look2Sit;
     ;
     //坐下旁观
-    var CMD_GF_Sit2Look = /** @class */ (function () {
+    var CMD_GF_Sit2Look = (function () {
         function CMD_GF_Sit2Look() {
         }
         return CMD_GF_Sit2Look;
@@ -832,7 +832,7 @@ var df;
     df.CMD_GF_Sit2Look = CMD_GF_Sit2Look;
     ;
     //比赛分数
-    var CMD_GF_MatchScore = /** @class */ (function () {
+    var CMD_GF_MatchScore = (function () {
         function CMD_GF_MatchScore() {
         }
         return CMD_GF_MatchScore;
@@ -840,7 +840,7 @@ var df;
     df.CMD_GF_MatchScore = CMD_GF_MatchScore;
     ;
     //比赛数据
-    var CMD_GF_MatchData = /** @class */ (function () {
+    var CMD_GF_MatchData = (function () {
         function CMD_GF_MatchData() {
         }
         return CMD_GF_MatchData;
@@ -848,7 +848,7 @@ var df;
     df.CMD_GF_MatchData = CMD_GF_MatchData;
     ;
     //比赛等待
-    var CMD_GF_MatchWait = /** @class */ (function () {
+    var CMD_GF_MatchWait = (function () {
         function CMD_GF_MatchWait() {
         }
         return CMD_GF_MatchWait;
@@ -856,7 +856,7 @@ var df;
     df.CMD_GF_MatchWait = CMD_GF_MatchWait;
     ;
     //比赛晋级
-    var CMD_GF_MatchPromote = /** @class */ (function () {
+    var CMD_GF_MatchPromote = (function () {
         function CMD_GF_MatchPromote() {
         }
         return CMD_GF_MatchPromote;
@@ -864,7 +864,7 @@ var df;
     df.CMD_GF_MatchPromote = CMD_GF_MatchPromote;
     ;
     //比赛淘汰
-    var CMD_GF_MatchEliminate = /** @class */ (function () {
+    var CMD_GF_MatchEliminate = (function () {
         function CMD_GF_MatchEliminate() {
         }
         return CMD_GF_MatchEliminate;
@@ -872,7 +872,7 @@ var df;
     df.CMD_GF_MatchEliminate = CMD_GF_MatchEliminate;
     ;
     //轮次切换
-    var CMD_GF_MatchRoundSwitch = /** @class */ (function () {
+    var CMD_GF_MatchRoundSwitch = (function () {
         function CMD_GF_MatchRoundSwitch() {
         }
         return CMD_GF_MatchRoundSwitch;
@@ -880,7 +880,7 @@ var df;
     df.CMD_GF_MatchRoundSwitch = CMD_GF_MatchRoundSwitch;
     ;
     //比赛结果
-    var CMD_GF_MatchResult = /** @class */ (function () {
+    var CMD_GF_MatchResult = (function () {
         function CMD_GF_MatchResult() {
         }
         return CMD_GF_MatchResult;
@@ -888,7 +888,7 @@ var df;
     df.CMD_GF_MatchResult = CMD_GF_MatchResult;
     ;
     //桌子参数
-    var CMD_GF_TableParam = /** @class */ (function () {
+    var CMD_GF_TableParam = (function () {
         function CMD_GF_TableParam() {
         }
         return CMD_GF_TableParam;
@@ -896,7 +896,7 @@ var df;
     df.CMD_GF_TableParam = CMD_GF_TableParam;
     ;
     //视频参数
-    var CMD_GF_VideoParam = /** @class */ (function () {
+    var CMD_GF_VideoParam = (function () {
         function CMD_GF_VideoParam() {
         }
         return CMD_GF_VideoParam;
@@ -904,7 +904,7 @@ var df;
     df.CMD_GF_VideoParam = CMD_GF_VideoParam;
     ;
     //投票解散
-    var CMD_GF_BallotDismiss = /** @class */ (function () {
+    var CMD_GF_BallotDismiss = (function () {
         function CMD_GF_BallotDismiss() {
         }
         return CMD_GF_BallotDismiss;
@@ -912,7 +912,7 @@ var df;
     df.CMD_GF_BallotDismiss = CMD_GF_BallotDismiss;
     ;
     //解散提醒
-    var CMD_GF_DismissNotify = /** @class */ (function () {
+    var CMD_GF_DismissNotify = (function () {
         function CMD_GF_DismissNotify() {
         }
         return CMD_GF_DismissNotify;
@@ -920,7 +920,7 @@ var df;
     df.CMD_GF_DismissNotify = CMD_GF_DismissNotify;
     ;
     //解散投票
-    var CMD_GF_DismissBallot = /** @class */ (function () {
+    var CMD_GF_DismissBallot = (function () {
         function CMD_GF_DismissBallot() {
         }
         return CMD_GF_DismissBallot;

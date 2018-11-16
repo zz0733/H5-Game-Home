@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var models;
 (function (models) {
-    var Loading = /** @class */ (function (_super) {
+    var Loading = (function (_super) {
         __extends(Loading, _super);
         function Loading(finishHandler) {
             var _this = _super.call(this) || this;

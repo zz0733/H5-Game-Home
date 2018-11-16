@@ -19,7 +19,7 @@ var game;
     var TEXTURE_DATA = [{ width: 74, height: 100 }, { width: 62, height: 50 }, { width: 62, height: 50 }];
     var sparrowsclm;
     (function (sparrowsclm) {
-        var WeaveCard = /** @class */ (function () {
+        var WeaveCard = (function () {
             function WeaveCard(scene) {
                 this._weavePanel = [];
                 //组合位置偏移

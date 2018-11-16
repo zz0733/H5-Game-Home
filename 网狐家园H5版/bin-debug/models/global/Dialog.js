@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var models;
 (function (models) {
-    var Dialog = /** @class */ (function (_super) {
+    var Dialog = (function (_super) {
         __extends(Dialog, _super);
         function Dialog(style, content, okFunc, canCellFunc) {
             var _this = _super.call(this) || this;

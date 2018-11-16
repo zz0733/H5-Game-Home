@@ -1,6 +1,6 @@
 var battle;
 (function (battle) {
-    var BattleParam = /** @class */ (function () {
+    var BattleParam = (function () {
         function BattleParam(buffer) {
             this.tableUserList = [];
             this.onInit(buffer);

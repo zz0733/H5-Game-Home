@@ -13,7 +13,7 @@ namespace game {
             NORMAL:0,
             GARY:1,
             TING:2
-        }
+        };
        
         const CardName = {
             0x11: "一条", 
@@ -36,7 +36,7 @@ namespace game {
             0x28: "八筒", 
             0x29: "九筒"
 
-        }
+        };
         export class CardSprite extends egret.DisplayObjectContainer {
             public _cbCardData: number = 0;
             public _isTouchEnable: boolean = true;

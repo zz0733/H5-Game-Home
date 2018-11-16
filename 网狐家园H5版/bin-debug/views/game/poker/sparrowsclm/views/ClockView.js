@@ -15,7 +15,7 @@ var game;
 (function (game) {
     var sparrowsclm;
     (function (sparrowsclm) {
-        var ClockView = /** @class */ (function (_super) {
+        var ClockView = (function (_super) {
             __extends(ClockView, _super);
             function ClockView(scene, clockId) {
                 var _this = _super.call(this) || this;

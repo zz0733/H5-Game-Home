@@ -26,7 +26,7 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var ThemeAdapter = /** @class */ (function () {
+var ThemeAdapter = (function () {
     function ThemeAdapter() {
     }
     /**

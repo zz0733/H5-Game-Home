@@ -3,7 +3,7 @@
  */
 var network;
 (function (network) {
-    var Message = /** @class */ (function () {
+    var Message = (function () {
         /**构造
          * constructor
          */

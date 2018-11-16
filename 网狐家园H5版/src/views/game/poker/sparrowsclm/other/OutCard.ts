@@ -42,7 +42,7 @@ namespace game {
                     let params: any = {};
                     params.bSheet = true;
                     params.texture = "game_handcard_png";
-                    params.key = "card"
+                    params.key = "card";
                     params.pos = 0;
                     params.width = 88;
                     params.height = 128;

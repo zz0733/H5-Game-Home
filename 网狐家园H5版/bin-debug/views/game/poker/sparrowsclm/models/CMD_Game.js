@@ -137,7 +137,7 @@ var cmd;
             116: "[呼叫转移]"
         };
         //结构定义
-        var tagCustomOption = /** @class */ (function () {
+        var tagCustomOption = (function () {
             function tagCustomOption() {
             }
             return tagCustomOption;
@@ -145,7 +145,7 @@ var cmd;
         sparrowsclm.tagCustomOption = tagCustomOption;
         ;
         //组合子项
-        var tagWeaveItem = /** @class */ (function () {
+        var tagWeaveItem = (function () {
             function tagWeaveItem() {
                 this.cbCardData = utils.allocArray(4, Number); //扑克值
                 this.cbCardCount = [0, 0, 0, 0]; //扑克数,用于特殊杠牌，其它未定义
@@ -173,7 +173,7 @@ var cmd;
         sparrowsclm.tagWeaveItem = tagWeaveItem;
         ;
         //游戏动作
-        var tagGameAction = /** @class */ (function () {
+        var tagGameAction = (function () {
             function tagGameAction() {
                 this.cbActionType = 0;
                 this.cbActionCode = 0;
@@ -190,7 +190,7 @@ var cmd;
         }());
         sparrowsclm.tagGameAction = tagGameAction;
         //游戏规则
-        var tagGameRuleParams = /** @class */ (function () {
+        var tagGameRuleParams = (function () {
             function tagGameRuleParams() {
                 this.cbGamePlayer = 0;
                 this.cbAllowJoin = 0;
@@ -205,7 +205,7 @@ var cmd;
         }());
         sparrowsclm.tagGameRuleParams = tagGameRuleParams;
         //动作信息
-        var tagActionInfo = /** @class */ (function () {
+        var tagActionInfo = (function () {
             function tagActionInfo() {
                 this.cbOperateCode = 0;
                 this.wRecodeParam = 0;
@@ -219,7 +219,7 @@ var cmd;
         sparrowsclm.tagActionInfo = tagActionInfo;
         ;
         //结算信息
-        var tagSettlementInfo = /** @class */ (function () {
+        var tagSettlementInfo = (function () {
             function tagSettlementInfo() {
                 this.nWindFanShu = [0, 0]; //刮风番数
                 this.nRainFanShu = [0, 0]; //下雨番数
@@ -243,7 +243,7 @@ var cmd;
         sparrowsclm.tagSettlementInfo = tagSettlementInfo;
         ;
         //呼叫转移
-        var tagTransferInfo = /** @class */ (function () {
+        var tagTransferInfo = (function () {
             function tagTransferInfo() {
                 this.lTransferScore = [0, 0, 0, 0]; //转移分数 
                 this.cbTransferValid = 0;
@@ -257,7 +257,7 @@ var cmd;
         sparrowsclm.tagTransferInfo = tagTransferInfo;
         ;
         //转移子项
-        var tagTransferItem = /** @class */ (function (_super) {
+        var tagTransferItem = (function (_super) {
             __extends(tagTransferItem, _super);
             function tagTransferItem() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -269,7 +269,7 @@ var cmd;
         sparrowsclm.tagTransferItem = tagTransferItem;
         ;
         //空闲状态
-        var CMD_S_StatusFree = /** @class */ (function () {
+        var CMD_S_StatusFree = (function () {
             function CMD_S_StatusFree(buffer) {
                 this.bTrustee = [false, false, false, false]; //是否托管
                 //历史积分
@@ -293,7 +293,7 @@ var cmd;
         }());
         sparrowsclm.CMD_S_StatusFree = CMD_S_StatusFree;
         //游戏状态
-        var CMD_S_StatusPlay = /** @class */ (function () {
+        var CMD_S_StatusPlay = (function () {
             function CMD_S_StatusPlay() {
                 //禁止信息
                 this.cbNoGangCard = [0, 0, 0]; //禁杠数据 
@@ -406,7 +406,7 @@ var cmd;
         sparrowsclm.CMD_S_StatusPlay = CMD_S_StatusPlay;
         ;
         //游戏开始
-        var CMD_S_GameStart = /** @class */ (function () {
+        var CMD_S_GameStart = (function () {
             function CMD_S_GameStart() {
                 this.cbCardData = utils.allocArray(sparrowsclm.MAX_COUNT, Number); //扑克列表
                 this.cbHeapCardInfo = utils.alloc2Array(sparrowsclm.GAME_PLAYER, 2, Number); //堆立信息
@@ -432,9 +432,8 @@ var cmd;
             return CMD_S_GameStart;
         }());
         sparrowsclm.CMD_S_GameStart = CMD_S_GameStart;
-        ;
         //动作提醒
-        var CMD_S_GAME_ACTION_NOTIFY = /** @class */ (function () {
+        var CMD_S_GAME_ACTION_NOTIFY = (function () {
             function CMD_S_GAME_ACTION_NOTIFY() {
                 this.nPerUserFanCount = utils.allocArray(sparrowsclm.GAME_PLAYER, Number); //玩家番数
                 this.GameAction = new tagGameAction();
@@ -450,7 +449,7 @@ var cmd;
         sparrowsclm.CMD_S_GAME_ACTION_NOTIFY = CMD_S_GAME_ACTION_NOTIFY;
         ;
         //呼叫转移
-        var CMD_S_TRANSFER_NOTIFY = /** @class */ (function () {
+        var CMD_S_TRANSFER_NOTIFY = (function () {
             function CMD_S_TRANSFER_NOTIFY() {
                 this.lTransferScore = utils.allocArray(sparrowsclm.GAME_PLAYER, Number); //转移分数 
                 this.cbGameActionIndex = 0;
@@ -468,7 +467,7 @@ var cmd;
         sparrowsclm.CMD_S_TRANSFER_NOTIFY = CMD_S_TRANSFER_NOTIFY;
         ;
         //出牌命令
-        var CMD_S_OutCard = /** @class */ (function () {
+        var CMD_S_OutCard = (function () {
             function CMD_S_OutCard() {
                 this.bTrusteeOut = false;
                 this.wOutCardUser = df.INVALID_ITEM;
@@ -484,7 +483,7 @@ var cmd;
         sparrowsclm.CMD_S_OutCard = CMD_S_OutCard;
         ;
         //发送禁杠
-        var CMD_S_NOGANG = /** @class */ (function () {
+        var CMD_S_NOGANG = (function () {
             function CMD_S_NOGANG() {
                 this.cbNoGangCard = [0, 0, 0]; //禁杠数据
             }
@@ -498,7 +497,7 @@ var cmd;
         sparrowsclm.CMD_S_NOGANG = CMD_S_NOGANG;
         ;
         //发送扑克
-        var CMD_S_SendCard = /** @class */ (function () {
+        var CMD_S_SendCard = (function () {
             function CMD_S_SendCard() {
                 this.cbCardData = 0;
                 this.cbActionMask = 0;
@@ -516,7 +515,7 @@ var cmd;
         sparrowsclm.CMD_S_SendCard = CMD_S_SendCard;
         ;
         //操作提示
-        var CMD_S_OperateNotify = /** @class */ (function () {
+        var CMD_S_OperateNotify = (function () {
             function CMD_S_OperateNotify() {
                 this.wResumeUser = df.INVALID_CHAIR;
                 this.cbActionMask = 0;
@@ -532,7 +531,7 @@ var cmd;
         sparrowsclm.CMD_S_OperateNotify = CMD_S_OperateNotify;
         ;
         //操作命令
-        var CMD_S_OperateResult = /** @class */ (function () {
+        var CMD_S_OperateResult = (function () {
             function CMD_S_OperateResult() {
                 this.cbOperateCard = [0, 0, 0]; //操作扑克
                 this.wOperateUser = df.INVALID_CHAIR;
@@ -556,7 +555,7 @@ var cmd;
         sparrowsclm.CMD_S_OperateResult = CMD_S_OperateResult;
         ;
         //胡牌命令
-        var CMD_S_ChiHuResult = /** @class */ (function () {
+        var CMD_S_ChiHuResult = (function () {
             function CMD_S_ChiHuResult() {
                 this.cbCardData = utils.allocArray(sparrowsclm.MAX_COUNT, Number); //玩家扑克
                 this.wOperateUser = df.INVALID_CHAIR;
@@ -585,7 +584,7 @@ var cmd;
         sparrowsclm.CMD_S_ChiHuResult = CMD_S_ChiHuResult;
         ;
         //游戏结束(181)
-        var CMD_S_GameEnd = /** @class */ (function () {
+        var CMD_S_GameEnd = (function () {
             function CMD_S_GameEnd() {
                 //结束信息
                 this.wProvideUser = utils.allocArray(sparrowsclm.GAME_PLAYER, Number); //供应用户
@@ -662,7 +661,7 @@ var cmd;
         sparrowsclm.CMD_S_GameEnd = CMD_S_GameEnd;
         ;
         //用户托管
-        var CMD_S_Trustee = /** @class */ (function () {
+        var CMD_S_Trustee = (function () {
             function CMD_S_Trustee() {
             }
             CMD_S_Trustee.prototype.onInit = function (buffer) {
@@ -674,7 +673,7 @@ var cmd;
         sparrowsclm.CMD_S_Trustee = CMD_S_Trustee;
         ;
         //用户听牌
-        var CMD_S_Listen = /** @class */ (function () {
+        var CMD_S_Listen = (function () {
             function CMD_S_Listen() {
                 this.cbTingCard = utils.allocArray(sparrowsclm.MAX_COUNT, Number); //听牌
             }
@@ -690,7 +689,7 @@ var cmd;
         sparrowsclm.CMD_S_Listen = CMD_S_Listen;
         ;
         //定张结束
-        var CMD_S_DING_ZHANG_END = /** @class */ (function () {
+        var CMD_S_DING_ZHANG_END = (function () {
             function CMD_S_DING_ZHANG_END() {
                 this.bUserDingCardColor = utils.allocArray(sparrowsclm.GAME_PLAYER, Number); //定张花色
             }
@@ -705,7 +704,7 @@ var cmd;
         sparrowsclm.CMD_S_DING_ZHANG_END = CMD_S_DING_ZHANG_END;
         ;
         //规则选择
-        var CMD_S_GAME_RULE_NOTIFY = /** @class */ (function () {
+        var CMD_S_GAME_RULE_NOTIFY = (function () {
             function CMD_S_GAME_RULE_NOTIFY() {
             }
             CMD_S_GAME_RULE_NOTIFY.prototype.onInit = function (buffer) {
@@ -719,7 +718,7 @@ var cmd;
         sparrowsclm.CMD_S_GAME_RULE_NOTIFY = CMD_S_GAME_RULE_NOTIFY;
         ;
         //规则设置
-        var CMD_S_GAME_RULE_SETTING = /** @class */ (function () {
+        var CMD_S_GAME_RULE_SETTING = (function () {
             function CMD_S_GAME_RULE_SETTING() {
             }
             CMD_S_GAME_RULE_SETTING.prototype.onInit = function (buffer) {
@@ -730,7 +729,7 @@ var cmd;
         sparrowsclm.CMD_S_GAME_RULE_SETTING = CMD_S_GAME_RULE_SETTING;
         ;
         //报胡提醒
-        var CMD_S_BAO_HU_NOTIFY = /** @class */ (function () {
+        var CMD_S_BAO_HU_NOTIFY = (function () {
             function CMD_S_BAO_HU_NOTIFY() {
             }
             CMD_S_BAO_HU_NOTIFY.prototype.onInit = function (buffer) {

@@ -1,6 +1,6 @@
 var client;
 (function (client) {
-    var GameListInfo = /** @class */ (function () {
+    var GameListInfo = (function () {
         function GameListInfo() {
             this._Info = [];
             this._Favourite = [];

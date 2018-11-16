@@ -11,7 +11,7 @@ var game;
         var HAND_POS = [new egret.Point(40, 500), new egret.Point(114, 372), new egret.Point(0, 0)];
         //手牌间隔
         var HAND_SPACE = [20, 10, 10];
-        var HandCard = /** @class */ (function () {
+        var HandCard = (function () {
             function HandCard(scene, viewId, cardsData) {
                 this._cbCardsData = [];
                 this._handCardsObject = [];
@@ -59,7 +59,7 @@ var game;
                 var params = {};
                 if (null == cardParam) {
                     if (viewId != cmd.sparrowsclm.MY_VIEW) {
-                        params.bSheet = false;
+                        params.bSheet = false; //反面
                         params.texture = "game_handcard_" + viewId + "_png";
                         params.width = 24;
                         params.height = 63;

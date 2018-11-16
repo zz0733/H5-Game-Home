@@ -6,7 +6,7 @@ var models;
     /**
      * 代理
      */
-    var Agent = /** @class */ (function () {
+    var Agent = (function () {
         function Agent(wAgentLevel, dwServiceAddr, szServiceDomain) {
             this.wAgentLevel = 0;
             this.dwServiceAddr = 0;
@@ -18,7 +18,7 @@ var models;
         return Agent;
     }());
     models.Agent = Agent;
-    var AgentServer = /** @class */ (function () {
+    var AgentServer = (function () {
         function AgentServer(wAgentID, wServicePort) {
             this.wAgentID = 0;
             this.wServicePort = 0;
@@ -31,7 +31,7 @@ var models;
     /** 约战相关
      * 附加配置
      */
-    var ItemsSpcial = /** @class */ (function () {
+    var ItemsSpcial = (function () {
         function ItemsSpcial(data) {
             this.type = 0;
             this.describe = "";
@@ -68,7 +68,7 @@ var models;
     /**
      * 约战配置
      */
-    var Option = /** @class */ (function () {
+    var Option = (function () {
         function Option() {
             this.wPlayerCount = 0;
             this.wOptionMask = 0;
@@ -95,7 +95,7 @@ var models;
     /**
      * 附加配置
      */
-    var OptionSpecial = /** @class */ (function () {
+    var OptionSpecial = (function () {
         function OptionSpecial() {
             this.wCount = 0;
             this.name = "";
@@ -112,7 +112,7 @@ var models;
         return OptionSpecial;
     }());
     models.OptionSpecial = OptionSpecial;
-    var ServerInfo = /** @class */ (function () {
+    var ServerInfo = (function () {
         /**
          * 构造
          */

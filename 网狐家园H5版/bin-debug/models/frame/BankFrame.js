@@ -3,7 +3,7 @@
  */
 var frame;
 (function (frame) {
-    var BankFrame = /** @class */ (function () {
+    var BankFrame = (function () {
         function BankFrame(delegate) {
             this.BANK_TYPE_STORAGE = 0;
             this.BANK_TYPE_DRAWOUTE = 1;

@@ -13,7 +13,7 @@ var client;
     /**
      * 登录服务
      */
-    var LogonView = /** @class */ (function (_super) {
+    var LogonView = (function (_super) {
         __extends(LogonView, _super);
         function LogonView(scene) {
             var _this = _super.call(this) || this;

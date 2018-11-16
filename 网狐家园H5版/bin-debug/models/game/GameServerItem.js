@@ -3,7 +3,7 @@
  */
 var models;
 (function (models) {
-    var GameServerItem = /** @class */ (function () {
+    var GameServerItem = (function () {
         function GameServerItem(buffer) {
             /**
              * 类型

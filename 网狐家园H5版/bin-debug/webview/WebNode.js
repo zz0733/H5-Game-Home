@@ -13,7 +13,7 @@ var exp;
     /**
      * 显示到 egret 中的 DOM 元件
      */
-    var WebNode = /** @class */ (function (_super) {
+    var WebNode = (function (_super) {
         __extends(WebNode, _super);
         function WebNode() {
             var _this = _super.call(this) || this;

@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var models;
 (function (models) {
-    var Toast = /** @class */ (function (_super) {
+    var Toast = (function (_super) {
         __extends(Toast, _super);
         function Toast() {
             return _super !== null && _super.apply(this, arguments) || this;

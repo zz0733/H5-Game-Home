@@ -16,7 +16,7 @@ var game;
 (function (game) {
     var sparrowsclm;
     (function (sparrowsclm) {
-        var OpSelectView = /** @class */ (function (_super) {
+        var OpSelectView = (function (_super) {
             __extends(OpSelectView, _super);
             function OpSelectView(scene) {
                 var _this = _super.call(this) || this;

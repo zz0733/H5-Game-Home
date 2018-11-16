@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var client;
 (function (client) {
-    var CheckBoxGroup = /** @class */ (function (_super) {
+    var CheckBoxGroup = (function (_super) {
         __extends(CheckBoxGroup, _super);
         /**
          * showData {title:"",itemCount: 0,seletedValue: 0,option:["xxx","xxx","xxx"...]}

@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var client;
 (function (client) {
-    var ServiceLayer = /** @class */ (function (_super) {
+    var ServiceLayer = (function (_super) {
         __extends(ServiceLayer, _super);
         function ServiceLayer(scene) {
             var _this = _super.call(this) || this;

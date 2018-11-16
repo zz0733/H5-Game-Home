@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
  */
 var models;
 (function (models) {
-    var PopWait = /** @class */ (function (_super) {
+    var PopWait = (function (_super) {
         __extends(PopWait, _super);
         /**
          * 构造

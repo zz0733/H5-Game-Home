@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var client;
 (function (client) {
-    var RadioGroup = /** @class */ (function (_super) {
+    var RadioGroup = (function (_super) {
         __extends(RadioGroup, _super);
         /**
          * _showData {title:"",itemCount: 0,seletedIdx: 0,option:["xxx","xxx","xxx"...]}

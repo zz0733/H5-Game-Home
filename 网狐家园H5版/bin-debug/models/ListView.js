@@ -13,7 +13,7 @@ var models;
     /**
      * 滑动列表
      */
-    var CellData = /** @class */ (function () {
+    var CellData = (function () {
         function CellData(target, datas) {
             this.target = target;
             this.datas = datas;
@@ -21,7 +21,7 @@ var models;
         return CellData;
     }());
     models.CellData = CellData;
-    var ListView = /** @class */ (function (_super) {
+    var ListView = (function (_super) {
         __extends(ListView, _super);
         function ListView() {
             var _this = _super.call(this) || this;

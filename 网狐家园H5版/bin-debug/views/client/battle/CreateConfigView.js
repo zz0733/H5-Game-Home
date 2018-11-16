@@ -28,7 +28,7 @@ var client;
         0x02: client.CheckBoxGroup,
         0x04: client.NumInput //df.OPTION_TYPE_INPUT
     };
-    var CreateConfigView = /** @class */ (function (_super) {
+    var CreateConfigView = (function (_super) {
         __extends(CreateConfigView, _super);
         function CreateConfigView(scene, config, recordConfig) {
             var _this = _super.call(this) || this;
